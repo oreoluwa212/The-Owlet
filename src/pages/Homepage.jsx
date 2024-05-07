@@ -4,6 +4,7 @@ import { LuBell, LuMenu } from "react-icons/lu";
 import { carton, logo, medal, purse } from "../assets";
 import HomeSearch from "../components/input/HomeSearch";
 import HomeCard from "../components/cards/HomeCard";
+import TableCard from "../components/cards/TableCard";
 
 const Homepage = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -30,6 +31,9 @@ const Homepage = () => {
           <HomeCard title="Total Orders"
           value={"Tier 3"}
           img={medal}/>
+        </div>
+        <div className="w-full flex justify-center items-center pt-6">
+        <TableCard/>
         </div>
       </div>
     </div>
