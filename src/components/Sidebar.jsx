@@ -9,8 +9,8 @@ import NavLinks from "./NavLinks";
 const Sidebar = ({ isOpen, setIsOpen }) => {
   return (
     <>
-      <div className="lgss:w-1/5 hidden lgss:flex flex-col h-full shadow-sm border-r-[1px] pt-4 bg-white shadow-gray-400/10 pb-10">
-        <div className="w-full h-full px-[5%] flex gap-5 justify-between items-center border-b-[1px] pb-5">
+      <div className="lgss:w-1/5 hidden lgss:flex flex-col h- overflow-hidden shadow-sm border-r-[1px] pt-4 bg-white shadow-gray-400/10 pb-10">
+        <div className="w-full h- px-[5%] flex gap-5 justify-between items-center border-b-[1px] pb-5">
           <img src={logo} alt="the-owulet logo" />
           <div className="bg-white shadow-gray-400/30 border-[1px] shadow-sm p-2 rounded-[8px] justify-center items-center">
             <LuArrowLeftToLine />
@@ -35,7 +35,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
               isOpen ? "translate-x-0 " : "-translate-x-full"
             }`}
           >
-            <div className="flex w-full justify-between items-center border-b-[1px] px-4 py-7">
+            <div className="flex w-full justify-between items-center border-b-[1px] px-4 py-7 gap-16">
               <UserInfo avatar={avatar} />
               <LiaTimesSolid
                 className="text-[20px]"

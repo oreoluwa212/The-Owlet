@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Sidebar from "../components/Sidebar";
 import { LuBell, LuMenu } from "react-icons/lu";
 import { logo } from "../assets";
+import HomeSearch from "../components/input/HomeSearch";
 
 const AffiliatePage = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -16,8 +17,8 @@ const AffiliatePage = () => {
           <LuMenu onClick={() => setIsOpen(true)} />
         </div>
       </div>
-      <div className="w-full lgss:w-4/5 h-full p-[5%]">
-        <h1>Affiliates Page</h1>
+      <div className="w-full lgss:w-4/5 hidden lgss:flex flex-col h-full">
+        <HomeSearch />
       </div>
     </div>
   );

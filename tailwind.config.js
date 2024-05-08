@@ -6,6 +6,7 @@ module.exports = {
       colors: {
         primary: "#B42318",
         secondary: "#667085",
+        bg: "#F9FAFB",
       },
       fontFamily: {
         inter: ["Inter", "sans-serif"],

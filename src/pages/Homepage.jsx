@@ -13,7 +13,7 @@ const Homepage = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="max-w-full flex flex-col lgss:flex-row bg-[#F9FAFB]">
+    <div className="max-w-full flex flex-col lgss:flex-row bg-bg">
       <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
       <div className="lgss:hidden w-full px-[5%] flex justify-between items-center border-b-[1px] py-5">
         <img src={logo} alt="the-owulet logo" />
