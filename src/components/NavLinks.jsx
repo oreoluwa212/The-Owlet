@@ -9,7 +9,7 @@ import { CiMail, CiSettings } from "react-icons/ci";
 const general = [
   {
     name: "Home",
-    route: "/home",
+    route: "/",
     icon: <PiHouseSimpleLight />,
   },
   {
@@ -70,7 +70,7 @@ function NavLinks() {
                   pathname === link.route
                     ? "rounded-lg bg-[#FEF3F2] text-primary py-[.4rem] lgss:w-[80%] w-[200px] pl-4"
                     : pathname.includes(link.route)
-                    ? "rounded-lg bg-red bg-opacity-65 text-white lgss:w-[220px] pl-4 mx-auto w-full"
+                    ? ""
                     : ""
                 }`}
               >

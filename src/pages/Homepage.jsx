@@ -5,6 +5,9 @@ import { carton, logo, medal, purse } from "../assets";
 import HomeSearch from "../components/input/HomeSearch";
 import HomeCard from "../components/cards/HomeCard";
 import TableCard from "../components/cards/TableCard";
+import HomeSearchInputWhite from "../components/input/HomeSearchInput";
+import HomeFilters from "../components/buttons/HomeFilters";
+import FilterBtn from "../components/buttons/FilterBtn";
 
 const Homepage = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -22,18 +25,20 @@ const Homepage = () => {
       <div className="w-full lgss:w-4/5 hidden lgss:flex flex-col h-full">
         <HomeSearch />
         <div className="flex flex-wrap w-full justify-between pt-12 px-[5%]">
-          <HomeCard title="Available Balance"
-          value={"#123,583"}
-          img={purse}/>
-          <HomeCard title="Total Orders"
-          value={"323"}
-          img={carton}/>
-          <HomeCard title="Total Orders"
-          value={"Tier 3"}
-          img={medal}/>
+          <HomeCard title="Available Balance" value={"#123,583"} img={purse} />
+          <HomeCard title="Total Orders" value={"323"} img={carton} />
+          <HomeCard title="Total Orders" value={"Tier 3"} img={medal} />
         </div>
-        <div className="w-full flex justify-center items-center pt-6">
-        <TableCard/>
+        <div className="w-full px-[5%] py-8 flex justify-between">
+          <div className="flex gap-3">
+            <HomeFilters name="In Progress" />
+            <HomeFilters name="All Platforms" />
+            <FilterBtn name="More Filters" />
+          </div>
+          <HomeSearchInputWhite />
+        </div>
+        <div className="w-full flex justify-center items-center py-2">
+          <TableCard />
         </div>
       </div>
     </div>
