@@ -31,11 +31,11 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         <>
           <div className="absolute inset-0 bg-black opacity-80 z-10 backdrop-filter backdrop-blur-md lgss:hidden"></div>
           <div
-            className={`absolute z-20 top-0 right-0  h-screen bg-white w-3/4 md:w-[35%] lgss:hidden flex flex-col text-scondary  transform transition-transform duration-300 ${
+            className={`absolute z-20 top-0 right-0  h-screen bg-white lgss:w-3/4 mds:w-[50%] w-[70%] lgss:hidden flex flex-col text-scondary  transform transition-transform duration-300 ${
               isOpen ? "translate-x-0 " : "-translate-x-full"
             }`}
           >
-            <div className="flex w-full justify-between items-center border-b-[1px] px-4 py-7 gap-16">
+            <div className="flex w-full justify-between items-center border-b-[1px] px-4 py-7 lgss:gap-16">
               <UserInfo avatar={avatar} />
               <LiaTimesSolid
                 className="text-[20px]"
