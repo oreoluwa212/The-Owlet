@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import { LuArrowLeftToLine } from "react-icons/lu";
 import { LiaTimesSolid } from "react-icons/lia";
+import { TiPlus } from "react-icons/ti";
 import { avatar, logo } from "../assets";
 import CreateOrderBtn from "./buttons/CreateOrderBtn";
 import UserInfo from "./UserInfo";
@@ -17,7 +18,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           </div>
         </div>
         <div className="w-full px-4 py-2 mx-auto border-b-[1px] h-[10%] flex justify-center">
-          <CreateOrderBtn />
+          <CreateOrderBtn title="Create order" icon={TiPlus} />
         </div>
         <div className="w-full mx-auto">
           <NavLinks />
@@ -42,8 +43,8 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                 onClick={() => setIsOpen(false)}
               />
             </div>
-            <div className="w-full px-[5%] py-5 border-b-[1px]">
-              <CreateOrderBtn />
+            <div className="w-full px-[5%] py-5 border-b-[1px] text-white">
+              <CreateOrderBtn title="Create order" icon={TiPlus} />
             </div>
           </div>
         </>

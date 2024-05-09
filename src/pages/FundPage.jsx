@@ -7,6 +7,7 @@ import HomeSearch from "../components/input/HomeSearch";
 import { FaAngleDown } from "react-icons/fa6";
 import PaymentBtns from "../components/buttons/PaymentBtns";
 import Btn from "../components/buttons/Btn";
+import CommonH1 from "../components/CommonH1";
 
 const FundPage = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -14,7 +15,7 @@ const FundPage = () => {
   return (
     <div className="w-full flex flex-col lgss:flex-row bg-bg">
       <div className="w-[20%]">
-      <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
+        <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
       </div>
       <div className="flex flex-col lgss:w-[80%] z-0">
         <div className="lgss:hidden w-full px-[5%] flex justify-between items-center border-b-[1px] py-5">
@@ -28,9 +29,10 @@ const FundPage = () => {
           <HomeSearch />
           <div className="flex flex-wrap w-full h-full justify-between py-12 px-[5%]">
             <div className="bg-white w-[55%] border shaow-md py-6 rounded-[12px] flex flex-col justify-start items-start text-left">
-              <div className="w-full border-b-2 px-5 pb-5 flex items-start">
-                <h1 className="text-[22px] font-semibold">Fund your account</h1>
-              </div>
+              <CommonH1
+                title="Fund your account
+"
+              />
               <div className="w-full flex flex-col px-[5%] pt-5">
                 <h1 className="text-[20px] font-medium text-secondary">
                   Amount
@@ -98,9 +100,9 @@ const FundPage = () => {
                 <Btn />
               </div>
             </div>
-            <div className="bg-white w-[40%] border shaow-md py-6 rounded-[12px] h-[420px] flex flex-col ">
-              <div className="w-full border-b-2 px-5 pb-5 flex items-center justify-between text-[22px] ">
-                <h1 className="font-semibold">Funding history</h1>
+            <div className="bg-white w-[40%] border shaow-md py-5 rounded-[12px] h-[420px] flex flex-col ">
+              <div className="w-full border-b-2 px-5 pb-1 flex items-center justify-between text-[18px] ">
+                <h1 className="font-bold">Funding history</h1>
                 <PiDotsThreeOutlineVerticalBold />
               </div>
               <div className="flex justify-center items-center w-full flex-col font-semibold text-[26px]">
