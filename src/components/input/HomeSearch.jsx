@@ -8,7 +8,7 @@ import { LuBell, LuMenu } from "react-icons/lu";
 function HomeSearch() {
   return (
     <div className="hidden lgss:flex justify-between items-center w-full px-[5%] py-7 bg-white mb-5 h-[85px] shadow-md">
-      <div className="relative w-[30%]">
+      <div className="relative w-[40%]">
         <input
           type="text"
           className="w-full bg-[#F2F4F7] h-12 rounded-[8px] px-10 outline-none"
@@ -20,7 +20,7 @@ function HomeSearch() {
           <AiOutlineSearch className="text-gray-400 text-[22px]" />
         </div>
       </div>
-      <div className="w-[50%] flex justify-end items-end">
+      <div className="w-[30%] flex justify-end items-end">
         <div className="gap-8 flex justify-center items-center text-secondary text-[24px]">
           <LuBell />
           <LuMenu />

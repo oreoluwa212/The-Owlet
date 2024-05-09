@@ -9,21 +9,21 @@ import NavLinks from "./NavLinks";
 const Sidebar = ({ isOpen, setIsOpen }) => {
   return (
     <>
-      <div className="lgss:w-1/5 hidden lgss:flex flex-col h- overflow-hidden shadow-sm border-r-[1px] pt-4 bg-white shadow-gray-400/10 pb-10">
-        <div className="w-full h- px-[5%] flex gap-5 justify-between items-center border-b-[1px] pb-5">
-          <img src={logo} alt="the-owulet logo" />
-          <div className="bg-white shadow-gray-400/30 border-[1px] shadow-sm p-2 rounded-[8px] justify-center items-center">
+      <div className="h-screen  lgss:w-1/5 hidden lgss:flex flex-col shadow-sm border-r-[1px] pt-3 bg-white shadow-gray-400/10 pb-10 z-10 fixed">
+        <div className="w-full h-[8%] px-[5%] flex gap-5 justify-between items-center border-b-[1px] pb-3">
+          <img src={logo} alt="the-owulet logo" className="h-10" />
+          <div className="bg-white shadow-gray-400/30 border-[1px] shadow-sm p-1 rounded-[8px] justify-center items-center">
             <LuArrowLeftToLine />
           </div>
         </div>
-        <div className="w-full px-4 py-4 mx-auto border-b-[1px]">
+        <div className="w-full px-4 py-2 mx-auto border-b-[1px] h-[10%] flex justify-center">
           <CreateOrderBtn />
         </div>
-        <div className="w-full py-4 mx-auto">
+        <div className="w-full mx-auto">
           <NavLinks />
         </div>
-        <div className="pt-6 pb-2 justify-center flex w-full">
-          <div className="bg-[#eaeef3] w-[85%] rounded-md h-[200px]"></div>
+        <div className="w-full px-6 pt-10 border-t-2">
+          <div className="bg-[#eaeef3] w-full rounded-md h-[200px]"></div>
         </div>
       </div>
 

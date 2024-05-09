@@ -57,24 +57,24 @@ function NavLinks() {
 
   return (
     <div>
-      <nav className="w-full h-full">
-        <ul className="border-b-[1px] py-5">
-          <h1 className="text-center w-1/2 uppercase text-secondary font-medium pb-3">
+      <nav className="w-full h-full flex flex-col">
+        <ul className="border-b-[1px] py-3">
+          <h1 className="text-center w-1/2 uppercase text-secondary font-medium pb-1">
             general
           </h1>
           {general.map((link) => (
             <li key={link.route}>
               <NavLink
                 to={link.route}
-                className={`flex flex-row items-center mb-3 w-[90%] px-8 mx-auto ${
+                className={`flex flex-row items-center mb-2 w-[90%] px-8 mx-auto ${
                   pathname === link.route
-                    ? "rounded-lg bg-[#FEF3F2] text-primary py-[.4rem] lgss:w-[80%] w-[200px] pl-4"
+                    ? "rounded-lg bg-[#FEF3F2] text-primary py-2 lgss:w-[80%] w-[200px] pl-4"
                     : pathname.includes(link.route)
                     ? ""
                     : ""
                 }`}
               >
-                <div className="flex justify-center items-center gap-2">
+                <div className="flex justify-center items-center gap-3">
                   {link.icon}
                   <span className="text-[1.1rem] font-semibold leading-7 whitespace-nowrap">
                     {link.name}
@@ -84,17 +84,17 @@ function NavLinks() {
             </li>
           ))}
         </ul>
-        <ul className="border-b-[1px] pt-4">
-          <h1 className="text-center w-1/2 uppercase text-secondary font-medium pb-3">
+        <ul className="pt-4">
+          <h1 className="text-center w-1/2 uppercase text-secondary font-medium pb-1">
             help
           </h1>
           {help.map((link) => (
             <li key={link.route}>
               <NavLink
                 to={link.route}
-                className={`flex flex-row items-center mb-3 w-[90%] px-8 mx-auto ${
+                className={`flex flex-row text-[0.8rem] items-center mb-2 w-[90%] px-8 mx-auto ${
                   pathname === link.route
-                    ? "rounded-lg bg-[#FEF3F2] text-primary py-[.4rem] lgss:w-[80%] w-[200px] pl-4"
+                    ? "rounded-lg bg-[#FEF3F2] text-primary py-[.5rem] lgss:w-[80%] w-[200px] pl-4"
                     : pathname.includes(link.route)
                     ? "rounded-lg bg-red bg-opacity-65 text-white lgss:w-[220px] pl-4 mx-auto w-full"
                     : ""
