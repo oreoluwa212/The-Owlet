@@ -11,12 +11,14 @@ import HomeSearch from "../components/input/HomeSearch";
 import ReferralTopCard from "../components/cards/ReferralTopCard";
 import CommonH1 from "../components/CommonH1";
 import CreateOrderBtn from "../components/buttons/CreateOrderBtn";
+import ReferralBottomCard from "../components/cards/ReferralBottonCard";
+import QuickLinks from "../components/cards/QuickLinks";
 
 const AffiliatePage = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="max-w-full flex h-screen flex-col lgss:flex-row bg-bg">
+    <div className="max-w-full flex flex-col lgss:flex-row bg-bg">
       <div className="w-[20%]">
         <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
       </div>
@@ -57,8 +59,8 @@ const AffiliatePage = () => {
                 />
               </div>
             </div>
-            <div className="flex gap-5 pt-7 w-full">
-              <div className="bg-white border shadow-sm py-4 rounded-[12px] w-[65%]">
+            <div className="flex gap-5 pt-7 mb-12 w-full">
+              <div className="bg-white border shadow-sm pt-4 rounded-[12px] h-fit w-[65%]">
                 <CommonH1 title="Share your referral link" />
                 <div className="flex flex-col text-left px-[3%] py-6">
                   <div className="flex w-full gap-6">
@@ -71,14 +73,31 @@ const AffiliatePage = () => {
                       <CreateOrderBtn icon={MdCopyAll} title="Copy link" />
                     </div>
                   </div>
-                  <div className="border-t mt-6 py-3">
-                  <h1 className="text-[18px] font-bold">How it works</h1>
-                    
+                  <div className="border-t mt-8 py-3">
+                    <h1 className="text-[18px] font-bold">How it works</h1>
+                    <div className="flex gap-6 pt-7">
+                      <ReferralBottomCard
+                        number="1"
+                        title="Send invite"
+                        description="Send your referral link to friends and tell them how cool the-owlet.com is."
+                      />
+                      <ReferralBottomCard
+                        number="2"
+                        title="Sign up"
+                        description="Let them sign up for our services using your referral link to get them"
+                      />
+                      <ReferralBottomCard
+                        number="3"
+                        title="Get your reward"
+                        description="You get 3% of whatever deposit they make on their account."
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
-              <div className="bg-white border shadow-sm py-4 rounded-[12px] w-[35%] h-[200px]">
+              <div className="bg-white border shadow-sm py-5 rounded-[12px] h-fit w-[35%]">
                 <CommonH1 title="Watch this video to learn how to use your referral link to earn more money" />
+                <QuickLinks/>
               </div>
             </div>
           </div>

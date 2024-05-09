@@ -6,6 +6,7 @@ import { avatar, logo } from "../assets";
 import CreateOrderBtn from "./buttons/CreateOrderBtn";
 import UserInfo from "./UserInfo";
 import NavLinks from "./NavLinks";
+import QuickLinks from "./cards/QuickLinks";
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
   return (
@@ -23,8 +24,15 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         <div className="w-full mx-auto">
           <NavLinks />
         </div>
-        <div className="w-full px-6 pt-10 border-t-2">
-          <div className="bg-[#eaeef3] w-full rounded-md h-[200px]"></div>
+        <div className="w-full px-6 pt-7 border-t-2">
+          <div className="bg-[#eaeef3] w-full rounded-md h-[200px] p-4">
+            <div className="flex w-full justify-between pb-2">
+              <h1 className="uppercase text-secondary">quick links</h1>
+              <LiaTimesSolid />
+            </div>
+            <p className="text-left font-semibold text-[18px]">How to add funds to your OwletPay wallet.</p>
+            <QuickLinks />
+          </div>
         </div>
       </div>
 

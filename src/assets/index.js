@@ -8,5 +8,7 @@ import cryptomus from "../assets/images/cryptomus.png";
 import flutter from "../assets/images/flutter.png";
 import korapay from "../assets/images/korapay.png";
 import book from "../assets/images/book.png";
+import quicklinkimg from "../assets/images/quicklinksImg.png";
+import play from "../assets/images/PlayButton.png";
 
-export { logo, avatar, purse, medal, carton, korapay, flutter, cryptomus, cashenvoy, book }
+export { logo, avatar, purse, medal, carton, korapay, flutter, cryptomus, cashenvoy, book, quicklinkimg, play }

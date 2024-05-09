@@ -5,6 +5,7 @@ import ServicesPage from "./pages/ServicesPage";
 import OrderPage from "./pages/OrderPage";
 import FundPage from "./pages/FundPage";
 import AffiliatePage from "./pages/AffiliatePage";
+import ContactPage from "./pages/ContactPage";
 
 function App() {
   return (
@@ -16,7 +17,7 @@ function App() {
         <Route path="/fund" element={<FundPage />} />
         <Route path="/affiliates" element={<AffiliatePage />} />
         <Route path="/help" element={<AffiliatePage />} />
-        <Route path="/contact" element={<AffiliatePage />} />
+        <Route path="/contact" element={<ContactPage />} />
         <Route path="/settings" element={<AffiliatePage />} />
       </Routes>
     </Router>
