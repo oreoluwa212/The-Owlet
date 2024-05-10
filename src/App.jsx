@@ -16,9 +16,9 @@ function App() {
         <Route path="/services" element={<ServicesPage />} />
         <Route path="/fund" element={<FundPage />} />
         <Route path="/affiliates" element={<AffiliatePage />} />
-        <Route path="/help" element={<AffiliatePage />} />
+        <Route path="/help" element={<ServicesPage />} />
         <Route path="/contact" element={<ContactPage />} />
-        <Route path="/settings" element={<AffiliatePage />} />
+        <Route path="/settings" element={<ServicesPage />} />
       </Routes>
     </Router>
   );

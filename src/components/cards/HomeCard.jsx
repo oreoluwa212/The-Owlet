@@ -2,7 +2,7 @@ import { CiCircleInfo } from "react-icons/ci";
 
 function HomeCard({title, value, img }) {
   return (
-    <div className="bg-white shadow-sm border-[1px] rounded-[8px] h-[150px] w-[32%] flex justify-between items-center px-6">
+    <div className="bg-white shadow-sm border-[1px] rounded-[8px] h-[150px] w-full lgss:w-[32%] flex justify-between items-center px-6">
       <div className="flex flex-col gap-6">
         <h3 className="flex gap-3 justify-center items-center text-secondary">
           {title}

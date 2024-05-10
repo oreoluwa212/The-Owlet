@@ -66,9 +66,9 @@ function NavLinks() {
             <li key={link.route}>
               <NavLink
                 to={link.route}
-                className={`flex flex-row items-center mb-2 w-[90%] px-8 mx-auto ${
+                className={`flex flex-row items-center mb-2 w-[90%] text-[.8rem] px-8 mx-auto ${
                   pathname === link.route
-                    ? "rounded-lg bg-[#FEF3F2] text-primary py-2 lgss:w-[80%] w-[200px] pl-4"
+                    ? "rounded-lg bg-[#FEF3F2] text-primary py-2 lgss:w-[80%] w-[200px] lgss:pl-4"
                     : pathname.includes(link.route)
                     ? ""
                     : ""

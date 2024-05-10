@@ -30,7 +30,9 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
               <h1 className="uppercase text-secondary">quick links</h1>
               <LiaTimesSolid />
             </div>
-            <p className="text-left font-semibold text-[18px]">How to add funds to your OwletPay wallet.</p>
+            <p className="text-left font-semibold text-[18px]">
+              How to add funds to your OwletPay wallet.
+            </p>
             <QuickLinks />
           </div>
         </div>
@@ -40,7 +42,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         <>
           <div className="absolute inset-0 bg-black opacity-80 z-10 backdrop-filter backdrop-blur-md lgss:hidden"></div>
           <div
-            className={`absolute z-20 top-0 right-0  h-screen bg-white lgss:w-3/4 mds:w-[50%] w-[70%] lgss:hidden flex flex-col text-scondary  transform transition-transform duration-300 ${
+            className={`absolute z-20 top-0 right-0  bg-white lgss:w-3/4 mds:w-[50%] w-[70%] lgss:hidden flex flex-col text-scondary  transform transition-transform duration-300 ${
               isOpen ? "translate-x-0 " : "-translate-x-full"
             }`}
           >
@@ -53,6 +55,9 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             </div>
             <div className="w-full px-[5%] py-5 border-b-[1px] text-white">
               <CreateOrderBtn title="Create order" icon={TiPlus} />
+            </div>
+            <div className="w-full mx-auto">
+              <NavLinks />
             </div>
           </div>
         </>

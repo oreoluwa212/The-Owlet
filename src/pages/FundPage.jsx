@@ -25,16 +25,16 @@ const FundPage = () => {
             <LuMenu onClick={() => setIsOpen(true)} />
           </div>
         </div>
-        <div className="w-full hidden lgss:flex flex-col">
+        <div className="w-full lgss:flex flex-col">
           <HomeSearch />
-          <div className="flex flex-wrap w-full h-full justify-between py-12 px-[5%]">
-            <div className="bg-white w-[55%] border shaow-md py-6 rounded-[12px] flex flex-col justify-start items-start text-left">
+          <div className="flex lgss:flex-row flex-col gap-5 w-full h-full justify-between py-12 px-[5%]">
+            <div className="lgss:bg-white lgss:w-[55%] lgss:border shaow-md py-6 rounded-[12px] flex flex-col justify-start items-start text-left">
               <CommonH1
                 title="Fund your account
 "
               />
               <div className="w-full flex flex-col px-[5%] pt-5">
-                <h1 className="text-[20px] font-medium text-secondary">
+                <h1 className="text-[1rem] lgss:text-[1.3rem] font-medium text-secondary">
                   Amount
                 </h1>
                 <div className="relative w-full">
@@ -43,14 +43,14 @@ const FundPage = () => {
                     className="px-3 py-4 border-2 mt-2 w-full rounded-[8px] text-black outline-none"
                     placeholder="# 1,000"
                   />
-                  <div className="absolute inset-y-0 right-0 px-3 flex gap-2 items-center pointer-events-none text-black text-[22px]">
+                  <div className="absolute inset-y-0 right-0 px-3 flex gap-2 items-center pointer-events-none text-black text-[1rem]">
                     <p>NGN</p>
                     <FaAngleDown />
                   </div>
                 </div>
               </div>
               <div className="w-full flex flex-col px-[5%] pt-5">
-                <h1 className="text-[20px] font-medium text-secondary">
+                <h1 className="text-[1rem] lgss:text-[1.3rem] font-medium text-secondary">
                   Select payment method
                 </h1>
                 <div className="flex-col gap-2">
@@ -64,7 +64,7 @@ const FundPage = () => {
                   </div>
                 </div>
               </div>
-              <div className="w-[90%] mx-auto flex flex-col px-[5%] mt-6 bg-[#EAECF0] bg-opacity-50 py-3 rounded-[8px] text-secondary font-semibold text-[18px]">
+              <div className="w-[90%] mx-auto flex flex-col px-[5%] mt-6 bg-[#EAECF0] bg-opacity-50 py-3 rounded-[8px] text-secondary font-semibold text-[.8rem] lgss:text-[1.1rem]">
                 <div className="pb-3 pt-5 border-b-[1px] mb-2">
                   <h1 className="font-semibold text-[22px] text-black">
                     CASHBACK DETAILS
@@ -74,9 +74,9 @@ const FundPage = () => {
                 <p>20% Hootback on all Payments from 11pm - 5:59am</p>
               </div>
 
-              <div className="w-[90%] mx-auto flex flex-col px-[5%] mt-6 bg-[#FEDF89] bg-opacity-30 py-3 rounded-[8px] font-semibold text-[18px] text-primary">
+              <div className="w-[90%] mx-auto flex flex-col px-[5%] mt-6 bg-[#FEDF89] bg-opacity-30 py-3 rounded-[8px] font-semibold text-[.9rem] lgss:text-[1.2rem] text-primary">
                 <h1 className="font-semibold py-3">IMPORTANT</h1>
-                <ul className="list-disc px-[5%] border-t-2 border-[#FEDF89] py-4">
+                <ul className="list-disc px-[5%] border-t-2 border-[#FEDF89] py-4 flex flex-col gap-4">
                   <li>
                     Pay exactly the amount you have imputed to pay, do not pay
                     lesser or higher than the amount you have placed.
@@ -100,7 +100,7 @@ const FundPage = () => {
                 <Btn />
               </div>
             </div>
-            <div className="bg-white w-[40%] border shaow-md py-5 rounded-[12px] h-[420px] flex flex-col ">
+            <div className="bg-white lgss:w-[40%] w-[90%] mx-auto border shaow-md py-5 rounded-[12px] h-[420px] flex flex-col ">
               <div className="w-full border-b-2 px-5 pb-1 flex items-center justify-between text-[18px] ">
                 <h1 className="font-bold">Funding history</h1>
                 <PiDotsThreeOutlineVerticalBold />
