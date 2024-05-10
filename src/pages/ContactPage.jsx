@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import Sidebar from "../components/Sidebar";
 import { LuBell, LuMenu } from "react-icons/lu";
-import { logo } from "../assets";
+import { chat, email, logo, office, questionmark } from "../assets";
 import HomeSearch from "../components/input/HomeSearch";
+import ContactCard from "../components/cards/ContactCard";
 
 const ContactPage = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,11 +21,37 @@ const ContactPage = () => {
             <LuMenu onClick={() => setIsOpen(true)} />
           </div>
         </div>
-        <div className="w-full hidden lgss:flex flex-col">
+        <div className="w-full lgss:flex flex-col">
           <HomeSearch />
           <div className="flex flex-col justify-start items-start text-left px-[5%]">
             <h1 className="text-[2rem] font-semibold">Contact Us</h1>
             <p className="text-secondary">Reach out anytime</p>
+            <div className="w-full flex flex-col gap-10 mt-8">
+              <div className="flex flex-col lgss:flex-row gap-10">
+                <ContactCard
+                  title="Customer Support"
+                  link="Visit help center"
+                  img={questionmark}
+                />
+                <ContactCard
+                  title="Chat with us"
+                  link="Create a ticket"
+                  img={chat}
+                />
+              </div>
+              <div className="flex flex-col lgss:flex-row gap-10">
+                <ContactCard
+                  title="Email us"
+                  link="support@theowelttecom"
+                  img={email}
+                />
+                <ContactCard
+                  title="Our Office"
+                  link="Plot 162A, Independence Layout, Enugu State"
+                  img={office}
+                />
+              </div>
+            </div>
           </div>
         </div>
       </div>

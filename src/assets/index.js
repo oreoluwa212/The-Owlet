@@ -10,5 +10,26 @@ import korapay from "../assets/images/korapay.png";
 import book from "../assets/images/book.png";
 import quicklinkimg from "../assets/images/quicklinksImg.png";
 import play from "../assets/images/PlayButton.png";
+import questionmark from "../assets/images/questionmark.png";
+import chat from "../assets/images/chat.png";
+import email from "../assets/images/email.png";
+import office from "../assets/images/office.png";
 
-export { logo, avatar, purse, medal, carton, korapay, flutter, cryptomus, cashenvoy, book, quicklinkimg, play }
+export {
+  logo,
+  avatar,
+  purse,
+  medal,
+  carton,
+  korapay,
+  flutter,
+  cryptomus,
+  cashenvoy,
+  book,
+  quicklinkimg,
+  play,
+  questionmark,
+  chat,
+  email,
+  office,
+};

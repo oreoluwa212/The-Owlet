@@ -30,10 +30,10 @@ const AffiliatePage = () => {
             <LuMenu onClick={() => setIsOpen(true)} />
           </div>
         </div>
-        <div className="w-full hidden lgss:flex flex-col h-full">
+        <div className="w-full lgss:flex flex-col h-full">
           <HomeSearch />
           <div className="w-full px-[5%] pt-5">
-            <div className="bg-white border shadow-sm py-4 rounded-[12px]">
+            <div className="lgss:bg-white lgss:border lgss:shadow-sm lgss:py-4 rounded-[12px]">
               <CommonH1 title="Your referral stats" />
               <div className="flex flex-wrap w-full px-6 py-6 gap-6">
                 <ReferralTopCard icon={GoPeople} title="Visitors" value="0" />
@@ -59,13 +59,13 @@ const AffiliatePage = () => {
                 />
               </div>
             </div>
-            <div className="flex gap-5 pt-7 mb-12 w-full">
-              <div className="bg-white border shadow-sm pt-4 rounded-[12px] h-fit w-[65%]">
+            <div className="flex lgss:flex-row flex-col gap-5 pt-7 mb-12 w-full">
+              <div className="lgss:bg-white lgss:border lgss:shadow-sm pt-4 rounded-[12px] h-fit lgss:w-[65%]">
                 <CommonH1 title="Share your referral link" />
                 <div className="flex flex-col text-left px-[3%] py-6">
                   <div className="flex w-full gap-6">
                     <input
-                      className="w-[70%] rounded-[4px] outline-none px-2 border"
+                      className="w-[70%] rounded-[4px] placeholder:text-[.8rem] lgss:placeholder:text-[1rem] outline-none px-2 border"
                       type="text"
                       placeholder="https://the-owlet.com/ref/cpmb5	"
                     />
@@ -75,7 +75,7 @@ const AffiliatePage = () => {
                   </div>
                   <div className="border-t mt-8 py-3">
                     <h1 className="text-[18px] font-bold">How it works</h1>
-                    <div className="flex gap-6 pt-7">
+                    <div className="flex lgss:flex-row flex-col gap-6 pt-7">
                       <ReferralBottomCard
                         number="1"
                         title="Send invite"
@@ -95,7 +95,7 @@ const AffiliatePage = () => {
                   </div>
                 </div>
               </div>
-              <div className="bg-white border shadow-sm py-5 rounded-[12px] h-fit w-[35%]">
+              <div className="bg-white border shadow-sm py-5 rounded-[12px] h-fit lgss:w-[35%]">
                 <CommonH1 title="Watch this video to learn how to use your referral link to earn more money" />
                 <QuickLinks/>
               </div>
