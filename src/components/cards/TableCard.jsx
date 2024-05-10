@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa6";
-import { LuClock4 } from "react-icons/lu";
-
 
 const TableCard = ({ heading, columns, tableData, numberOfOrders }) => {
   return (

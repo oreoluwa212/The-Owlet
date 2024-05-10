@@ -7,6 +7,7 @@ import HomeSearchInputWhite from "../components/input/HomeSearchInput";
 import HomeFilters from "../components/buttons/HomeFilters";
 import FilterBtn from "../components/buttons/FilterBtn";
 import TableCard from "../components/cards/TableCard";
+import HomeCardMobile from "../components/cards/HomeCardMobile";
 
   const tableData = [
     {
@@ -89,16 +90,19 @@ const OrderPage = () => {
             <LuMenu onClick={() => setIsOpen(true)} />
           </div>
         </div>
-        <div className="w-full hidden lgss:flex flex-col">
+        <div className="w-full lgss:flex flex-col">
           <HomeSearch />
           <div className="w-full px-[5%]">
             <div className="flex justify-between w-full gap-4 pt-4">
-              <div className="flex gap-3">
+              <div className="hidden lgss:flex gap-3">
                 <HomeFilters name="In Progress" />
                 <HomeFilters name="All Platforms" />
                 <FilterBtn name="More Filters" />
               </div>
               <HomeSearchInputWhite />
+              <div className="lgss:hidden flex">
+              <FilterBtn />
+              </div>
             </div>
             <div className="hidden w-full lgss:flex  items-center pt-8">
               <TableCard
@@ -106,6 +110,35 @@ const OrderPage = () => {
                 columns={columns}
                 tableData={tableData}
                 numberOfOrders={countOrders()}
+              />
+            </div>
+            <div className="lgss:hidden flex flex-col text-left gap-4 mt-4">
+              <div className="w-full flex gap-4">
+                <h1 className="font-bold text-[1.3rem]">All Orders</h1>
+                <div className="bg-[#FECDCA] bg-opacity-50 border-[#FECDCA] border-2 text-[14px] rounded-full text-primary flex gap-1 font-semibold py-1 px-3">
+                  {countOrders()}
+                  <p>Orders</p>
+                </div>
+              </div>
+              <HomeCardMobile
+                title="Instagram Nigerian Followers"
+                value={"80%"}
+              />
+              <HomeCardMobile
+                title="Facebook Nigerian Followers"
+                value={"80%"}
+              />
+              <HomeCardMobile
+                title="Twitter Nigerian Followers"
+                value={"80%"}
+              />
+              <HomeCardMobile
+                title="Instagram Nigerian Followers"
+                value={"80%"}
+              />
+              <HomeCardMobile
+                title="Facebook Nigerian Followers"
+                value={"80%"}
               />
             </div>
           </div>

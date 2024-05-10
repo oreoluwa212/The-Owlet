@@ -2,7 +2,7 @@ import { AiOutlineSearch } from "react-icons/ai";
 
 function HomeSearchInputWhite() {
   return (
-    <div className="relative w-[30%]">
+    <div className="relative lgss:w-[30%] w-full">
       <input
         type="text"
         className="w-full bg-white border h-12 rounded-[8px] px-10 outline-none"
