@@ -25,7 +25,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           <NavLinks />
         </div>
         <div className="w-full px-6 pt-7 border-t-2">
-          <div className="bg-[#eaeef3] w-full rounded-md h-[200px] p-4">
+          <div className="bg-[#eaeef3] w-full rounded-md py-8 px-6">
             <div className="flex w-full justify-between pb-2">
               <h1 className="uppercase text-secondary">quick links</h1>
               <LiaTimesSolid />

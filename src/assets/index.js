@@ -14,6 +14,7 @@ import questionmark from "../assets/images/questionmark.png";
 import chat from "../assets/images/chat.png";
 import email from "../assets/images/email.png";
 import office from "../assets/images/office.png";
+import homeEmptyIcon from "../assets/images/homeEmptyIcon.png";
 
 export {
   logo,
@@ -32,4 +33,5 @@ export {
   chat,
   email,
   office,
+  homeEmptyIcon,
 };

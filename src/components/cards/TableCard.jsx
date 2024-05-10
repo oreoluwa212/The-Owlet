@@ -3,54 +3,23 @@ import { FaArrowLeft, FaArrowRight } from "react-icons/fa6";
 import { LuClock4 } from "react-icons/lu";
 
 
-const TableCard = () => {
-  const tableData = [
-    {
-      ID: "#53045701",
-      Services: "Instagram",
-      Date: "Jan 6 2022",
-      Quantity: "10000",
-      Cost: "#17,500.00",
-      Status: "In progress",
-      Progress: "60%",
-      Link: "link",
-    },
-    {
-      ID: "#53045701",
-      Services: "Facebook",
-      Date: "Jan 6 2022",
-      Quantity: "10000",
-      Cost: "#17,500.00",
-      Status: "In progress",
-      Progress: "60%",
-      Link: "link",
-    },
-  ];
-
-  const columns = [
-    { label: "ID", key: "ID" },
-    { label: "Services", key: "Services" },
-    { label: "Date", key: "Date" },
-    { label: "Quantity", key: "Quantity" },
-    { label: "Cost", key: "Cost" },
-    { label: "Status", key: "Status" },
-    { label: "Progress", key: "Progress" },
-    { label: "Link", key: "Link" },
-  ];
-
+const TableCard = ({ heading, columns, tableData, numberOfOrders }) => {
   return (
-    <div className="w-[90%] border bg-white rounded-[12px]">
+    <div className="w-full border bg-white rounded-[12px]">
       <div className="px-8 py-6 text-[20px] font-semibold flex gap-5 items-center">
-        <h1 className="text-left">In Progress</h1>
+        <h1 className="text-left">{heading}</h1>
         <div className="bg-[#FECDCA] bg-opacity-50 border-[#FECDCA] border-2 text-[16px] rounded-full text-primary py-1 px-3">
-          <p>2 Orders</p>
+          <p>{numberOfOrders} Orders</p>
         </div>
       </div>
       <table className="w-full">
         <thead>
-          <tr className="bg-secondary bg-opacity-5 py-4 h-[70px] text-[18px] flex justify-between items-center">
+          <tr className="bg-secondary bg-opacity-5 py-4 lgss:h-[73px] text-[18px] flex justify-between items-start text-left px-[5%] w-full">
             {columns.map((column, index) => (
-              <th key={index} className="font-medium w-1/6 text-secondary">
+              <th
+                key={index}
+                className="font-semibold text-[1rem] w-1/7 text-secondary"
+              >
                 {column.label}
               </th>
             ))}
@@ -60,10 +29,12 @@ const TableCard = () => {
           {tableData.map((row, rowIndex) => (
             <tr
               key={rowIndex}
-              className="h-[90px] border-y-2 flex justify-between items-center text-[12px]"
+              className="lgss:h-[90px] border-y-2 flex justify-start w-full items-center lgss:text-[.9rem] text-[.6rem] py-3 font-semibold"
             >
               {columns.map((column, colIndex) => (
-                <td className="w-1/6" key={colIndex}>{row[column.key]}</td>
+                <td className="w-1/5" key={colIndex}>
+                  {row[column.key]}
+                </td>
               ))}
             </tr>
           ))}
