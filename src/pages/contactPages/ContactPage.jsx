@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import Sidebar from "../components/Sidebar";
+import Sidebar from "../../components/Sidebar";
 import { LuBell, LuMenu } from "react-icons/lu";
-import { chat, email, logo, office, questionmark } from "../assets";
-import HomeSearch from "../components/input/HomeSearch";
-import ContactCard from "../components/cards/ContactCard";
+import { chat, email, logo, office, questionmark } from "../../assets";
+import HomeSearch from "../../components/input/HomeSearch";
+import ContactCard from "../../components/cards/ContactCard";
 
 const ContactPage = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -37,7 +37,8 @@ const ContactPage = () => {
                   title="Chat with us"
                   link="Create a ticket"
                   img={chat}
-                />
+                  to={"/contact/create-ticket"}
+                  />
               </div>
               <div className="flex flex-col lgss:flex-row gap-10">
                 <ContactCard

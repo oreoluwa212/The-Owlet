@@ -27,6 +27,17 @@ const TableCard = () => {
     },
   ];
 
+  const columns = [
+    { label: "ID", key: "ID" },
+    { label: "Services", key: "Services" },
+    { label: "Date", key: "Date" },
+    { label: "Quantity", key: "Quantity" },
+    { label: "Cost", key: "Cost" },
+    { label: "Status", key: "Status" },
+    { label: "Progress", key: "Progress" },
+    { label: "Link", key: "Link" },
+  ];
+
   return (
     <div className="w-[90%] border bg-white rounded-[12px]">
       <div className="px-8 py-6 text-[20px] font-semibold flex gap-5 items-center">
@@ -36,40 +47,24 @@ const TableCard = () => {
         </div>
       </div>
       <table className="w-full">
-        <thead className="">
-          <tr className="bg-secondary bg-opacity-5 py-4 h-[70px] text-[18px] flex justify-between items-center px-[3%]">
-            <th className="font-medium text-secondary">ID</th>
-            <th className="font-medium text-secondary">Services</th>
-            <th className="font-medium text-secondary">Date</th>
-            <th className="font-medium text-secondary">Quantity</th>
-            <th className="font-medium text-secondary">Cost</th>
-            <th className="font-medium text-secondary">Status</th>
-            <th className="font-medium text-secondary">Progress</th>
-            <th className="font-medium text-secondary">Link</th>
+        <thead>
+          <tr className="bg-secondary bg-opacity-5 py-4 h-[70px] text-[18px] flex justify-between items-center">
+            {columns.map((column, index) => (
+              <th key={index} className="font-medium w-1/6 text-secondary">
+                {column.label}
+              </th>
+            ))}
           </tr>
         </thead>
-        <tbody className="">
-          {tableData.map((row, index) => (
+        <tbody>
+          {tableData.map((row, rowIndex) => (
             <tr
-              key={row.ID}
-              className="h-[90px] border-y-2 w- flex justify-between items-center pl-[3%] pr-[5%] text-[12px]"
+              key={rowIndex}
+              className="h-[90px] border-y-2 flex justify-between items-center text-[12px]"
             >
-              <td className="">{row.ID}</td>
-              <td className="flex flex-col justify-start items-start">
-                {row.Services} <span>Nigerian Followers</span>
-              </td>
-              <td className="flex flex-col justify-start items-start">
-                {row.Date}
-                <span>13:04:46</span>
-              </td>
-              <td>{row.Quantity}</td>
-              <td>{row.Cost}</td>
-              <td className="text-primary bg-primary bg-opacity-5 border-[#FEDF89] border flex gap-2 justify-center items-center px-3 rounded-full py-1">
-                <LuClock4/>
-                {row.Status}
-              </td>
-              <td>{row.Progress}</td>
-              <td>{row.Link}</td>
+              {columns.map((column, colIndex) => (
+                <td className="w-1/6" key={colIndex}>{row[column.key]}</td>
+              ))}
             </tr>
           ))}
         </tbody>

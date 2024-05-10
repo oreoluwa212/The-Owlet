@@ -8,9 +8,87 @@ import { FaAngleDown } from "react-icons/fa6";
 import PaymentBtns from "../components/buttons/PaymentBtns";
 import Btn from "../components/buttons/Btn";
 import CommonH1 from "../components/CommonH1";
+import CreateOrderBtn from "../components/buttons/CreateOrderBtn";
+import FundHistoryTable from "../components/tables/FundHistoryTable";
+
+  const tableData = [
+    {
+      ID: "#53007613",
+      Method: "Cryptomus",
+      Cost: "#50,000.00",
+      Date: "Jan 6,2022",
+    },
+    {
+      ID: "#53007613",
+      Method: "Cryptomus",
+      Cost: "#50,000.00",
+      Date: "Jan 6,2022",
+    },
+    {
+      ID: "#53007613",
+      Method: "Korapay",
+      Cost: "#50,000.00",
+      Date: "Jan 6,2022",
+    },
+    {
+      ID: "#53007613",
+      Method: "Cryptomus",
+      Cost: "#50,000.00",
+      Date: "Jan 6,2022",
+    },
+    {
+      ID: "#53007613",
+      Method: "Korapay",
+      Cost: "#50,000.00",
+      Date: "Jan 6,2022",
+    },
+    {
+      ID: "#53007613",
+      Method: "Cryptomus",
+      Cost: "#50,000.00",
+      Date: "Jan 6,2022",
+    },
+    {
+      ID: "#53045701",
+      Method: "Flutterwave",
+      Cost: "#50,000.00",
+      Date: "Jan 6,2022",
+    },
+    {
+      ID: "#53045701",
+      Method: "Flutterwave",
+      Cost: "#50,000.00",
+      Date: "Jan 6,2022",
+    },
+    {
+      ID: "#53007613",
+      Method: "Korapay",
+      Cost: "#50,000.00",
+      Date: "Jan 6,2022",
+    },
+    {
+      ID: "#53007613",
+      Method: "Cryptomus",
+      Cost: "#50,000.00",
+      Date: "Jan 6,2022",
+    },
+    {
+      ID: "#53045701",
+      Method: "Flutterwave",
+      Cost: "#50,000.00",
+      Date: "Jan 6,2022",
+    },
+  ];
+  const columns = [
+    { label: "ID", key: "ID" },
+    { label: "Method", key: "Method" },
+    { label: "Cost", key: "Cost" },
+    { label: "Date", key: "Date" },
+  ];
 
 const FundPage = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState("empty");
 
   return (
     <div className="w-full flex flex-col lgss:flex-row bg-bg">
@@ -27,7 +105,21 @@ const FundPage = () => {
         </div>
         <div className="w-full lgss:flex flex-col">
           <HomeSearch />
-          <div className="flex lgss:flex-row flex-col gap-5 w-full h-full justify-between py-12 px-[5%]">
+          <div className="w-full flex lgss:flex-row flex-col gap-4 py-2 px-[5%]">
+            <div
+              className={activeTab === "empty" ? "active" : ""}
+              onClick={() => setActiveTab("empty")}
+            >
+              <CreateOrderBtn title="Empty Tab" />
+            </div>
+            <div
+              className={activeTab === "active" ? "active" : ""}
+              onClick={() => setActiveTab("active")}
+            >
+              <CreateOrderBtn title="Active Tab" />
+            </div>
+          </div>
+          <div className="flex lgss:flex-row flex-col gap-5 w-full h-full justify-between lgss:py-12 px-[5%]">
             <div className="lgss:bg-white lgss:w-[55%] lgss:border shaow-md py-6 rounded-[12px] flex flex-col justify-start items-start text-left">
               <CommonH1
                 title="Fund your account
@@ -100,16 +192,26 @@ const FundPage = () => {
                 <Btn />
               </div>
             </div>
-            <div className="bg-white lgss:w-[40%] w-[90%] mx-auto border shaow-md py-5 rounded-[12px] h-[420px] flex flex-col ">
-              <div className="w-full border-b-2 px-5 pb-1 flex items-center justify-between text-[18px] ">
-                <h1 className="font-bold">Funding history</h1>
-                <PiDotsThreeOutlineVerticalBold />
+            {activeTab === "empty" ? (
+              <div className="bg-white lgss:w-[45%] w-[90%] mx-auto border shaow-md py-5 rounded-[12px] h-[420px] flex flex-col ">
+                <div className="w-full border-b-2 px-5 pb-1 flex items-center justify-between text-[18px] ">
+                  <h1 className="font-bold">Funding history</h1>
+                  <PiDotsThreeOutlineVerticalBold />
+                </div>
+                <div className="flex justify-center items-center w-full flex-col font-semibold text-[26px]">
+                  <img className="h-[250px]" src={book} alt="" />
+                  <h2>No funding history</h2>
+                </div>
               </div>
-              <div className="flex justify-center items-center w-full flex-col font-semibold text-[26px]">
-                <img className="h-[250px]" src={book} alt="" />
-                <h2>No funding history</h2>
+            ) : (
+              <div className="lgss:w-[55%] bg-white border">
+                <div className="w-full border-b-2 px-5 py-7 flex items-center justify-between text-[18px]">
+                  <h1 className="font-bold">Funding history</h1>
+                  <PiDotsThreeOutlineVerticalBold />
+                </div>
+                <FundHistoryTable columns={columns} tableData={tableData} />
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>

@@ -5,7 +5,8 @@ import ServicesPage from "./pages/ServicesPage";
 import OrderPage from "./pages/OrderPage";
 import FundPage from "./pages/FundPage";
 import AffiliatePage from "./pages/AffiliatePage";
-import ContactPage from "./pages/ContactPage";
+import ContactPage from "./pages/contactPages/ContactPage";
+import CreateTicket from "./pages/contactPages/CreateTicket";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/affiliates" element={<AffiliatePage />} />
         <Route path="/help" element={<ServicesPage />} />
         <Route path="/contact" element={<ContactPage />} />
+        <Route path="/contact/create-ticket" element={<CreateTicket />} />
         <Route path="/settings" element={<ServicesPage />} />
       </Routes>
     </Router>
