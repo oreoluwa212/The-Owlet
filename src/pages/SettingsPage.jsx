@@ -23,7 +23,7 @@ const SettingsPage = () => {
             <LuMenu onClick={() => setIsOpen(true)} />
           </div>
         </div>
-        <div className="w-full hidden lgss:flex flex-col">
+        <div className="w-full lgss:flex flex-col">
           <HomeSearch />
           <div className="flex lgss:flex-row flex-col gap-5 w-full h-full justify-between lgss:py-12 px-[5%]">
             <div className="lgss:bg-white lgss:w-[60%] lgss:border shaow-md pt-6 rounded-[12px] flex flex-col justify-start items-start h-fit py-3 text-left">

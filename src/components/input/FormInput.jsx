@@ -13,7 +13,7 @@ function FormInput({ name, placeholder, id, label, textarea, upload }) {
 
   return (
     <div className="flex flex-col gap-2">
-      <label className="font-semibold text-[1.1rem]" htmlFor={id}>
+      <label className="font-semibold text-[1rem]" htmlFor={id}>
         {label}
       </label>
       {upload ? (
