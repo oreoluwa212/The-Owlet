@@ -7,6 +7,7 @@ import FundPage from "./pages/FundPage";
 import AffiliatePage from "./pages/AffiliatePage";
 import ContactPage from "./pages/contactPages/ContactPage";
 import CreateTicket from "./pages/contactPages/CreateTicket";
+import SettingsPage from "./pages/SettingsPage";
 
 function App() {
   return (
@@ -20,7 +21,7 @@ function App() {
         <Route path="/help" element={<ServicesPage />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/contact/create-ticket" element={<CreateTicket />} />
-        <Route path="/settings" element={<ServicesPage />} />
+        <Route path="/settings" element={<SettingsPage />} />
       </Routes>
     </Router>
   );

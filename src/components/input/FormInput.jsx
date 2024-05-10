@@ -3,12 +3,12 @@ import { RiUploadCloud2Line } from "react-icons/ri";
 function FormInput({ name, placeholder, id, label, textarea, upload }) {
   let InputComponent = textarea ? "textarea" : "input";
   let inputClassName = textarea
-    ? "w-full bg-white border rounded-[8px] px-4 py-2 outline-none h-[150px]"
-    : "w-full bg-white border h-12 rounded-[8px] px-10 outline-none";
+    ? "w-full bg-white border rounded-[8px] p-2 outline-none h-[150px]"
+    : "w-full bg-white border h-12 rounded-[8px] px-3 outline-none";
 
   if (upload) {
     InputComponent = "input";
-    inputClassName = "hidden"; // Hide the default input for file upload
+    inputClassName = "hidden";
   }
 
   return (
@@ -23,7 +23,7 @@ function FormInput({ name, placeholder, id, label, textarea, upload }) {
             htmlFor={id}
             className="w-1/4 bg-[#FECDCA] bg-opacity-50 h-[100px] rounded-[8px] px-10 flex items-center justify-center cursor-pointer text-primary text-[1.6rem]"
           >
-            <RiUploadCloud2Line/>
+            <RiUploadCloud2Line />
           </label>
         </div>
       ) : (
