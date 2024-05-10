@@ -33,9 +33,9 @@ const AffiliatePage = () => {
         <div className="w-full lgss:flex flex-col h-full">
           <HomeSearch />
           <div className="w-full px-[5%] pt-5">
-            <div className="lgss:bg-white lgss:border lgss:shadow-sm lgss:py-4 rounded-[12px]">
+            <div className="lgss:bg-white lgss:border lgss:shadow-sm lgss:pt-4 rounded-[12px]">
               <CommonH1 title="Your referral stats" />
-              <div className="flex flex-wrap w-full px-6 py-6 gap-6">
+              <div className="flex lgss:flex-row flex-col w-full px-5 py-6 gap-5">
                 <ReferralTopCard icon={GoPeople} title="Visitors" value="0" />
                 <ReferralTopCard
                   icon={AiOutlineUsergroupAdd}
@@ -59,7 +59,7 @@ const AffiliatePage = () => {
                 />
               </div>
             </div>
-            <div className="flex lgss:flex-row flex-col gap-5 pt-7 mb-12 w-full">
+            <div className="flex lgss:flex-row flex-col gap-5 pt-9 mb-12 w-full">
               <div className="lgss:bg-white lgss:border lgss:shadow-sm pt-4 rounded-[12px] h-fit lgss:w-[65%]">
                 <CommonH1 title="Share your referral link" />
                 <div className="flex flex-col text-left px-[3%] py-6">

@@ -80,15 +80,27 @@ const Homepage = () => {
                 <CreateOrderBtn title="Active Tab" />
               </div>
             </div>
-            <div className="flex flex-row flex-wrap w-full gap-4 justify-between pt-12">
-              <HomeCard
-                title="Available Balance"
-                value={"#123,583"}
-                img={purse}
-              />
-              <HomeCard title="Total Orders" value={"323"} img={carton} />
-              <HomeCard title="Total Orders" value={"Tier 3"} img={medal} />
-            </div>
+            {activeTab === "empty" ? (
+              <div className="flex flex-row flex-wrap w-full gap-4 justify-between pt-12">
+                <HomeCard
+                  title="Available Balance"
+                  value={"#0.00"}
+                  img={purse}
+                />
+                <HomeCard title="Total Orders" value={"0"} img={carton} />
+                <HomeCard title="Total Orders" value={"Tier 1"} img={medal} />
+              </div>
+            ) : (
+              <div className="flex flex-row flex-wrap w-full gap-4 justify-between pt-12">
+                <HomeCard
+                  title="Available Balance"
+                  value={"#123,583"}
+                  img={purse}
+                />
+                <HomeCard title="Total Orders" value={"323"} img={carton} />
+                <HomeCard title="Total Orders" value={"Tier 3"} img={medal} />
+              </div>
+            )}
             {activeTab === "empty" ? (
               <div className="w-full flex flex-col justify-center items-center pt-6">
                 <img src={homeEmptyIcon} alt="" />
