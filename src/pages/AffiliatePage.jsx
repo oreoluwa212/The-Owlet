@@ -13,14 +13,21 @@ import CommonH1 from "../components/CommonH1";
 import CreateOrderBtn from "../components/buttons/CreateOrderBtn";
 import ReferralBottomCard from "../components/cards/ReferralBottonCard";
 import QuickLinks from "../components/cards/QuickLinks";
+import SearchPlatforms from "../components/modals/creatingOrder/SearchPlatforms";
 
 const AffiliatePage = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
     <div className="max-w-full flex flex-col lgss:flex-row bg-bg">
       <div className="w-[20%]">
-        <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
+        <Sidebar
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          isModalOpen={isModalOpen}
+          setIsModalOpen={setIsModalOpen}
+        />
       </div>
       <div className="flex flex-col lgss:w-[80%] z-0">
         <div className="lgss:hidden w-full px-[5%] flex justify-between items-center border-b-[1px] py-5">
@@ -97,12 +104,16 @@ const AffiliatePage = () => {
               </div>
               <div className="bg-white border shadow-sm py-5 rounded-[12px] h-fit lgss:w-[35%]">
                 <CommonH1 title="Watch this video to learn how to use your referral link to earn more money" />
-                <QuickLinks/>
+                <QuickLinks />
               </div>
             </div>
           </div>
         </div>
       </div>
+      <SearchPlatforms
+        setIsModalOpen={setIsModalOpen}
+        isModalOpen={isModalOpen}
+      />
     </div>
   );
 };

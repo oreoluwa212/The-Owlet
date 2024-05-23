@@ -6,14 +6,21 @@ import HomeSearch from "../components/input/HomeSearch";
 import CreateOrderBtn from "../components/buttons/CreateOrderBtn";
 import FormInput from "../components/input/FormInput";
 import CommonH1 from "../components/CommonH1";
+import SearchPlatforms from "../components/modals/creatingOrder/SearchPlatforms";
 
 const SettingsPage = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
     <div className="max-w-full flex flex-col lgss:flex-row bg-bg h-screen">
       <div className="w-[20%]">
-        <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
+        <Sidebar
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          isModalOpen={isModalOpen}
+          setIsModalOpen={setIsModalOpen}
+        />
       </div>
       <div className="flex flex-col lgss:w-[80%] z-0">
         <div className="lgss:hidden w-full px-[5%] flex justify-between items-center border-b-[1px] py-5">
@@ -77,6 +84,10 @@ const SettingsPage = () => {
           </div>
         </div>
       </div>
+      <SearchPlatforms
+        setIsModalOpen={setIsModalOpen}
+        isModalOpen={isModalOpen}
+      />
     </div>
   );
 };

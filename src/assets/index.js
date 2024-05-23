@@ -15,6 +15,17 @@ import chat from "../assets/images/chat.png";
 import email from "../assets/images/email.png";
 import office from "../assets/images/office.png";
 import homeEmptyIcon from "../assets/images/homeEmptyIcon.png";
+import instagram from "../assets/images/instagram.png";
+import Facebook from "../assets/images/Facebook.png";
+import twitter from "../assets/images/twitter.png";
+import tiktok from "../assets/images/tiktok.png";
+import pinterest from "../assets/images/pinterest.png";
+import whatsapp from "../assets/images/whatsapp.png";
+import linkedin from "../assets/images/linkedin.png";
+import sound from "../assets/images/sound_cloud.png";
+import telegram from "../assets/images/telegram.png";
+import spotify from "../assets/images/spotify.png";
+import reddit from "../assets/images/reddit.png";
 
 export {
   logo,
@@ -34,4 +45,15 @@ export {
   email,
   office,
   homeEmptyIcon,
+  instagram,
+  Facebook,
+  twitter,
+  tiktok,
+  whatsapp,
+  pinterest,
+  linkedin,
+  sound,
+  telegram,
+  spotify,
+  reddit
 };

@@ -10,6 +10,7 @@ import HomeFilters from "../components/buttons/HomeFilters";
 import FilterBtn from "../components/buttons/FilterBtn";
 import HomeCardMobile from "../components/cards/HomeCardMobile";
 import CreateOrderBtn from "../components/buttons/CreateOrderBtn";
+import SearchPlatforms from "../components/modals/creatingOrder/SearchPlatforms";
 
 const tableData = [
   {
@@ -47,13 +48,19 @@ const columns = [
 
 const Homepage = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const countOrders = () => tableData.length;
   const [activeTab, setActiveTab] = useState("empty");
 
   return (
     <div className="max-w-full flex flex-col lgss:flex-row ">
       <div className="w-[20%]">
-        <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
+        <Sidebar
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          isModalOpen={isModalOpen}
+          setIsModalOpen={setIsModalOpen}
+        />
       </div>
       <div className="flex flex-col lgss:w-[80%] z-0">
         <div className="lgss:hidden w-full px-[5%] flex justify-between items-center border-b-[1px] py-5 bg-white">
@@ -63,7 +70,7 @@ const Homepage = () => {
             <LuMenu onClick={() => setIsOpen(true)} />
           </div>
         </div>
-        <div className="w-full lgss:flex flex-col bg-bg">
+        <div className="w-full flex flex-col bg-bg">
           <HomeSearch />
           <div className="w-full flex flex-col px-[5%]">
             <div className="w-full flex lgss:flex-row flex-col gap-4 py-2">
@@ -152,6 +159,10 @@ const Homepage = () => {
           </div>
         </div>
       </div>
+      <SearchPlatforms
+        setIsModalOpen={setIsModalOpen}
+        isModalOpen={isModalOpen}
+      />
     </div>
   );
 };

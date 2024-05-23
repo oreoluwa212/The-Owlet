@@ -8,6 +8,7 @@ import HomeFilters from "../components/buttons/HomeFilters";
 import FilterBtn from "../components/buttons/FilterBtn";
 import TableCard from "../components/cards/TableCard";
 import HomeCardMobile from "../components/cards/HomeCardMobile";
+import SearchPlatforms from "../components/modals/creatingOrder/SearchPlatforms";
 
   const tableData = [
     {
@@ -75,12 +76,18 @@ import HomeCardMobile from "../components/cards/HomeCardMobile";
   
 const OrderPage = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const countOrders = () => tableData.length;
 
   return (
     <div className="max-w-full flex flex-col lgss:flex-row bg-bg h-screen">
       <div className="w-[20%]">
-        <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
+        <Sidebar
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          isModalOpen={isModalOpen}
+          setIsModalOpen={setIsModalOpen}
+        />
       </div>
       <div className="flex flex-col lgss:w-[80%] z-0">
         <div className="lgss:hidden w-full px-[5%] flex justify-between items-center border-b-[1px] py-5">
@@ -101,7 +108,7 @@ const OrderPage = () => {
               </div>
               <HomeSearchInputWhite />
               <div className="lgss:hidden flex">
-              <FilterBtn />
+                <FilterBtn />
               </div>
             </div>
             <div className="hidden w-full lgss:flex  items-center pt-8">
@@ -144,6 +151,10 @@ const OrderPage = () => {
           </div>
         </div>
       </div>
+      <SearchPlatforms
+        setIsModalOpen={setIsModalOpen}
+        isModalOpen={isModalOpen}
+      />
     </div>
   );
 };

@@ -7,6 +7,7 @@ module.exports = {
         primary: "#B42318",
         secondary: "#667085",
         bg: "#F9FAFB",
+        grey: "#475467",
       },
       fontFamily: {
         inter: ["Inter", "sans-serif"],

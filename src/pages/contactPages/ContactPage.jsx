@@ -4,14 +4,21 @@ import { LuBell, LuMenu } from "react-icons/lu";
 import { chat, email, logo, office, questionmark } from "../../assets";
 import HomeSearch from "../../components/input/HomeSearch";
 import ContactCard from "../../components/cards/ContactCard";
+import SearchPlatforms from "../../components/modals/creatingOrder/SearchPlatforms";
 
 const ContactPage = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
     <div className="max-w-full flex flex-col lgss:flex-row bg-bg h-screen">
       <div className="w-[20%]">
-        <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
+        <Sidebar
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          isModalOpen={isModalOpen}
+          setIsModalOpen={setIsModalOpen}
+        />
       </div>
       <div className="flex flex-col lgss:w-[80%] z-0">
         <div className="lgss:hidden w-full px-[5%] flex justify-between items-center border-b-[1px] py-5">
@@ -38,7 +45,7 @@ const ContactPage = () => {
                   link="Create a ticket"
                   img={chat}
                   to={"/contact/create-ticket"}
-                  />
+                />
               </div>
               <div className="flex flex-col lgss:flex-row gap-10">
                 <ContactCard
@@ -56,6 +63,10 @@ const ContactPage = () => {
           </div>
         </div>
       </div>
+      <SearchPlatforms
+        setIsModalOpen={setIsModalOpen}
+        isModalOpen={isModalOpen}
+      />
     </div>
   );
 };
