@@ -6,9 +6,9 @@ import HomeSearch from "../components/input/HomeSearch";
 import HomeSearchInputWhite from "../components/input/HomeSearchInput";
 import HomeFilters from "../components/buttons/HomeFilters";
 import FilterBtn from "../components/buttons/FilterBtn";
-import TableCard from "../components/cards/TableCard";
 import HomeCardMobile from "../components/cards/HomeCardMobile";
 import SearchPlatforms from "../components/modals/creatingOrder/SearchPlatforms";
+import TableHome from "../components/cards/TableHome";
 
   const tableData = [
     {
@@ -44,6 +44,26 @@ import SearchPlatforms from "../components/modals/creatingOrder/SearchPlatforms"
     {
       ID: "#53045701",
       Services: "Instagram",
+      Date: "Jan 6 2022",
+      Quantity: "10000",
+      Cost: "#17,500.00",
+      Status: "In progress",
+      Progress: "60%",
+      Link: "link",
+    },
+    {
+      ID: "#53045701",
+      Services: "Facebook",
+      Date: "Jan 6 2022",
+      Quantity: "10000",
+      Cost: "#17,500.00",
+      Status: "In progress",
+      Progress: "60%",
+      Link: "link",
+    },
+    {
+      ID: "#53045701",
+      Services: "Facebook",
       Date: "Jan 6 2022",
       Quantity: "10000",
       Cost: "#17,500.00",
@@ -111,8 +131,8 @@ const OrderPage = () => {
                 <FilterBtn />
               </div>
             </div>
-            <div className="hidden w-full lgss:flex  items-center pt-8">
-              <TableCard
+            <div className="hidden w-full lgss:flex items-center pt-8">
+              <TableHome
                 heading="Orders"
                 columns={columns}
                 tableData={tableData}
@@ -158,5 +178,6 @@ const OrderPage = () => {
     </div>
   );
 };
+
 
 export default OrderPage;

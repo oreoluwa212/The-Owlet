@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa6";
 
-const TableCard = ({ heading, columns, tableData, numberOfOrders }) => {
+const TableHome = ({ heading, columns, tableData, numberOfOrders }) => {
   return (
     <div className="w-full border bg-white rounded-[12px]">
       <div className="px-8 py-6 text-[20px] font-semibold flex gap-5 items-center">
@@ -10,25 +10,25 @@ const TableCard = ({ heading, columns, tableData, numberOfOrders }) => {
           <p>{numberOfOrders} Orders</p>
         </div>
       </div>
-      <div className="w-full px-[5%] py-4">
-        <div className="grid grid-cols-5 gap-4 text-[18px] text-secondary font-semibold">
+      <div className="w-full">
+        <div className="grid grid-cols-8 bg-secondary bg-opacity-5 py-4 text-[18px] px-[5%]">
           {columns.map((column, index) => (
-            <div key={index} className="text-center">
+            <div
+              key={index}
+              className="font-semibold text-[1rem] text-secondary text-center"
+            >
               {column.label}
             </div>
           ))}
         </div>
-        <div className="mt-4">
+        <div>
           {tableData.map((row, rowIndex) => (
             <div
               key={rowIndex}
-              className="grid grid-cols-5 gap-4 border-b py-3 w-full"
+              className="grid grid-cols-8 border-b py-3 px-[5%] text-[.9rem] font-semibold text-center"
             >
               {columns.map((column, colIndex) => (
-                <div
-                  key={colIndex}
-                  className="text-center text-[.9rem] font-semibold flex justify-center items-center"
-                >
+                <div key={colIndex} className="text-center">
                   {row[column.key]}
                 </div>
               ))}
@@ -59,4 +59,4 @@ const TableCard = ({ heading, columns, tableData, numberOfOrders }) => {
   );
 };
 
-export default TableCard;
+export default TableHome;
