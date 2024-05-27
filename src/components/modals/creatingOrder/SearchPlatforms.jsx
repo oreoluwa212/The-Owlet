@@ -21,11 +21,11 @@ function SearchPlatforms({ setIsModalOpen, isModalOpen }) {
   if (!isModalOpen) return null;
   const [serviceModal, setServiceModal] = useState(false);
   const [displayVmodal, removeVModal] = useState(true);
-  
+
   const handleButtonClick = () => {
-      setServiceModal(true);
-      removeVModal(false);
-    };
+    setServiceModal(true);
+    removeVModal(false);
+  };
 
   const handleOverlayClick = (e) => {
     if (e.target === e.currentTarget) {
@@ -37,13 +37,13 @@ function SearchPlatforms({ setIsModalOpen, isModalOpen }) {
     <>
       <div
         onClick={handleOverlayClick}
-        className="hidden lgss:flex fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50"
+        className="hidden lgss:flex fixed inset-0 bg-gray-500 bg-opacity-50 justify-center items-center z-50"
       >
         {serviceModal && <SpecificService />}
         {displayVmodal && (
           <div className="bg-white h-fit pb-4 rounded-[16px] border w-[30%] pt-3 flex flex-col justify-start items-start">
             <SearchComp placeholder={"Search for any platform"} />
-            <ul className="flex flex-col text-left px-5 gap-2 pt-4 text-[1.2rem]">
+            <ul className="flex flex-col text-left px-5 gap-2 pt-4 text-[1rem]">
               <li className="text-grey font-medium">Most popular</li>
               <li
                 onClick={handleButtonClick}
@@ -63,7 +63,7 @@ function SearchPlatforms({ setIsModalOpen, isModalOpen }) {
                 Tiktok
               </li>
             </ul>
-            <ul className="flex flex-col text-left px-5 gap-2 pt-6 text-[1.2rem]">
+            <ul className="flex flex-col text-left px-5 gap-2 pt-6 text-[1rem]">
               <li className="text-grey font-medium">All platforms</li>
               <li className="flex gap-2 items-center">
                 <img className="h-6" src={whatsapp} alt="whatsapp" /> Whatsapp
@@ -95,8 +95,6 @@ function SearchPlatforms({ setIsModalOpen, isModalOpen }) {
           </div>
         )}
       </div>
-
-
     </>
   );
 }

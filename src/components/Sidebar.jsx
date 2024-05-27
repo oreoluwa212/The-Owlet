@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { LuArrowLeftToLine } from "react-icons/lu";
 import { LiaTimesSolid } from "react-icons/lia";
 import { TiPlus } from "react-icons/ti";
@@ -10,6 +10,18 @@ import QuickLinks from "./cards/QuickLinks";
 import SearchPlatforms from "./modals/creatingOrder/SearchPlatforms";
 
 const Sidebar = ({ isOpen, setIsOpen, isModalOpen, setIsModalOpen }) => {
+  useEffect(() => {
+    if (isOpen) {
+      document.body.classList.add("no-scroll");
+    } else {
+      document.body.classList.remove("no-scroll");
+    }
+
+    return () => {
+      document.body.classList.remove("no-scroll");
+    };
+  }, [isOpen]);
+
   return (
     <>
       <div className="h-screen lgss:w-1/5 hidden lgss:flex flex-col shadow-sm border-r-[1px] pt-3 bg-white shadow-gray-400/10 pb-10 z-10 fixed">
@@ -53,7 +65,7 @@ const Sidebar = ({ isOpen, setIsOpen, isModalOpen, setIsModalOpen }) => {
         <>
           <div className="absolute inset-0 bg-black opacity-80 z-10 backdrop-filter backdrop-blur-md lgss:hidden"></div>
           <div
-            className={`absolute z-20 top-0 right-0 bg-white lgss:w-3/4 mds:w-[50%] w-[70%] lgss:hidden flex flex-col text-scondary transform transition-transform duration-300 ${
+            className={`absolute z-20 top-0 right-0 bg-white h-full lgss:w-3/4 mds:w-[50%] w-[70%] lgss:hidden flex flex-col text-secondary transform transition-transform duration-300 ${
               isOpen ? "translate-x-0 " : "-translate-x-full"
             }`}
           >

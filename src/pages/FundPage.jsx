@@ -12,85 +12,86 @@ import CreateOrderBtn from "../components/buttons/CreateOrderBtn";
 import FundHistoryTable from "../components/tables/FundHistoryTable";
 import SearchPlatforms from "../components/modals/creatingOrder/SearchPlatforms";
 
-  const tableData = [
-    {
-      ID: "#53007613",
-      Method: "Cryptomus",
-      Cost: "#50,000.00",
-      Date: "Jan 6,2022",
-    },
-    {
-      ID: "#53007613",
-      Method: "Cryptomus",
-      Cost: "#50,000.00",
-      Date: "Jan 6,2022",
-    },
-    {
-      ID: "#53007613",
-      Method: "Korapay",
-      Cost: "#50,000.00",
-      Date: "Jan 6,2022",
-    },
-    {
-      ID: "#53007613",
-      Method: "Cryptomus",
-      Cost: "#50,000.00",
-      Date: "Jan 6,2022",
-    },
-    {
-      ID: "#53007613",
-      Method: "Korapay",
-      Cost: "#50,000.00",
-      Date: "Jan 6,2022",
-    },
-    {
-      ID: "#53007613",
-      Method: "Cryptomus",
-      Cost: "#50,000.00",
-      Date: "Jan 6,2022",
-    },
-    {
-      ID: "#53045701",
-      Method: "Flutterwave",
-      Cost: "#50,000.00",
-      Date: "Jan 6,2022",
-    },
-    {
-      ID: "#53045701",
-      Method: "Flutterwave",
-      Cost: "#50,000.00",
-      Date: "Jan 6,2022",
-    },
-    {
-      ID: "#53007613",
-      Method: "Korapay",
-      Cost: "#50,000.00",
-      Date: "Jan 6,2022",
-    },
-    {
-      ID: "#53007613",
-      Method: "Cryptomus",
-      Cost: "#50,000.00",
-      Date: "Jan 6,2022",
-    },
-    {
-      ID: "#53045701",
-      Method: "Flutterwave",
-      Cost: "#50,000.00",
-      Date: "Jan 6,2022",
-    },
-  ];
-  const columns = [
-    { label: "ID", key: "ID" },
-    { label: "Method", key: "Method" },
-    { label: "Cost", key: "Cost" },
-    { label: "Date", key: "Date" },
-  ];
+const tableData = [
+  {
+    ID: "#53007613",
+    Method: "Cryptomus",
+    Cost: "#50,000.00",
+    Date: "Jan 6,2022",
+  },
+  {
+    ID: "#53007613",
+    Method: "Cryptomus",
+    Cost: "#50,000.00",
+    Date: "Jan 6,2022",
+  },
+  {
+    ID: "#53007613",
+    Method: "Korapay",
+    Cost: "#50,000.00",
+    Date: "Jan 6,2022",
+  },
+  {
+    ID: "#53007613",
+    Method: "Cryptomus",
+    Cost: "#50,000.00",
+    Date: "Jan 6,2022",
+  },
+  {
+    ID: "#53007613",
+    Method: "Korapay",
+    Cost: "#50,000.00",
+    Date: "Jan 6,2022",
+  },
+  {
+    ID: "#53007613",
+    Method: "Cryptomus",
+    Cost: "#50,000.00",
+    Date: "Jan 6,2022",
+  },
+  {
+    ID: "#53045701",
+    Method: "Flutterwave",
+    Cost: "#50,000.00",
+    Date: "Jan 6,2022",
+  },
+  {
+    ID: "#53045701",
+    Method: "Flutterwave",
+    Cost: "#50,000.00",
+    Date: "Jan 6,2022",
+  },
+  {
+    ID: "#53007613",
+    Method: "Korapay",
+    Cost: "#50,000.00",
+    Date: "Jan 6,2022",
+  },
+  {
+    ID: "#53007613",
+    Method: "Cryptomus",
+    Cost: "#50,000.00",
+    Date: "Jan 6,2022",
+  },
+  {
+    ID: "#53045701",
+    Method: "Flutterwave",
+    Cost: "#50,000.00",
+    Date: "Jan 6,2022",
+  },
+];
+const columns = [
+  { label: "ID", key: "ID" },
+  { label: "Method", key: "Method" },
+  { label: "Cost", key: "Cost" },
+  { label: "Date", key: "Date" },
+];
 
 const FundPage = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("empty");
+  const [activePayment, setActivePayment] = useState(null);
 
   return (
     <div className="w-full flex flex-col lgss:flex-row bg-bg">
@@ -128,10 +129,7 @@ const FundPage = () => {
           </div>
           <div className="flex lgss:flex-row flex-col gap-5 w-full h-full justify-between lgss:py-12 px-[5%]">
             <div className="lgss:bg-white lgss:w-[55%] lgss:border shaow-md py-6 rounded-[12px] flex flex-col justify-start items-start text-left">
-              <CommonH1
-                title="Fund your account
-"
-              />
+              <CommonH1 title="Fund your account" />
               <div className="w-full flex flex-col px-[5%] pt-5">
                 <h1 className="text-[1rem] lgss:text-[1.3rem] font-medium text-secondary">
                   Amount
@@ -154,12 +152,28 @@ const FundPage = () => {
                 </h1>
                 <div className="flex-col gap-2">
                   <div className="flex justify-between gap-4 pt-4 items-center w-full">
-                    <PaymentBtns img={flutter} />
-                    <PaymentBtns img={cryptomus} />
+                    <PaymentBtns
+                      img={flutter}
+                      isActive={activePayment === "flutter"}
+                      onClick={() => setActivePayment("flutter")}
+                    />
+                    <PaymentBtns
+                      img={cryptomus}
+                      isActive={activePayment === "cryptomus"}
+                      onClick={() => setActivePayment("cryptomus")}
+                    />
                   </div>
                   <div className="flex justify-between gap-4 pt-4 items-center w-full">
-                    <PaymentBtns img={korapay} />
-                    <PaymentBtns img={cashenvoy} />
+                    <PaymentBtns
+                      img={korapay}
+                      isActive={activePayment === "korapay"}
+                      onClick={() => setActivePayment("korapay")}
+                    />
+                    <PaymentBtns
+                      img={cashenvoy}
+                      isActive={activePayment === "cashenvoy"}
+                      onClick={() => setActivePayment("cashenvoy")}
+                    />
                   </div>
                 </div>
               </div>
@@ -172,7 +186,6 @@ const FundPage = () => {
                 <p>8% Cashback on all Payments from 6am - 11pm</p>
                 <p>20% Hootback on all Payments from 11pm - 5:59am</p>
               </div>
-
               <div className="w-[90%] mx-auto flex flex-col px-[5%] mt-6 bg-[#FEDF89] bg-opacity-30 py-3 rounded-[8px] font-semibold text-[.9rem] lgss:text-[1.2rem] text-primary">
                 <h1 className="font-semibold py-3">IMPORTANT</h1>
                 <ul className="list-disc px-[5%] border-t-2 border-[#FEDF89] py-4 flex flex-col gap-4">
@@ -194,7 +207,6 @@ const FundPage = () => {
                   completed, kindly send a mail to payment@theowlette.com
                 </p>
               </div>
-
               <div className="w-full px-[5%] pt-4">
                 <Btn />
               </div>

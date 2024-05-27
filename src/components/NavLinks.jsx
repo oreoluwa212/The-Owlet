@@ -58,17 +58,17 @@ function NavLinks() {
   return (
     <div>
       <nav className="w-full h-full flex flex-col">
-        <ul className="border-b-[1px] py-3">
-          <h1 className="text-center w-1/2 uppercase text-secondary font-medium pb-1">
+        <ul className="border-b-[1px] py-4">
+          <h1 className="text-center w-1/2 uppercase text-secondary font-medium">
             general
           </h1>
           {general.map((link) => (
             <li key={link.route}>
               <NavLink
                 to={link.route}
-                className={`flex flex-row items-center mb-2 w-[90%] text-[.8rem] px-8 mx-auto ${
+                className={`flex flex-row items-center lgss:mb-0 mb-3 w-[90%] text-[.8rem] px-8 mx-auto ${
                   pathname === link.route
-                    ? "rounded-lg bg-[#FEF3F2] text-primary py-2 lgss:w-[80%] w-[200px] lgss:pl-4"
+                    ? "rounded-lg bg-[#FEF3F2] text-primary py-1 lgss:w-[80%] w-[200px] lgss:pl-4"
                     : pathname.includes(link.route)
                     ? ""
                     : ""
@@ -76,7 +76,7 @@ function NavLinks() {
               >
                 <div className="flex justify-center items-center gap-3">
                   {link.icon}
-                  <span className="text-[1.1rem] font-semibold leading-7 whitespace-nowrap">
+                  <span className="text-[1.1rem] lgss:text-[.8rem] font-semibold lgss:leading-6 leading-7 whitespace-nowrap">
                     {link.name}
                   </span>
                 </div>
@@ -84,25 +84,25 @@ function NavLinks() {
             </li>
           ))}
         </ul>
-        <ul className="pt-4">
-          <h1 className="text-center w-1/2 uppercase text-secondary font-medium pb-1">
+        <ul className="py-4">
+          <h1 className="text-center w-1/2 uppercase text-secondary font-medium">
             help
           </h1>
           {help.map((link) => (
             <li key={link.route}>
               <NavLink
                 to={link.route}
-                className={`flex flex-row text-[0.8rem] items-center mb-2 w-[90%] px-8 mx-auto ${
+                className={`flex flex-row items-center lgss:mb-0 mb-3 w-[90%] text-[.8rem] px-8 mx-auto ${
                   pathname === link.route
-                    ? "rounded-lg bg-[#FEF3F2] text-primary py-[.5rem] lgss:w-[80%] w-[200px] pl-4"
+                    ? "rounded-lg bg-[#FEF3F2] text-primary py-1 lgss:w-[80%] w-[200px] lgss:pl-4"
                     : pathname.includes(link.route)
-                    ? "rounded-lg bg-[#FEF3F2] text-primary py-[.5rem] lgss:w-[80%] w-[200px] pl-4"
+                    ? ""
                     : ""
                 }`}
               >
-                <div className="flex justify-center items-center gap-2">
+                <div className="flex justify-center items-center gap-3">
                   {link.icon}
-                  <span className="text-[1.1rem] font-semibold leading-7 whitespace-nowrap">
+                  <span className="text-[1.1rem] lgss:text-[.8rem] font-semibold lgss:leading-6 leading-7 whitespace-nowrap">
                     {link.name}
                   </span>
                 </div>
