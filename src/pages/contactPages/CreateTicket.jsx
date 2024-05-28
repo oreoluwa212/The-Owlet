@@ -6,10 +6,14 @@ import HomeSearch from "../../components/input/HomeSearch";
 import CreateOrderBtn from "../../components/buttons/CreateOrderBtn";
 import CommonH1 from "../../components/CommonH1";
 import FormInput from "../../components/input/FormInput";
+import { AiOutlineSearch } from "react-icons/ai";
 
 const CreateTicket = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("empty");
+  const [activeStatusTab, setActiveStatusTab] = useState("pending");
+  const pendingCount = 5;
+  const resolvedCount = 3;
 
   return (
     <div className="max-w-full flex flex-col lgss:flex-row bg-bg h-screen">
@@ -41,8 +45,8 @@ const CreateTicket = () => {
                 <CreateOrderBtn title="Active Tab" />
               </div>
             </div>
-            <div className="flex lgss:flex-row flex-col gap-5 w-full h-full justify-between lgss:py-12">
-              <div className="lgss:bg-white lgss:w-[55%] lgss:border shaow-md pt-6 rounded-[12px] flex flex-col justify-start items-start text-left">
+            <div className="flex lgss:flex-row flex-col gap-5 w-full h-full justify-between lgss:py-7">
+              <div className="lgss:bg-white lgss:w-[45%] lgss:border shadow-md pt-6 rounded-[12px] flex flex-col justify-start items-start text-left">
                 <CommonH1 title="Create a ticket" />
                 <div className="w-full px-[5%] pt-4">
                   <form action="tickets" className="flex flex-col gap-7">
@@ -71,7 +75,7 @@ const CreateTicket = () => {
                 </div>
               </div>
               {activeTab === "empty" ? (
-                <div className="bg-white lgss:w-[45%] w-[90%] mx-auto border shaow-md py-5 rounded-[12px] h-[420px] flex flex-col ">
+                <div className="bg-white lgss:w-[45%] w-[90%] mx-auto border shadow-md py-5 rounded-[12px] h-[420px] flex flex-col ">
                   <CommonH1 title="Tickets" />
                   <div className="flex justify-center items-center w-full flex-col font-semibold text-[26px]">
                     <img className="h-[250px]" src={book} alt="" />
@@ -82,7 +86,69 @@ const CreateTicket = () => {
                 <div className="lgss:w-[55%] bg-white border">
                   <CommonH1 title="Tickets" />
                   <div className="flex flex-col px-[5%] pt-5">
-                     
+                    <div className="w-full flex lgss:flex-row flex-col justify-between gap-4">
+                      <div className="w-[30%] flex text-[14px]">
+                        <button
+                          className={`bg-transparent border-b-2 px-3 inline-flex gap-2 py-2 ${
+                            activeStatusTab === "pending"
+                              ? "text-primary border-b-primary"
+                              : "text-secondary border-b-secondary border-b-[1px]"
+                          }`}
+                          onClick={() => setActiveStatusTab("pending")}
+                        >
+                          Pending
+                          <span
+                            className={`px-2 font-semibold rounded-full ${
+                              activeStatusTab === "pending"
+                                ? "border-primary border-[1px] bg-pinkBg"
+                                : "bg-[#F9FAFB] border-[#EAECF0] border-[1px]"
+                            }`}
+                          >
+                            {pendingCount}
+                          </span>
+                        </button>
+                        <button
+                          className={`bg-transparent border-b-2 px-3 inline-flex gap-2 py-2 ${
+                            activeStatusTab === "resolved"
+                              ? "text-primary border-b-primary"
+                              : "text-secondary border-b-secondary border-b-[1px]"
+                          }`}
+                          onClick={() => setActiveStatusTab("resolved")}
+                        >
+                          Resolved
+                          <span
+                            className={`px-2 font-semibold rounded-full ${
+                              activeStatusTab === "resolved"
+                                ? "bg-pinkBg border-[1px] border-primary"
+                                : "bg-[#F9FAFB] border-[#EAECF0] border-[1px]"
+                            }`}
+                          >
+                            {resolvedCount}
+                          </span>
+                        </button>
+                      </div>
+                      <div className="lgss:w-[50%] w-full">
+                        <div className="relative w-full">
+                          <input
+                            type="text"
+                            className="w-full bg-white border h-12 rounded-[8px] px-10 outline-none"
+                            placeholder="Search"
+                            name="search"
+                            id="search"
+                          />
+                          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <AiOutlineSearch className="text-gray-400 text-[22px]" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="mt-5">
+                      {activeStatusTab === "pending" ? (
+                        <div>Pending orders content...</div>
+                      ) : (
+                        <div>Resolved orders content...</div>
+                      )}
+                    </div>
                   </div>
                 </div>
               )}

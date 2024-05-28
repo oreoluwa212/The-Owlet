@@ -8,6 +8,7 @@ module.exports = {
         secondary: "#667085",
         bg: "#F9FAFB",
         grey: "#475467",
+        pinkBg: "#FECDCA",
       },
       fontFamily: {
         inter: ["Inter", "sans-serif"],

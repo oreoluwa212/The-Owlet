@@ -96,7 +96,7 @@ function NavLinks() {
                   pathname === link.route
                     ? "rounded-lg bg-[#FEF3F2] text-primary py-1 lgss:w-[80%] w-[200px] lgss:pl-4"
                     : pathname.includes(link.route)
-                    ? ""
+                    ? "rounded-lg bg-[#FEF3F2] text-primary py-1 lgss:w-[80%] w-[200px] lgss:pl-4"
                     : ""
                 }`}
               >
