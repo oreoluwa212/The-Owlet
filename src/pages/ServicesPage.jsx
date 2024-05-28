@@ -10,6 +10,7 @@ import FilterBtn from "../components/buttons/FilterBtn";
 import HomeFilters from "../components/buttons/HomeFilters";
 import HomeSearchInputWhite from "../components/input/HomeSearchInput";
 import { CiCircleInfo } from "react-icons/ci";
+import { IoFilterSharp } from "react-icons/io5";
 
 const tableData = [
   {
@@ -82,6 +83,11 @@ const ServicesPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
+  const getCurrentDate = () => {
+    const options = { day: "numeric", month: "long", year: "numeric" };
+    return new Date().toLocaleDateString(undefined, options);
+  };
+
   return (
     <div className="max-w-full flex flex-col lgss:flex-row bg-bg h-screen">
       <div className="w-[20%]">
@@ -105,11 +111,11 @@ const ServicesPage = () => {
         </div>
         <div>
           <div className="w-full px-[5%] py-5">
-            <h1 className="text-[2rem] font-semibold">
+            <h1 className="text-[2rem] font-bold">
               Instagram followers service list
             </h1>
-            <h1 className="text-[1.2rem] font-normal text-secondary">
-              Last updated Mar 15th 2024
+            <h1 className="text-[1rem] font-medium text-secondary">
+              Last updated {getCurrentDate()}
             </h1>
             <div className="w-full py-8 hidden lgss:flex justify-between">
               <div className="flex gap-3">
@@ -121,21 +127,24 @@ const ServicesPage = () => {
             </div>
             <div className="hidden w-full lgss:flex justify-center items-center py-2">
               <TableCard
-                heading="In Progress"
                 columns={columns}
                 tableData={tableData}
                 numberOfOrders={tableData.length}
               />
             </div>
           </div>
-          <div className="lgss:hidden flex flex-col gap-5 text-left py-6">
-            <h1 className="uppercase font-semibold text-secondary">
-              orders in progress
-            </h1>
+          <div className="lgss:hidden flex flex-col gap-5 text-left py-6 px-[5%]">
+            <div className="w-full flex gap-3">
+              <HomeSearchInputWhite />
+              <div className="w-[15%] bg-white border-[1px] rounded-[8px] flex items-center justify-center">
+                <IoFilterSharp />
+              </div>
+            </div>
             <HomeCardMobile
               title="Instagram Nigerian Followers"
               value={"80%"}
             />
+            <HomeCardMobile title="Facebook Nigerian Followers" value={"80%"} />
             <HomeCardMobile title="Facebook Nigerian Followers" value={"80%"} />
           </div>
         </div>

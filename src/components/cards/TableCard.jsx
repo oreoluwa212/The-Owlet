@@ -1,17 +1,11 @@
 import React from "react";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa6";
 
-const TableCard = ({ heading, columns, tableData, numberOfOrders }) => {
+const TableCard = ({ columns, tableData, numberOfOrders }) => {
   return (
     <div className="w-full border bg-white rounded-[12px]">
-      <div className="px-8 py-6 text-[20px] font-semibold flex gap-5 items-center">
-        <h1 className="text-left">{heading}</h1>
-        <div className="bg-[#FECDCA] bg-opacity-50 border-[#FECDCA] border-2 text-[16px] rounded-full text-primary py-1 px-3">
-          <p>{numberOfOrders} Orders</p>
-        </div>
-      </div>
-      <div className="w-full px-[5%] py-4">
-        <div className="grid grid-cols-5 gap-4 text-[18px] text-secondary font-semibold">
+      <div className="w-full pb-4">
+        <div className="grid grid-cols-5 gap-4 text-[18px] bg-secondary bg-opacity-5 py-5 text-secondary font-semibold">
           {columns.map((column, index) => (
             <div key={index} className="text-center">
               {column.label}
@@ -22,7 +16,7 @@ const TableCard = ({ heading, columns, tableData, numberOfOrders }) => {
           {tableData.map((row, rowIndex) => (
             <div
               key={rowIndex}
-              className="grid grid-cols-5 gap-4 border-b py-3 w-full"
+              className="grid grid-cols-5 gap-4 border-b px-3 py-3 w-full"
             >
               {columns.map((column, colIndex) => (
                 <div

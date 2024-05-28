@@ -4,18 +4,28 @@ import { LuBell, LuInbox, LuMenu } from "react-icons/lu";
 import { carton, homeEmptyIcon, logo, medal, purse } from "../assets";
 import HomeSearch from "../components/input/HomeSearch";
 import HomeCard from "../components/cards/HomeCard";
-import TableCard from "../components/cards/TableCard";
 import HomeSearchInputWhite from "../components/input/HomeSearchInput";
 import HomeFilters from "../components/buttons/HomeFilters";
 import FilterBtn from "../components/buttons/FilterBtn";
 import HomeCardMobile from "../components/cards/HomeCardMobile";
 import CreateOrderBtn from "../components/buttons/CreateOrderBtn";
 import SearchPlatforms from "../components/modals/creatingOrder/SearchPlatforms";
+import TableHome from "../components/cards/TableHome";
 
 const tableData = [
   {
     ID: "#53045701",
     Services: "Instagram",
+    Date: "Jan 6 2022",
+    Quantity: "10000",
+    Cost: "#17,500.00",
+    Status: "In progress",
+    Progress: "60%",
+    Link: "link",
+  },
+  {
+    ID: "#53045701",
+    Services: "Facebook",
     Date: "Jan 6 2022",
     Quantity: "10000",
     Cost: "#17,500.00",
@@ -133,7 +143,7 @@ const Homepage = () => {
                     <HomeSearchInputWhite />
                   </div>
                   <div className="hidden w-full lgss:flex justify-center items-center py-2">
-                    <TableCard
+                    <TableHome
                       heading="In Progress"
                       columns={columns}
                       tableData={tableData}
