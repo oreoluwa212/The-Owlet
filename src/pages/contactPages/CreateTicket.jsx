@@ -7,13 +7,40 @@ import CreateOrderBtn from "../../components/buttons/CreateOrderBtn";
 import CommonH1 from "../../components/CommonH1";
 import FormInput from "../../components/input/FormInput";
 import { AiOutlineSearch } from "react-icons/ai";
+import TicketCards from "../../components/cards/TicketCards";
 
 const CreateTicket = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("empty");
   const [activeStatusTab, setActiveStatusTab] = useState("pending");
-  const pendingCount = 5;
-  const resolvedCount = 3;
+  const [pendingTickets, setPendingTickets] = useState([
+    {
+      complainHead: "Invalid Order",
+      user: "Mildred",
+      complaint:
+        "If you have any other questions or requests, please feel free to open a new ticket or refer to the previous ticket using the ticket number, and we will be happy to assist you further.",
+      time: "3h ago",
+    },
+    {
+      complainHead: "Cancel my Order",
+      user: "Michael",
+      complaint:
+        "If you have any other questions or requests, please feel free to open a new ticket or refer to the previous ticket using the ticket number, and we will be happy to assist you further.",
+      time: "8h ago",
+    },
+  ]);
+  const [resolvedTickets, setResolvedTickets] = useState([
+    {
+      complainHead: "Invalid Order",
+      user: "Mabel",
+      complaint:
+        "If you have any other questions or requests, please feel free to open a new ticket or refer to the previous ticket using the ticket number, and we will be happy to assist you further.",
+      time: "8h ago",
+    },
+  ]);
+
+  const pendingCount = pendingTickets.length;
+  const resolvedCount = resolvedTickets.length;
 
   return (
     <div className="max-w-full flex flex-col lgss:flex-row bg-bg h-screen">
@@ -144,9 +171,35 @@ const CreateTicket = () => {
                     </div>
                     <div className="mt-5">
                       {activeStatusTab === "pending" ? (
-                        <div>Pending orders content...</div>
+                        <div className="flex flex-col gap-6 w-full">
+                          <TicketCards
+                            complainHead={"Invalid Order"}
+                            user={"Mildred"}
+                            complaint={
+                              "If you have any other questions or requests, please feel free to open a new ticket or refer to the previous ticket using the ticket number, and we will be happy to assist you further."
+                            }
+                            time={"3h ago"}
+                          />
+                          <TicketCards
+                            complainHead={"Cancel my Order"}
+                            user={"Michael"}
+                            complaint={
+                              "If you have any other questions or requests, please feel free to open a new ticket or refer to the previous ticket using the ticket number, and we will be happy to assist you further."
+                            }
+                            time={"8h ago"}
+                          />
+                        </div>
                       ) : (
-                        <div>Resolved orders content...</div>
+                        <div className="flex flex-col gap-6 w-full">
+                          <TicketCards
+                            complainHead={"Invalid Order"}
+                            user={"Mabel"}
+                            complaint={
+                              "If you have any other questions or requests, please feel free to open a new ticket or refer to the previous ticket using the ticket number, and we will be happy to assist you further."
+                            }
+                            time={"8h ago"}
+                          />
+                        </div>
                       )}
                     </div>
                   </div>
