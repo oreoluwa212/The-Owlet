@@ -1,11 +1,10 @@
 import React from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 import { FaAngleDown } from "react-icons/fa6";
-import { avatar } from "../../assets";
 import UserInfo from "../UserInfo";
 import { LuBell, LuMenu } from "react-icons/lu";
 
-function HomeSearch() {
+function HomeSearch({ user, getInitials }) {
   return (
     <div className="hidden lgss:flex justify-between items-center w-full px-[5%] py-7 bg-white mb-5 h-[85px] shadow-md">
       <div className="relative w-[40%]">
@@ -23,11 +22,18 @@ function HomeSearch() {
       <div className="w-[30%] flex justify-end items-end">
         <div className="gap-8 flex justify-center items-center text-secondary text-[24px]">
           <LuBell />
-          <LuMenu />
+          <LuMenu className="lgss:" />
         </div>
       </div>
       <div className="w-[30%]">
-        <UserInfo icon={<FaAngleDown/>} avatar={avatar} />
+        {user && (
+          <UserInfo
+            initials={getInitials(`${user.firstName} ${user.lastName}`)}
+            icon={<FaAngleDown />}
+            firstName={user.firstName}
+            lastName={user.lastName}
+          />
+        )}
       </div>
     </div>
   );

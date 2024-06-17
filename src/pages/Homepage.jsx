@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Sidebar from "../components/Sidebar";
 import { LuBell, LuInbox, LuMenu } from "react-icons/lu";
 import { carton, homeEmptyIcon, logo, medal, purse } from "../assets";
@@ -11,56 +11,39 @@ import HomeCardMobile from "../components/cards/HomeCardMobile";
 import CreateOrderBtn from "../components/buttons/CreateOrderBtn";
 import SearchPlatforms from "../components/modals/creatingOrder/SearchPlatforms";
 import TableHome from "../components/cards/TableHome";
+import { tableData, columns } from "../assets/data/data";
+import { useLocation } from "react-router-dom";
 
-const tableData = [
-  {
-    ID: "#53045701",
-    Services: "Instagram",
-    Date: "Jan 6 2022",
-    Quantity: "10000",
-    Cost: "#17,500.00",
-    Status: "In progress",
-    Progress: "60%",
-    Link: "link",
-  },
-  {
-    ID: "#53045701",
-    Services: "Facebook",
-    Date: "Jan 6 2022",
-    Quantity: "10000",
-    Cost: "#17,500.00",
-    Status: "In progress",
-    Progress: "60%",
-    Link: "link",
-  },
-  {
-    ID: "#53045701",
-    Services: "Facebook",
-    Date: "Jan 6 2022",
-    Quantity: "10000",
-    Cost: "#17,500.00",
-    Status: "In progress",
-    Progress: "60%",
-    Link: "link",
-  },
-];
-
-const columns = [
-  { label: "ID", key: "ID" },
-  { label: "Services", key: "Services" },
-  { label: "Date", key: "Date" },
-  { label: "Quantity", key: "Quantity" },
-  { label: "Cost", key: "Cost" },
-  { label: "Status", key: "Status" },
-  { label: "Progress", key: "Progress" },
-  { label: "Link", key: "Link" },
-];
+const useQuery = () => {
+  return new URLSearchParams(useLocation().search);
+};
 
 const Homepage = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const countOrders = () => tableData.length;
   const [activeTab, setActiveTab] = useState("empty");
+  const query = useQuery();
+  const [user, setUser] = useState({
+    firstName: query.get("firstName"),
+    lastName: query.get("lastName"),
+    email: query.get("email"),
+  });
+
+  useEffect(() => {
+    console.log("User Data:", user);
+  }, [user]);
+
+  // Function to get initials from user's name
+  const getInitials = (name) => {
+    if (!name) return "";
+    const nameArray = name.trim().split(" ");
+    const firstInitial = nameArray[0].charAt(0);
+    const lastInitial =
+      nameArray.length > 1 ? nameArray[nameArray.length - 1].charAt(0) : "";
+    return `${firstInitial}${lastInitial}`;
+  };
+
+  const countOrders = () => tableData.length;
 
   return (
     <div className="max-w-full flex flex-col lgss:flex-row ">
@@ -81,7 +64,7 @@ const Homepage = () => {
           </div>
         </div>
         <div className="w-full flex flex-col bg-bg">
-          <HomeSearch />
+          <HomeSearch user={user} getInitials={getInitials}/>
           <div className="w-full flex flex-col px-[5%]">
             <div className="w-full flex lgss:flex-row flex-col gap-4 py-2">
               <div

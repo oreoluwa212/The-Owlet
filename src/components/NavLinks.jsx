@@ -4,6 +4,7 @@ import { GoInbox } from "react-icons/go";
 import CustomIcon from "./icons/CustomIcon";
 import { LuWallet2 } from "react-icons/lu";
 import { AiOutlineQuestionCircle, AiOutlineUsergroupAdd } from "react-icons/ai";
+import { HiOutlineLogout } from "react-icons/hi";
 import { CiMail, CiSettings } from "react-icons/ci";
 
 const general = [
@@ -110,6 +111,13 @@ function NavLinks() {
             </li>
           ))}
         </ul>
+        <button
+          onClick={() => navigate("/signin")}
+          className="flex gap-5 text-[18px] text-[#B82323] items-center  font-medium pl-12 h-[40%] w-full"
+        >
+          Sign Out
+          <HiOutlineLogout />
+        </button>
       </nav>
     </div>
   );
