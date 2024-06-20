@@ -1,19 +1,37 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Sidebar from "../../components/Sidebar";
 import { LuBell, LuMenu } from "react-icons/lu";
 import { chat, email, logo, office, questionmark } from "../../assets";
 import HomeSearch from "../../components/input/HomeSearch";
 import ContactCard from "../../components/cards/ContactCard";
 import SearchPlatforms from "../../components/modals/creatingOrder/SearchPlatforms";
+import Cookies from "js-cookie";
 
 const ContactPage = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const storedUserData = Cookies.get("userData");
+    if (storedUserData) {
+      setUser(JSON.parse(storedUserData));
+    }
+  }, []);
+
+  const getInitials = (name) => {
+    return name
+      .split(" ")
+      .map((n) => n[0])
+      .join("");
+  };
 
   return (
     <div className="max-w-full flex flex-col lgss:flex-row bg-bg h-screen">
       <div className="w-[20%]">
         <Sidebar
+          user={user}
+          getInitials={getInitials}
           isOpen={isOpen}
           setIsOpen={setIsOpen}
           isModalOpen={isModalOpen}
@@ -29,7 +47,7 @@ const ContactPage = () => {
           </div>
         </div>
         <div className="w-full lgss:flex flex-col">
-          <HomeSearch />
+          <HomeSearch user={user} getInitials={getInitials} />
           <div className="flex flex-col justify-start items-start text-left px-[5%]">
             <h1 className="text-[2rem] font-semibold">Contact Us</h1>
             <p className="text-secondary">Reach out anytime</p>

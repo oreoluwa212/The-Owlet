@@ -1,4 +1,4 @@
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { PiHouseSimpleLight } from "react-icons/pi";
 import { GoInbox } from "react-icons/go";
 import CustomIcon from "./icons/CustomIcon";
@@ -54,6 +54,7 @@ const help = [
 
 function NavLinks() {
   const location = useLocation();
+  const navigate = useNavigate();
   const { pathname } = location;
 
   return (
@@ -112,8 +113,11 @@ function NavLinks() {
           ))}
         </ul>
         <button
-          onClick={() => navigate("/signin")}
-          className="flex gap-5 text-[18px] text-[#B82323] items-center  font-medium pl-12 h-[40%] w-full"
+          onClick={() =>
+            // (window.location.href = "http://localhost:5173/signin")
+              (window.location.href = "https://the-owlet-web.vercel.app/signin")
+          }
+          className="flex gap-5 text-[16px] text-[#B82323] items-center  font-medium pl-14 pb-3 h-[40%] w-full"
         >
           Sign Out
           <HiOutlineLogout />

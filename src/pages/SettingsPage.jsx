@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Sidebar from "../components/Sidebar";
 import { LuBell, LuMenu } from "react-icons/lu";
 import { logo } from "../assets";
@@ -9,6 +9,7 @@ import CommonH1 from "../components/CommonH1";
 import SearchPlatforms from "../components/modals/creatingOrder/SearchPlatforms";
 import { PiDotsThreeOutlineVerticalBold } from "react-icons/pi";
 import { FiCopy } from "react-icons/fi";
+import Cookies from "js-cookie";
 
 const generateRandomApiKey = () => {
   return (
@@ -21,6 +22,21 @@ const SettingsPage = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [apiKey, setApiKey] = useState(generateRandomApiKey());
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const storedUserData = Cookies.get("userData");
+    if (storedUserData) {
+      setUser(JSON.parse(storedUserData));
+    }
+  }, []);
+
+  const getInitials = (name) => {
+    return name
+      .split(" ")
+      .map((n) => n[0])
+      .join("");
+  };
 
   const handleCopy = () => {
     navigator.clipboard
@@ -49,6 +65,8 @@ const SettingsPage = () => {
     <div className="max-w-full flex flex-col lgss:flex-row bg-bg h-screen">
       <div className="w-[20%]">
         <Sidebar
+          user={user}
+          getInitials={getInitials}
           isOpen={isOpen}
           setIsOpen={setIsOpen}
           isModalOpen={isModalOpen}
@@ -64,7 +82,7 @@ const SettingsPage = () => {
           </div>
         </div>
         <div className="w-full lgss:flex flex-col">
-          <HomeSearch />
+          <HomeSearch user={user} getInitials={getInitials} />
           <div className="flex lgss:flex-row flex-col gap-5 w-full h-full justify-between lgss:py-12 px-[5%]">
             <div className="lgss:bg-white lgss:w-[50%] lgss:border shadow-md pt-6 rounded-[12px] flex flex-col justify-start items-start h-fit py-3 text-left">
               <CommonH1 title="Edit your profile" />

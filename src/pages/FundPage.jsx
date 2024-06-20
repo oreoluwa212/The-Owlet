@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Sidebar from "../components/Sidebar";
 import { LuBell, LuMenu } from "react-icons/lu";
 import { PiDotsThreeOutlineVerticalBold } from "react-icons/pi";
@@ -11,6 +11,7 @@ import CommonH1 from "../components/CommonH1";
 import CreateOrderBtn from "../components/buttons/CreateOrderBtn";
 import FundHistoryTable from "../components/tables/FundHistoryTable";
 import SearchPlatforms from "../components/modals/creatingOrder/SearchPlatforms";
+import Cookies from "js-cookie";
 
 const tableData = [
   {
@@ -92,11 +93,28 @@ const FundPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("empty");
   const [activePayment, setActivePayment] = useState(null);
+    const [user, setUser] = useState(null);
+
+    useEffect(() => {
+      const storedUserData = Cookies.get("userData");
+      if (storedUserData) {
+        setUser(JSON.parse(storedUserData));
+      }
+    }, []);
+
+    const getInitials = (name) => {
+      return name
+        .split(" ")
+        .map((n) => n[0])
+        .join("");
+    };
 
   return (
     <div className="w-full flex flex-col lgss:flex-row bg-bg">
       <div className="w-[20%]">
         <Sidebar
+          user={user}
+          getInitials={getInitials}
           isOpen={isOpen}
           setIsOpen={setIsOpen}
           isModalOpen={isModalOpen}
@@ -112,7 +130,7 @@ const FundPage = () => {
           </div>
         </div>
         <div className="w-full lgss:flex flex-col">
-          <HomeSearch />
+          <HomeSearch user={user} getInitials={getInitials} />
           <div className="w-full flex lgss:flex-row flex-col gap-4 py-2 px-[5%]">
             <div
               className={activeTab === "empty" ? "active" : ""}

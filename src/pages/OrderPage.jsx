@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Sidebar from "../components/Sidebar";
 import { LuBell, LuMenu } from "react-icons/lu";
 import { logo } from "../assets";
@@ -9,6 +9,7 @@ import FilterBtn from "../components/buttons/FilterBtn";
 import HomeCardMobile from "../components/cards/HomeCardMobile";
 import SearchPlatforms from "../components/modals/creatingOrder/SearchPlatforms";
 import TableHome from "../components/cards/TableHome";
+import Cookies from "js-cookie";
 
   const tableData = [
     {
@@ -98,11 +99,28 @@ const OrderPage = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const countOrders = () => tableData.length;
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const storedUserData = Cookies.get("userData");
+    if (storedUserData) {
+      setUser(JSON.parse(storedUserData));
+    }
+  }, []);
+
+  const getInitials = (name) => {
+    return name
+      .split(" ")
+      .map((n) => n[0])
+      .join("");
+  };
 
   return (
     <div className="max-w-full flex flex-col lgss:flex-row bg-bg h-screen">
       <div className="w-[20%]">
         <Sidebar
+          user={user}
+          getInitials={getInitials}
           isOpen={isOpen}
           setIsOpen={setIsOpen}
           isModalOpen={isModalOpen}
@@ -118,7 +136,7 @@ const OrderPage = () => {
           </div>
         </div>
         <div className="w-full lgss:flex flex-col">
-          <HomeSearch />
+          <HomeSearch user={user} getInitials={getInitials} />
           <div className="w-full px-[5%]">
             <div className="flex justify-between w-full gap-4 pt-4">
               <div className="hidden lgss:flex gap-3">
