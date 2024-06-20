@@ -8,6 +8,7 @@ import CommonH1 from "../../components/CommonH1";
 import FormInput from "../../components/input/FormInput";
 import { AiOutlineSearch } from "react-icons/ai";
 import TicketCards from "../../components/cards/TicketCards";
+import axios from "axios";
 
 const CreateTicket = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -38,14 +39,50 @@ const CreateTicket = () => {
       time: "8h ago",
     },
   ]);
-
   const pendingCount = pendingTickets.length;
   const resolvedCount = resolvedTickets.length;
 
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get(
+          "https://theowletapp.com/server/api/v1/users/analytics",
+          {
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+            },
+          }
+        );
+
+        if (response.status !== 200) {
+          throw new Error("Failed to fetch user data");
+        }
+        setUser(response.data.data.user);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchUserData();
+  }, [authToken]);
+
+  const getInitials = (name) => {
+    return name
+      .split(" ")
+      .map((n) => n[0])
+      .join("");
+  };
   return (
     <div className="max-w-full flex flex-col lgss:flex-row bg-bg h-screen">
       <div className="w-[20%]">
-        <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
+        <Sidebar
+          user={user}
+          getInitials={getInitials}
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          isModalOpen={isModalOpen}
+          setIsModalOpen={setIsModalOpen}
+        />
       </div>
       <div className="flex flex-col lgss:w-[80%] z-0">
         <div className="lgss:hidden w-full px-[5%] flex justify-between items-center border-b-[1px] py-5">
@@ -56,7 +93,7 @@ const CreateTicket = () => {
           </div>
         </div>
         <div className="w-full lgss:flex flex-col">
-          <HomeSearch />
+          <HomeSearch user={user} getInitials={getInitials} />
           <div className="w-full px-[5%]">
             <div className="w-full flex lgss:flex-row flex-col gap-4 py-2">
               <div

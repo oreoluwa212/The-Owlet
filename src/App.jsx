@@ -3,7 +3,6 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
-  useNavigate,
 } from "react-router-dom";
 import Homepage from "./pages/Homepage";
 import ServicesPage from "./pages/ServicesPage";
@@ -61,6 +60,10 @@ function App() {
         />
         <Route
           path="/settings"
+          element={<SettingsPage authToken={authToken} />}
+        />
+        <Route
+          path="/help"
           element={<SettingsPage authToken={authToken} />}
         />
       </Routes>
