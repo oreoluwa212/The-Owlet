@@ -25,7 +25,7 @@ function HomeSearch({ user, getInitials }) {
           <LuMenu className="lgss:" />
         </div>
       </div>
-      <div className="w-[30%]">
+      <div className="w-[20%]">
         {user && (
           <UserInfo
             initials={getInitials(`${user.firstName} ${user.lastName}`)}

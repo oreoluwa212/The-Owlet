@@ -12,35 +12,26 @@ import CreateOrderBtn from "../components/buttons/CreateOrderBtn";
 import SearchPlatforms from "../components/modals/creatingOrder/SearchPlatforms";
 import TableHome from "../components/cards/TableHome";
 import { tableData, columns } from "../assets/data/data";
-import { useLocation } from "react-router-dom";
-
-const useQuery = () => {
-  return new URLSearchParams(useLocation().search);
-};
+import Cookies from "js-cookie";
 
 const Homepage = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("empty");
-  const query = useQuery();
-  const [user, setUser] = useState({
-    firstName: query.get("firstName"),
-    lastName: query.get("lastName"),
-    email: query.get("email"),
-  });
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    console.log("User Data:", user);
-  }, [user]);
+    const storedUserData = Cookies.get("userData");
+    if (storedUserData) {
+      setUser(JSON.parse(storedUserData));
+    }
+  }, []);
 
-  // Function to get initials from user's name
   const getInitials = (name) => {
-    if (!name) return "";
-    const nameArray = name.trim().split(" ");
-    const firstInitial = nameArray[0].charAt(0);
-    const lastInitial =
-      nameArray.length > 1 ? nameArray[nameArray.length - 1].charAt(0) : "";
-    return `${firstInitial}${lastInitial}`;
+    return name
+      .split(" ")
+      .map((n) => n[0])
+      .join("");
   };
 
   const countOrders = () => tableData.length;
@@ -49,6 +40,8 @@ const Homepage = () => {
     <div className="max-w-full flex flex-col lgss:flex-row ">
       <div className="w-[20%]">
         <Sidebar
+          user={user}
+          getInitials={getInitials}
           isOpen={isOpen}
           setIsOpen={setIsOpen}
           isModalOpen={isModalOpen}
@@ -64,7 +57,7 @@ const Homepage = () => {
           </div>
         </div>
         <div className="w-full flex flex-col bg-bg">
-          <HomeSearch user={user} getInitials={getInitials}/>
+          <HomeSearch user={user} getInitials={getInitials} />
           <div className="w-full flex flex-col px-[5%]">
             <div className="w-full flex lgss:flex-row flex-col gap-4 py-2">
               <div

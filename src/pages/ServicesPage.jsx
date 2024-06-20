@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Sidebar from "../components/Sidebar";
 import { LuBell, LuMenu } from "react-icons/lu";
 import { logo } from "../assets";
@@ -11,6 +11,7 @@ import HomeFilters from "../components/buttons/HomeFilters";
 import HomeSearchInputWhite from "../components/input/HomeSearchInput";
 import { CiCircleInfo } from "react-icons/ci";
 import { IoFilterSharp } from "react-icons/io5";
+import Cookies from "js-cookie";
 
 const tableData = [
   {
@@ -82,6 +83,21 @@ const columns = [
 const ServicesPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const storedUserData = Cookies.get("userData");
+    if (storedUserData) {
+      setUser(JSON.parse(storedUserData));
+    }
+  }, []);
+
+  const getInitials = (name) => {
+    return name
+      .split(" ")
+      .map((n) => n[0])
+      .join("");
+  };
 
   const getCurrentDate = () => {
     const options = { day: "numeric", month: "long", year: "numeric" };
@@ -92,6 +108,8 @@ const ServicesPage = () => {
     <div className="max-w-full flex flex-col lgss:flex-row bg-bg h-screen">
       <div className="w-[20%]">
         <Sidebar
+          user={user}
+          getInitials={getInitials}
           isOpen={isOpen}
           setIsOpen={setIsOpen}
           isModalOpen={isModalOpen}
@@ -107,7 +125,7 @@ const ServicesPage = () => {
           </div>
         </div>
         <div className="w-full hidden lgss:flex flex-col">
-          <HomeSearch />
+          <HomeSearch user={user} getInitials={getInitials} />
         </div>
         <div>
           <div className="w-full px-[5%] py-5">

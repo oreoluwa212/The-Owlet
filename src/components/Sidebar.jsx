@@ -8,8 +8,9 @@ import UserInfo from "./UserInfo";
 import NavLinks from "./NavLinks";
 import QuickLinks from "./cards/QuickLinks";
 import SearchPlatforms from "./modals/creatingOrder/SearchPlatforms";
+import { FaAngleDown } from "react-icons/fa6";
 
-const Sidebar = ({ isOpen, setIsOpen, isModalOpen, setIsModalOpen }) => {
+const Sidebar = ({ user, getInitials, isOpen, setIsOpen, isModalOpen, setIsModalOpen }) => {
   useEffect(() => {
     if (isOpen) {
       document.body.classList.add("no-scroll");
@@ -70,7 +71,14 @@ const Sidebar = ({ isOpen, setIsOpen, isModalOpen, setIsModalOpen }) => {
             }`}
           >
             <div className="flex w-full justify-between items-center border-b-[1px] px-4 py-7 lgss:gap-16">
-              <UserInfo avatar={avatar} />
+              {user && (
+                <UserInfo
+                  initials={getInitials(`${user.firstName} ${user.lastName}`)}
+                  icon={<FaAngleDown />}
+                  firstName={user.firstName}
+                  lastName={user.lastName}
+                />
+              )}
               <LiaTimesSolid
                 className="text-[20px]"
                 onClick={() => setIsOpen(false)}

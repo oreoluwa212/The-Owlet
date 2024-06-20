@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Sidebar from "../components/Sidebar";
 import { LuBell, LuMenu } from "react-icons/lu";
 import { GoPeople } from "react-icons/go";
@@ -14,15 +14,33 @@ import CreateOrderBtn from "../components/buttons/CreateOrderBtn";
 import ReferralBottomCard from "../components/cards/ReferralBottonCard";
 import QuickLinks from "../components/cards/QuickLinks";
 import SearchPlatforms from "../components/modals/creatingOrder/SearchPlatforms";
+import Cookies from "js-cookie";
 
 const AffiliatePage = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const storedUserData = Cookies.get("userData");
+    if (storedUserData) {
+      setUser(JSON.parse(storedUserData));
+    }
+  }, []);
+
+  const getInitials = (name) => {
+    return name
+      .split(" ")
+      .map((n) => n[0])
+      .join("");
+  };
 
   return (
     <div className="max-w-full flex flex-col lgss:flex-row bg-bg">
       <div className="w-[20%]">
         <Sidebar
+          user={user}
+          getInitials={getInitials}
           isOpen={isOpen}
           setIsOpen={setIsOpen}
           isModalOpen={isModalOpen}
@@ -38,7 +56,7 @@ const AffiliatePage = () => {
           </div>
         </div>
         <div className="w-full lgss:flex flex-col h-full">
-          <HomeSearch />
+          <HomeSearch user={user} getInitials={getInitials} />
           <div className="w-full px-[5%] pt-5">
             <div className="lgss:bg-white lgss:border lgss:shadow-sm lgss:pt-4 rounded-[12px]">
               <CommonH1 title="Your referral stats" />
