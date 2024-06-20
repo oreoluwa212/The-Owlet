@@ -10,6 +10,7 @@ import HomeCardMobile from "../components/cards/HomeCardMobile";
 import SearchPlatforms from "../components/modals/creatingOrder/SearchPlatforms";
 import TableHome from "../components/cards/TableHome";
 import Cookies from "js-cookie";
+import axios from "axios";
 
   const tableData = [
     {
@@ -95,18 +96,39 @@ import Cookies from "js-cookie";
     { label: "Link", key: "Link" },
   ];
   
-const OrderPage = () => {
+const OrderPage = ({ authToken }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const countOrders = () => tableData.length;
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const storedUserData = Cookies.get("userData");
-    if (storedUserData) {
-      setUser(JSON.parse(storedUserData));
-    }
-  }, []);
+    const fetchUserData = async () => {
+      try {
+        if (!authToken) {
+          throw new Error("Auth token not provided");
+        }
+
+        const response = await axios.get(
+          "https://theowletapp.com/server/api/v1/users/analytics",
+          {
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+            },
+          }
+        );
+
+        if (response.status !== 200) {
+          throw new Error("Failed to fetch user data");
+        }
+        setUser(response.data.data.user);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchUserData();
+  }, [authToken]);
 
   const getInitials = (name) => {
     return name
@@ -120,11 +142,11 @@ const OrderPage = () => {
       <div className="w-[20%]">
         <Sidebar
           user={user}
-          getInitials={getInitials}
           isOpen={isOpen}
           setIsOpen={setIsOpen}
           isModalOpen={isModalOpen}
           setIsModalOpen={setIsModalOpen}
+          getInitials={getInitials}
         />
       </div>
       <div className="flex flex-col lgss:w-[80%] z-0">

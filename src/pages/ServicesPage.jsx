@@ -12,6 +12,7 @@ import HomeSearchInputWhite from "../components/input/HomeSearchInput";
 import { CiCircleInfo } from "react-icons/ci";
 import { IoFilterSharp } from "react-icons/io5";
 import Cookies from "js-cookie";
+import axios from "axios";
 
 const tableData = [
   {
@@ -80,17 +81,34 @@ const columns = [
   { label: "Description", key: "icon" },
 ];
 
-const ServicesPage = () => {
+const ServicesPage = ({ authToken }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const storedUserData = Cookies.get("userData");
-    if (storedUserData) {
-      setUser(JSON.parse(storedUserData));
-    }
-  }, []);
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get(
+          "https://theowletapp.com/server/api/v1/users/analytics",
+          {
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+            },
+          }
+        );
+
+        if (response.status !== 200) {
+          throw new Error("Failed to fetch user data");
+        }
+        setUser(response.data.data.user);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchUserData();
+  }, [authToken]);
 
   const getInitials = (name) => {
     return name

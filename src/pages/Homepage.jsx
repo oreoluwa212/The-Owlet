@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 import Sidebar from "../components/Sidebar";
 import { LuBell, LuInbox, LuMenu } from "react-icons/lu";
 import { carton, homeEmptyIcon, logo, medal, purse } from "../assets";
@@ -12,20 +13,36 @@ import CreateOrderBtn from "../components/buttons/CreateOrderBtn";
 import SearchPlatforms from "../components/modals/creatingOrder/SearchPlatforms";
 import TableHome from "../components/cards/TableHome";
 import { tableData, columns } from "../assets/data/data";
-import Cookies from "js-cookie";
 
-const Homepage = () => {
+const Homepage = ({ authToken }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("empty");
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const storedUserData = Cookies.get("userData");
-    if (storedUserData) {
-      setUser(JSON.parse(storedUserData));
-    }
-  }, []);
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get(
+          "https://theowletapp.com/server/api/v1/users/analytics",
+          {
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+            },
+          }
+        );
+
+        if (response.status !== 200) {
+          throw new Error("Failed to fetch user data");
+        }
+        setUser(response.data.data.user);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchUserData();
+  }, [authToken]);
 
   const getInitials = (name) => {
     return name

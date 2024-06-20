@@ -28,10 +28,10 @@ function HomeSearch({ user, getInitials }) {
       <div className="w-[20%]">
         {user && (
           <UserInfo
-            initials={getInitials(`${user.firstName} ${user.lastName}`)}
+            initials={getInitials(`${user.firstname} ${user.lastname}`)}
             icon={<FaAngleDown />}
-            firstName={user.firstName}
-            lastName={user.lastName}
+            firstName={user.firstname}
+            lastName={user.lastname}
           />
         )}
       </div>
