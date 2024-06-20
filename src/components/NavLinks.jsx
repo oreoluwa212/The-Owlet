@@ -114,8 +114,8 @@ function NavLinks() {
         </ul>
         <button
           onClick={() =>
-            // (window.location.href = "http://localhost:5173/signin")
-              (window.location.href = "https://the-owlet-web.vercel.app/signin")
+            // (window.location.href = "http://localhost:5173")
+              (window.location.href = "https://the-owlet-web.vercel.app")
           }
           className="flex gap-5 text-[16px] text-[#B82323] items-center  font-medium pl-14 pb-3 h-[40%] w-full"
         >
