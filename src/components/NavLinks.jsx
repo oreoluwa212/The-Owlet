@@ -59,7 +59,7 @@ function NavLinks() {
   const handleSignOut = () => {
     localStorage.clear();
     // window.location.href = "http://localhost:5173";
-    window.location.href = "https://the-owlet.vercel.app";
+    window.location.href = "https://the-owlet-web.vercel.app";
   };
 
   return (
