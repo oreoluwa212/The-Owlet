@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Sidebar from "../../components/Sidebar";
 import { book, logo } from "../../assets";
 import { LuBell, LuMenu } from "react-icons/lu";
@@ -10,9 +10,11 @@ import { AiOutlineSearch } from "react-icons/ai";
 import TicketCards from "../../components/cards/TicketCards";
 import axios from "axios";
 
-const CreateTicket = () => {
+const CreateTicket = ({ authToken }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("empty");
+  const [user, setUser] = useState(null);
   const [activeStatusTab, setActiveStatusTab] = useState("pending");
   const [pendingTickets, setPendingTickets] = useState([
     {
