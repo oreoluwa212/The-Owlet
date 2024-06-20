@@ -10,6 +10,7 @@ import SearchPlatforms from "../components/modals/creatingOrder/SearchPlatforms"
 import { PiDotsThreeOutlineVerticalBold } from "react-icons/pi";
 import { FiCopy } from "react-icons/fi";
 import Cookies from "js-cookie";
+import axios from "axios";
 
 const generateRandomApiKey = () => {
   return (
@@ -18,18 +19,35 @@ const generateRandomApiKey = () => {
   );
 };
 
-const SettingsPage = () => {
+const SettingsPage = ({ authToken }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [apiKey, setApiKey] = useState(generateRandomApiKey());
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const storedUserData = Cookies.get("userData");
-    if (storedUserData) {
-      setUser(JSON.parse(storedUserData));
-    }
-  }, []);
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get(
+          "https://theowletapp.com/server/api/v1/users/analytics",
+          {
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+            },
+          }
+        );
+
+        if (response.status !== 200) {
+          throw new Error("Failed to fetch user data");
+        }
+        setUser(response.data.data.user);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchUserData();
+  }, [authToken]);
 
   const getInitials = (name) => {
     return name
