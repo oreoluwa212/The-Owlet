@@ -1,8 +1,8 @@
+import React from "react";
 import HeaderH1 from "../HeaderH1";
 import { MdOutlineChatBubbleOutline } from "react-icons/md";
 
-
-function TicketCards({ complainHead, user, complaint, time }) {
+const TicketCards = ({ complainHead, user, complaint, time, ticketId }) => {
   return (
     <div className="bg-white rounded-[16px] w-full h-fit flex flex-col gap-3 py-4 px-4 border-[1px]">
       <div className="flex w-full justify-between">
@@ -15,7 +15,7 @@ function TicketCards({ complainHead, user, complaint, time }) {
       </h2>
       <div className="flex items-center gap-5 text-[#667085]">
         <div className="border-[1px] rounded-[16px] px-2 py-1">
-          <p>#1234</p>
+          <p>#{ticketId}</p>
         </div>
         <p className="flex items-center gap-2">
           <MdOutlineChatBubbleOutline /> 2
@@ -23,6 +23,6 @@ function TicketCards({ complainHead, user, complaint, time }) {
       </div>
     </div>
   );
-}
+};
 
-export default TicketCards
+export default TicketCards;
