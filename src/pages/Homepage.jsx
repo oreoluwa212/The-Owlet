@@ -76,7 +76,7 @@ const Homepage = ({ authToken }) => {
             <LuMenu onClick={() => setIsOpen(true)} />
           </div>
         </div>
-        <div className="w-full flex flex-col bg-bg">
+        <div className="w-full flex flex-col bg-bg h-screen">
           <HomeSearch user={user} getInitials={getInitials} />
           <div className="w-full flex flex-col px-[5%]">
             <div className="w-full flex lgss:flex-row flex-col gap-4 py-2">

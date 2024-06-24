@@ -203,7 +203,7 @@ useEffect(() => {
         </div>
         <div className="w-full lgss:flex flex-col">
           <HomeSearch user={user} getInitials={getInitials} />
-          <div className="flex lgss:flex-row flex-col gap-5 w-full h-full justify-between py-12 px-[5%]">
+          <div className="flex lgss:flex-row flex-col gap-5 w-full h-screen justify-between py-12 px-[5%]">
             <div className="lgss:bg-white lgss:w-[50%] lgss:border shadow-md pt-6 rounded-[12px] flex flex-col justify-start items-start h-fit py-3 text-left">
               <CommonH1 title="Edit your profile" />
               <div className="w-full px-[5%] pt-4">
@@ -320,7 +320,7 @@ useEffect(() => {
                       label="Select Time Zone"
                       options={timeZones}
                       value={user?.timezone || ""}
-                      onChange={(e) => console.log(e.target.value)} // Handle onChange event
+                      onChange={(e) => console.log(e.target.value)}
                     />
                   </div>
                   <hr />
