@@ -51,6 +51,8 @@ function FormInput({
             className="w-full bg-white border h-12 rounded-[8px] px-3 outline-none"
             name={name}
             id={id}
+            value={value}
+            onChange={onChange}
           >
             {options.map((option, index) => (
               <option key={index} value={option.value}>

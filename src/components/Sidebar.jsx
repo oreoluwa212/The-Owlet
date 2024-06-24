@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { LuArrowLeftToLine } from "react-icons/lu";
 import { LiaTimesSolid } from "react-icons/lia";
 import { TiPlus } from "react-icons/ti";
@@ -8,16 +8,15 @@ import UserInfo from "./UserInfo";
 import NavLinks from "./NavLinks";
 import QuickLinks from "./cards/QuickLinks";
 import SearchPlatforms from "./modals/creatingOrder/SearchPlatforms";
-import { FaAngleDown } from "react-icons/fa6";
+import SpecificService from "./modals/creatingOrder/SpecificService";
+import { FaAngleDown } from "react-icons/fa";
+import OrderForm from "./modals/creatingOrder/OrderForm";
 
-const Sidebar = ({
-  user,
-  getInitials,
-  isOpen,
-  setIsOpen,
-  isModalOpen,
-  setIsModalOpen,
-}) => {
+const Sidebar = ({ user, getInitials, isOpen, setIsOpen, setIsModalOpen }) => {
+  const [activeModal, setActiveModal] = useState(null);
+  const [selectedPlatform, setSelectedPlatform] = useState("");
+  const [selectedService, setSelectedService] = useState("");
+
   useEffect(() => {
     if (isOpen) {
       document.body.classList.add("no-scroll");
@@ -30,6 +29,24 @@ const Sidebar = ({
     };
   }, [isOpen]);
 
+  const openModal = (modalName) => {
+    setActiveModal(modalName);
+  };
+
+  const closeModal = () => {
+    setActiveModal(null);
+  };
+
+  const handlePlatformClick = (platform) => {
+    setSelectedPlatform(platform);
+    openModal("specificService");
+  };
+
+  const handleServiceClick = (service) => {
+    setSelectedService(`${selectedPlatform} ${service}`);
+    openModal("orderForm");
+  };
+
   return (
     <>
       <div className="h-screen lgss:w-1/5 hidden lgss:flex flex-col shadow-sm border-r-[1px] pt-3 bg-white shadow-gray-400/10 pb-10 z-10 fixed">
@@ -41,7 +58,7 @@ const Sidebar = ({
         </div>
         <div className="w-full px-4 py-2 mx-auto border-b-[1px] h-[10%] flex justify-center">
           <button
-            onClick={() => setIsModalOpen(true)}
+            onClick={() => openModal("searchPlatforms")}
             className="bg-primary lgss:px-5 w-full text-white flex justify-center lgss:gap-4 gap-1 items-center py-3 rounded-[4px] font-semibold text-[18px]"
           >
             <TiPlus />
@@ -64,10 +81,30 @@ const Sidebar = ({
           </div>
         </div>
       </div>
-      <SearchPlatforms
-        setIsModalOpen={setIsModalOpen}
-        isModalOpen={isModalOpen}
-      />
+
+      {activeModal === "searchPlatforms" && (
+        <SearchPlatforms
+          setIsModalOpen={setIsModalOpen}
+          isModalOpen={true}
+          onPlatformClick={handlePlatformClick}
+        />
+      )}
+
+      {activeModal === "specificService" && (
+        <SpecificService
+          platform={selectedPlatform}
+          setIsModalOpen={setIsModalOpen}
+          onServiceClick={handleServiceClick}
+        />
+      )}
+
+      {activeModal === "orderForm" && (
+        <OrderForm
+          platform={selectedPlatform}
+          service={selectedService}
+          setIsModalOpen={setIsModalOpen}
+        />
+      )}
 
       {isOpen && (
         <>
@@ -93,7 +130,7 @@ const Sidebar = ({
             </div>
             <div className="w-full px-[5%] py-5 border-b-[1px] text-white">
               <button
-                onClick={() => setIsModalOpen(true)}
+                onClick={() => openModal("searchPlatforms")}
                 className="bg-primary lgss:px-5 w-full text-white flex justify-center lgss:gap-4 gap-1 items-center py-3 rounded-[4px] font-semibold text-[18px]"
               >
                 <TiPlus />
