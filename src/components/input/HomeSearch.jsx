@@ -19,13 +19,14 @@ function HomeSearch({ user, getInitials }) {
           <AiOutlineSearch className="text-gray-400 text-[22px]" />
         </div>
       </div>
-      <div className="w-[30%] flex justify-end items-end">
+      <div className="flex justify-end items-center gap-10 w-[60%]">
+      <div className="flex justify-end items-end">
         <div className="gap-8 flex justify-center items-center text-secondary text-[24px]">
           <LuBell />
           <LuMenu className="lgss:" />
         </div>
       </div>
-      <div className="w-[20%]">
+      <div className="flex justify-end">
         {user && (
           <UserInfo
             initials={getInitials(`${user.firstname} ${user.lastname}`)}
@@ -34,6 +35,7 @@ function HomeSearch({ user, getInitials }) {
             lastName={user.lastname}
           />
         )}
+      </div>
       </div>
     </div>
   );

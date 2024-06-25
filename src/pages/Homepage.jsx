@@ -13,10 +13,13 @@ import CreateOrderBtn from "../components/buttons/CreateOrderBtn";
 import SearchPlatforms from "../components/modals/creatingOrder/SearchPlatforms";
 import TableHome from "../components/cards/TableHome";
 import { tableData, columns } from "../assets/data/data";
+import CreateOrder from "../components/modals/creatingOrder/CreateOrder";
 
 const Homepage = ({ authToken }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [platform, setPlatform] = useState("");
+  const [service, setService] = useState("");
   const [activeTab, setActiveTab] = useState("empty");
   const [user, setUser] = useState(null);
 
@@ -73,7 +76,7 @@ const Homepage = ({ authToken }) => {
             <LuMenu onClick={() => setIsOpen(true)} />
           </div>
         </div>
-        <div className="w-full flex flex-col bg-bg">
+        <div className="w-full flex flex-col bg-bg h-screen">
           <HomeSearch user={user} getInitials={getInitials} />
           <div className="w-full flex flex-col px-[5%]">
             <div className="w-full flex lgss:flex-row flex-col gap-4 py-2">
@@ -163,9 +166,14 @@ const Homepage = ({ authToken }) => {
         </div>
       </div>
       <SearchPlatforms
-        setIsModalOpen={setIsModalOpen}
         isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
+        setPlatform={setPlatform}
+        setService={setService}
       />
+      {platform && service && (
+        <CreateOrder platform={platform} service={service} />
+      )}
     </div>
   );
 };

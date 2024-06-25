@@ -1,3 +1,4 @@
+// SettingsPage.js (Updated section)
 import React, { useEffect, useState } from "react";
 import Sidebar from "../components/Sidebar";
 import { LuBell, LuMenu } from "react-icons/lu";
@@ -9,8 +10,10 @@ import CommonH1 from "../components/CommonH1";
 import SearchPlatforms from "../components/modals/creatingOrder/SearchPlatforms";
 import { PiDotsThreeOutlineVerticalBold } from "react-icons/pi";
 import { FiCopy } from "react-icons/fi";
-import Cookies from "js-cookie";
 import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import FormSelect from "../components/input/FormSelect"; // Import FormSelect component
 
 const generateRandomApiKey = () => {
   return (
@@ -24,6 +27,14 @@ const SettingsPage = ({ authToken }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [apiKey, setApiKey] = useState(generateRandomApiKey());
   const [user, setUser] = useState(null);
+
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [timeZones, setTimeZones] = useState([]);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -49,6 +60,40 @@ const SettingsPage = ({ authToken }) => {
     fetchUserData();
   }, [authToken]);
 
+useEffect(() => {
+  const fetchTimeZones = async () => {
+    try {
+      const response = await axios.get(
+        "https://theowletapp.com/server/api/v1/time/zone",
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        }
+      );
+
+      if (response.status !== 200) {
+        throw new Error("Failed to fetch time zones");
+      }
+
+      if (response.data && Array.isArray(response.data.data)) {
+        setTimeZones(
+          response.data.data.map((tz) => ({
+            value: tz.timezone,
+            label: tz.timezone,
+          }))
+        );
+      } else {
+        console.error("Invalid response format for time zones:", response.data);
+      }
+    } catch (error) {
+      console.error("Error fetching time zones:", error);
+    }
+  };
+
+  fetchTimeZones();
+}, [authToken]);
+
   const getInitials = (name) => {
     return name
       .split(" ")
@@ -60,10 +105,11 @@ const SettingsPage = ({ authToken }) => {
     navigator.clipboard
       .writeText(apiKey)
       .then(() => {
-        alert("API Key copied to clipboard!");
+        toast.success("API Key copied to clipboard!");
       })
       .catch((err) => {
         console.error("Failed to copy: ", err);
+        toast.error("Failed to copy API Key");
       });
   };
 
@@ -72,15 +118,71 @@ const SettingsPage = ({ authToken }) => {
     setApiKey(newApiKey);
   };
 
-  const timeZones = [
-    { value: "CET", label: "Central European Time (UTC +1:00)" },
-    { value: "WAT", label: "West Africa Time (UTC +1:00)" },
-    { value: "EST", label: "Eastern Standard Time (UTC -5:00)" },
-    { value: "PST", label: "Pacific Standard Time (UTC -8:00)" },
-  ];
+  const handleProfileUpdate = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.put(
+        "https://theowletapp.com/server/api/v1/users/update/profile",
+        {
+          lastname: lastName,
+          firstname: firstName,
+          phone: phone,
+          email: email,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        }
+      );
+
+      if (response.status !== 200) {
+        throw new Error("Failed to update profile");
+      }
+
+      toast.success("Profile updated successfully!");
+      setFirstName("");
+      setLastName("");
+      setEmail("");
+      setPhone("");
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      toast.error("Failed to update profile");
+    }
+  };
+
+  const handleChangePassword = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.put(
+        "https://theowletapp.com/server/api/v1/users/change/password",
+        {
+          oldPassword: currentPassword,
+          newPassword: newPassword,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        }
+      );
+
+      if (response.status !== 200) {
+        throw new Error("Failed to change password");
+      }
+
+      toast.success("Password changed successfully!");
+      setCurrentPassword("");
+      setNewPassword("");
+    } catch (error) {
+      console.error("Error changing password:", error);
+      toast.error("Failed to change password");
+    }
+  };
 
   return (
-    <div className="max-w-full flex flex-col lgss:flex-row bg-bg h-screen">
+    <div className="max-w-full flex flex-col lgss:flex-row bg-bg">
+      <ToastContainer />
       <div className="w-[20%]">
         <Sidebar
           user={user}
@@ -101,11 +203,14 @@ const SettingsPage = ({ authToken }) => {
         </div>
         <div className="w-full lgss:flex flex-col">
           <HomeSearch user={user} getInitials={getInitials} />
-          <div className="flex lgss:flex-row flex-col gap-5 w-full h-full justify-between lgss:py-12 px-[5%]">
+          <div className="flex lgss:flex-row flex-col gap-5 w-full h-screen justify-between py-12 px-[5%]">
             <div className="lgss:bg-white lgss:w-[50%] lgss:border shadow-md pt-6 rounded-[12px] flex flex-col justify-start items-start h-fit py-3 text-left">
               <CommonH1 title="Edit your profile" />
               <div className="w-full px-[5%] pt-4">
-                <form action="tickets" className="flex flex-col gap-3 w-full">
+                <form
+                  onSubmit={handleProfileUpdate}
+                  className="flex flex-col gap-3 w-full"
+                >
                   <h3 className="font-semibold text-[14px] text-[#344054]">
                     PERSONAL INFORMATION
                   </h3>
@@ -117,6 +222,8 @@ const SettingsPage = ({ authToken }) => {
                         id="search"
                         label="First name"
                         textarea={false}
+                        value={firstName}
+                        onChange={(e) => setFirstName(e.target.value)}
                       />
                     </div>
                     <div className="w-1/2">
@@ -126,6 +233,8 @@ const SettingsPage = ({ authToken }) => {
                         id="lname"
                         label="Last name"
                         textarea={false}
+                        value={lastName}
+                        onChange={(e) => setLastName(e.target.value)}
                       />
                     </div>
                   </div>
@@ -138,6 +247,8 @@ const SettingsPage = ({ authToken }) => {
                         id="email"
                         label="Email"
                         textarea={false}
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
                       />
                     </div>
                     <div className="w-1/2">
@@ -147,9 +258,19 @@ const SettingsPage = ({ authToken }) => {
                         id="pnumber"
                         label="Phone number"
                         textarea={false}
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
                       />
                     </div>
                   </div>
+                  <div className="py-3">
+                    <CreateOrderBtn title="Save changes" type="submit" />
+                  </div>
+                </form>
+                <form
+                  onSubmit={handleChangePassword}
+                  className="flex flex-col gap-3 w-full pt-5"
+                >
                   <h3 className="font-semibold text-[14px] text-[#344054]">
                     CHANGE PASSWORD
                   </h3>
@@ -162,6 +283,8 @@ const SettingsPage = ({ authToken }) => {
                         id="current-password"
                         label="Current Password"
                         textarea={false}
+                        value={currentPassword}
+                        onChange={(e) => setCurrentPassword(e.target.value)}
                       />
                     </div>
                     <div className="w-1/2">
@@ -171,11 +294,13 @@ const SettingsPage = ({ authToken }) => {
                         id="new-password"
                         label="New Password"
                         textarea={false}
+                        value={newPassword}
+                        onChange={(e) => setNewPassword(e.target.value)}
                       />
                     </div>
                   </div>
                   <div className="py-3">
-                    <CreateOrderBtn title="Save changes" />
+                    <CreateOrderBtn title="Save changes" type="submit" />
                   </div>
                 </form>
               </div>
@@ -189,10 +314,13 @@ const SettingsPage = ({ authToken }) => {
                 </div>
                 <div className="w-full">
                   <div className="w-full px-[5%] py-4">
-                    <FormInput
-                      placeholder="Central European Time, West Africa Time (UTC +1:00)"
-                      select={true}
+                    <FormSelect
+                      id="timeZoneSelect"
+                      name="timeZone"
+                      label="Select Time Zone"
                       options={timeZones}
+                      value={user?.timezone || ""}
+                      onChange={(e) => console.log(e.target.value)}
                     />
                   </div>
                   <hr />
