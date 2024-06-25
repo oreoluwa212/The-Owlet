@@ -133,7 +133,6 @@ const CreateTicket = ({ authToken }) => {
       if (response.data.success) {
         toast.success("Ticket created successfully!");
         fetchTicketHistory();
-        // Clear form after successful submission
         setFormData({ subject: "", description: "", uploads: [] });
       } else {
         toast.error("Failed to create ticket");
