@@ -14,87 +14,20 @@ import SearchPlatforms from "../components/modals/creatingOrder/SearchPlatforms"
 import Cookies from "js-cookie";
 import axios from "axios";
 
-const tableData = [
-  {
-    ID: "#53007613",
-    Method: "Cryptomus",
-    Cost: "#50,000.00",
-    Date: "Jan 6,2022",
-  },
-  {
-    ID: "#53007613",
-    Method: "Cryptomus",
-    Cost: "#50,000.00",
-    Date: "Jan 6,2022",
-  },
-  {
-    ID: "#53007613",
-    Method: "Korapay",
-    Cost: "#50,000.00",
-    Date: "Jan 6,2022",
-  },
-  {
-    ID: "#53007613",
-    Method: "Cryptomus",
-    Cost: "#50,000.00",
-    Date: "Jan 6,2022",
-  },
-  {
-    ID: "#53007613",
-    Method: "Korapay",
-    Cost: "#50,000.00",
-    Date: "Jan 6,2022",
-  },
-  {
-    ID: "#53007613",
-    Method: "Cryptomus",
-    Cost: "#50,000.00",
-    Date: "Jan 6,2022",
-  },
-  {
-    ID: "#53045701",
-    Method: "Flutterwave",
-    Cost: "#50,000.00",
-    Date: "Jan 6,2022",
-  },
-  {
-    ID: "#53045701",
-    Method: "Flutterwave",
-    Cost: "#50,000.00",
-    Date: "Jan 6,2022",
-  },
-  {
-    ID: "#53007613",
-    Method: "Korapay",
-    Cost: "#50,000.00",
-    Date: "Jan 6,2022",
-  },
-  {
-    ID: "#53007613",
-    Method: "Cryptomus",
-    Cost: "#50,000.00",
-    Date: "Jan 6,2022",
-  },
-  {
-    ID: "#53045701",
-    Method: "Flutterwave",
-    Cost: "#50,000.00",
-    Date: "Jan 6,2022",
-  },
-];
 const columns = [
-  { label: "ID", key: "ID" },
-  { label: "Method", key: "Method" },
-  { label: "Cost", key: "Cost" },
-  { label: "Date", key: "Date" },
+  { label: "Method", key: "method" },
+  { label: "Amount", key: "amount" },
+  { label: "Date", key: "created_at" },
+  { label: "Transaction ID", key: "trans_id" },
 ];
 
 const FundPage = ({ authToken }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState("empty");
   const [activePayment, setActivePayment] = useState(null);
   const [user, setUser] = useState(null);
+  const [paymentHistory, setPaymentHistory] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -117,7 +50,31 @@ const FundPage = ({ authToken }) => {
       }
     };
 
+    const fetchPaymentHistory = async () => {
+      try {
+        const response = await axios.get(
+          "https://theowletapp.com/server/api/v1/payment/history",
+          {
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+            },
+          }
+        );
+
+        if (response.data.success) {
+          setPaymentHistory(response.data.data);
+        } else {
+          throw new Error("Failed to fetch payment history");
+        }
+      } catch (error) {
+        console.error("Error fetching payment history:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchUserData();
+    fetchPaymentHistory();
   }, [authToken]);
 
   const getInitials = (name) => {
@@ -149,20 +106,6 @@ const FundPage = ({ authToken }) => {
         </div>
         <div className="w-full lgss:flex flex-col">
           <HomeSearch user={user} getInitials={getInitials} />
-          <div className="w-full flex lgss:flex-row flex-col gap-4 py-2 px-[5%]">
-            <div
-              className={activeTab === "empty" ? "active" : ""}
-              onClick={() => setActiveTab("empty")}
-            >
-              <CreateOrderBtn title="Empty Tab" />
-            </div>
-            <div
-              className={activeTab === "active" ? "active" : ""}
-              onClick={() => setActiveTab("active")}
-            >
-              <CreateOrderBtn title="Active Tab" />
-            </div>
-          </div>
           <div className="flex lgss:flex-row flex-col gap-5 w-full h-full justify-between lgss:py-12 px-[5%]">
             <div className="lgss:bg-white lgss:w-[55%] lgss:border shaow-md py-6 rounded-[12px] flex flex-col justify-start items-start text-left">
               <CommonH1 title="Fund your account" />
@@ -224,7 +167,7 @@ const FundPage = ({ authToken }) => {
               </div>
               <div className="w-[90%] mx-auto flex flex-col px-[5%] mt-6 bg-[#FEDF89] bg-opacity-30 py-3 rounded-[8px] font-semibold text-[.9rem] lgss:text-[1.2rem] text-primary">
                 <h1 className="font-semibold py-3">IMPORTANT</h1>
-                <ul className="list-disc px-[5%] border-t-2 border-[#FEDF89] py-4 flex flex-col gap-4">
+                <ul className="list-disc px-[5%] border-t-2 border-[#FEDF89] py-4 flex flex-col gap-4 text-sm">
                   <li>
                     Pay exactly the amount you have imputed to pay, do not pay
                     lesser or higher than the amount you have placed.
@@ -236,7 +179,7 @@ const FundPage = ({ authToken }) => {
                     sure you are using the same bank you have been using to pay)
                   </li>
                 </ul>
-                <p>
+                <p className="text-sm">
                   Payments are updated instantly but in some cases where it is
                   taking too much time to update, kindly wait for 1-3hours, it
                   will be updated, if after 5hours and it has not been
@@ -247,26 +190,31 @@ const FundPage = ({ authToken }) => {
                 <Btn />
               </div>
             </div>
-            {activeTab === "empty" ? (
-              <div className="bg-white lgss:w-[45%] w-[90%] mx-auto border shaow-md py-5 rounded-[12px] h-[420px] flex flex-col ">
-                <div className="w-full border-b-2 px-5 pb-1 flex items-center justify-between text-[18px] ">
-                  <h1 className="font-bold">Funding history</h1>
-                  <PiDotsThreeOutlineVerticalBold />
+            <div className="lgss:w-[55%] h-fit pb-8 bg-white border">
+              <div className="w-full border-b-2 px-5 py-7 flex items-center justify-between text-[18px]">
+                <h1 className="font-bold text-2xl">Funding history</h1>
+                <PiDotsThreeOutlineVerticalBold />
+              </div>
+              {loading ? (
+                <div className="flex justify-center items-center h-full">
+                  <p>Loading...</p>
                 </div>
+              ) : paymentHistory.length > 0 ? (
+                <FundHistoryTable
+                  columns={columns}
+                  tableData={paymentHistory}
+                />
+              ) : (
                 <div className="flex justify-center items-center w-full flex-col font-semibold text-[26px]">
-                  <img className="h-[250px]" src={book} alt="" />
-                  <h2>No funding history</h2>
+                  <img
+                    className="h-[250px]"
+                    src={book}
+                    alt="No funding history"
+                  />
+                  <h2 className="text-2xl">No funding history</h2>
                 </div>
-              </div>
-            ) : (
-              <div className="lgss:w-[55%] bg-white border">
-                <div className="w-full border-b-2 px-5 py-7 flex items-center justify-between text-[18px]">
-                  <h1 className="font-bold">Funding history</h1>
-                  <PiDotsThreeOutlineVerticalBold />
-                </div>
-                <FundHistoryTable columns={columns} tableData={tableData} />
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
       </div>

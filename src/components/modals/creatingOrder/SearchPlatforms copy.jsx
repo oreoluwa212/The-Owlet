@@ -2,7 +2,12 @@ import React, { useEffect, useState } from "react";
 import SearchComp from "./SearchComp";
 import { platformImages } from "../../../assets";
 
-function SearchPlatforms({ setIsModalOpen, isModalOpen, onPlatformClick }) {
+function SearchPlatforms({
+  setIsModalOpen,
+  isModalOpen,
+  onPlatformClick,
+  authToken,
+}) {
   const [platforms, setPlatforms] = useState([]);
   const [error, setError] = useState(null);
   const mostPopularPlatforms = [
@@ -17,7 +22,12 @@ function SearchPlatforms({ setIsModalOpen, isModalOpen, onPlatformClick }) {
     const fetchPlatforms = async () => {
       try {
         const response = await fetch(
-          "https://theowletapp.com/server/api/v1/categories"
+          "https://theowletapp.com/server/api/v1/categories",
+          {
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+            },
+          }
         );
         const data = await response.json();
         if (data.success) {
@@ -31,7 +41,7 @@ function SearchPlatforms({ setIsModalOpen, isModalOpen, onPlatformClick }) {
     };
 
     fetchPlatforms();
-  }, []);
+  }, [authToken]);
 
   if (!isModalOpen) return null;
 
@@ -42,7 +52,7 @@ function SearchPlatforms({ setIsModalOpen, isModalOpen, onPlatformClick }) {
   };
 
   const handlePlatformClick = (platform) => {
-    onPlatformClick(platform.name);
+    onPlatformClick(platform);
     setIsModalOpen("specificService");
   };
 
@@ -79,7 +89,7 @@ function SearchPlatforms({ setIsModalOpen, isModalOpen, onPlatformClick }) {
           {platforms.map((platform) => (
             <li
               key={platform.id}
-              onClick={() => handlePlatformClick(platform.name)}
+              onClick={() => handlePlatformClick(platform)}
               className="flex cursor-pointer gap-2 items-center"
             >
               <img

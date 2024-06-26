@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "../../components/Sidebar";
-import { logo } from "../../assets";
+import { logo, book } from "../../assets";
 import { LuBell, LuMenu } from "react-icons/lu";
 import HomeSearch from "../../components/input/HomeSearch";
 import CreateOrderBtn from "../../components/buttons/CreateOrderBtn";
@@ -51,39 +51,34 @@ const CreateTicket = ({ authToken }) => {
     fetchUserData();
   }, [authToken]);
 
-  useEffect(() => {
-    const fetchTicketHistory = async () => {
-      try {
-        const response = await axios.get(
-          "https://theowletapp.com/server/api/v1/tickets/history/10",
-          {
-            headers: {
-              Authorization: `Bearer ${authToken}`,
-            },
-          }
-        );
-
-        if (response.data.success) {
-          const { pending, resolved } = response.data.data;
-          setPendingTickets(pending.data);
-          setResolvedTickets(resolved.data);
-          setPendingCount(pending.total);
-          setResolvedCount(resolved.total);
-        } else {
-          toast.error(
-            response.data.message || "Failed to fetch ticket history"
-          );
-          console.error(
-            "Failed to fetch ticket history:",
-            response.data.message
-          );
+  const fetchTicketHistory = async () => {
+    try {
+      const response = await axios.get(
+        "https://theowletapp.com/server/api/v1/tickets/history/14",
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
         }
-      } catch (error) {
-        toast.error("Error fetching ticket history");
-        console.error("Error fetching ticket history:", error);
-      }
-    };
+      );
 
+      if (response.data.success) {
+        const { pending, resolved } = response.data.data;
+        setPendingTickets(pending.data);
+        setResolvedTickets(resolved.data);
+        setPendingCount(pending.total);
+        setResolvedCount(resolved.total);
+      } else {
+        toast.error(response.data.message || "Failed to fetch ticket history");
+        console.error("Failed to fetch ticket history:", response.data.message);
+      }
+    } catch (error) {
+      toast.error("Error fetching ticket history");
+      console.error("Error fetching ticket history:", error);
+    }
+  };
+
+  useEffect(() => {
     fetchTicketHistory();
   }, [authToken]);
 
@@ -105,7 +100,6 @@ const CreateTicket = ({ authToken }) => {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
 
-    // Basic form validation
     if (!formData.subject || !formData.description) {
       toast.error("Please fill out all required fields.");
       return;
@@ -154,7 +148,6 @@ const CreateTicket = ({ authToken }) => {
   return (
     <div className="max-w-full flex flex-col lgss:flex-row">
       <ToastContainer />
-
       <div className="w-[20%]">
         <Sidebar
           user={user}
@@ -203,20 +196,13 @@ const CreateTicket = ({ authToken }) => {
                       textarea={true}
                     />
                     <div className="flex flex-col gap-2">
-                      {/* <FormInput
-                        name="uploads"
-                        id="uploads"
-                        label="Upload File"
-                        upload={true}
-                        multiple
-                        onChange={handleFileChange}
-                      /> */}
                       <input
                         type="file"
                         id="uploads"
                         name="uploads"
                         className="border rounded-md py-2 px-3 bg-gray-100"
                         multiple
+                        onChange={handleFileChange}
                       />
                       {formData.uploads.length > 0 && (
                         <div className="flex flex-wrap gap-2 mt-2">
@@ -304,30 +290,55 @@ const CreateTicket = ({ authToken }) => {
                     </div>
                   </div>
                   <div className="mt-5">
-                    <div className="flex flex-col gap-6 w-full">
-                      {activeTab === "pending" &&
-                        pendingTickets.map((ticket, index) => (
-                          <TicketCards
-                            key={index}
-                            complainHead={ticket.subject}
-                            user={ticket.created_at}
-                            complaint={ticket.description}
-                            time={ticket.created_at}
-                            ticketId={ticket.ticket_id}
+                    {activeTab === "pending" ? (
+                      pendingTickets.length > 0 ? (
+                        <div className="flex flex-col gap-6 w-full">
+                          {pendingTickets.map((ticket, index) => (
+                            <TicketCards
+                              key={index}
+                              complainHead={ticket.subject}
+                              user={ticket.created_at}
+                              complaint={ticket.description}
+                              time={ticket.created_at}
+                              ticketId={ticket.ticket_id}
+                            />
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="flex justify-center items-center w-full flex-col font-semibold text-[26px]">
+                          <img
+                            className="h-[250px]"
+                            src={book}
+                            alt="No tickets"
                           />
-                        ))}
-                      {activeTab === "resolved" &&
-                        resolvedTickets.map((ticket, index) => (
-                          <TicketCards
-                            key={index}
-                            complainHead={ticket.subject}
-                            user={ticket.created_at}
-                            complaint={ticket.description}
-                            time={ticket.created_at}
-                            ticketId={ticket.ticket_id}
+                          <h2>No tickets</h2>
+                        </div>
+                      )
+                    ) : activeTab === "resolved" ? (
+                      resolvedTickets.length > 0 ? (
+                        <div className="flex flex-col gap-6 w-full">
+                          {resolvedTickets.map((ticket, index) => (
+                            <TicketCards
+                              key={index}
+                              complainHead={ticket.subject}
+                              user={ticket.created_at}
+                              complaint={ticket.description}
+                              time={ticket.created_at}
+                              ticketId={ticket.ticket_id}
+                            />
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="flex justify-center items-center w-full flex-col font-semibold text-[26px]">
+                          <img
+                            className="h-[250px]"
+                            src={book}
+                            alt="No tickets"
                           />
-                        ))}
-                    </div>
+                          <h2>No tickets</h2>
+                        </div>
+                      )
+                    ) : null}
                   </div>
                 </div>
               </div>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "../components/Sidebar";
-import { LuBell, LuMenu } from "react-icons/lu";
-import { logo } from "../assets";
+import { LuBell, LuInbox, LuMenu } from "react-icons/lu";
+import { homeEmptyIcon, logo } from "../assets";
 import HomeSearch from "../components/input/HomeSearch";
 import HomeSearchInputWhite from "../components/input/HomeSearchInput";
 import HomeFilters from "../components/buttons/HomeFilters";
@@ -12,95 +12,23 @@ import TableHome from "../components/cards/TableHome";
 import Cookies from "js-cookie";
 import axios from "axios";
 
-  const tableData = [
-    {
-      ID: "#53045701",
-      Services: "Facebook",
-      Date: "Jan 6 2022",
-      Quantity: "10000",
-      Cost: "#17,500.00",
-      Status: "In progress",
-      Progress: "60%",
-      Link: "link",
-    },
-    {
-      ID: "#53045701",
-      Services: "Instagram",
-      Date: "Jan 6 2022",
-      Quantity: "10000",
-      Cost: "#17,500.00",
-      Status: "In progress",
-      Progress: "60%",
-      Link: "link",
-    },
-    {
-      ID: "#53045701",
-      Services: "Facebook",
-      Date: "Jan 6 2022",
-      Quantity: "10000",
-      Cost: "#17,500.00",
-      Status: "In progress",
-      Progress: "60%",
-      Link: "link",
-    },
-    {
-      ID: "#53045701",
-      Services: "Instagram",
-      Date: "Jan 6 2022",
-      Quantity: "10000",
-      Cost: "#17,500.00",
-      Status: "In progress",
-      Progress: "60%",
-      Link: "link",
-    },
-    {
-      ID: "#53045701",
-      Services: "Facebook",
-      Date: "Jan 6 2022",
-      Quantity: "10000",
-      Cost: "#17,500.00",
-      Status: "In progress",
-      Progress: "60%",
-      Link: "link",
-    },
-    {
-      ID: "#53045701",
-      Services: "Facebook",
-      Date: "Jan 6 2022",
-      Quantity: "10000",
-      Cost: "#17,500.00",
-      Status: "In progress",
-      Progress: "60%",
-      Link: "link",
-    },
-    {
-      ID: "#53045701",
-      Services: "Facebook",
-      Date: "Jan 6 2022",
-      Quantity: "10000",
-      Cost: "#17,500.00",
-      Status: "In progress",
-      Progress: "60%",
-      Link: "link",
-    },
-  ];
+const columns = [
+  { label: "ID", key: "order_id" },
+  { label: "Services", key: "service_name" },
+  { label: "Date", key: "created_at" },
+  { label: "Quantity", key: "quantity" },
+  { label: "Cost", key: "amount" },
+  { label: "Status", key: "status.status" },
+  { label: "Progress", key: "status.remains" },
+  { label: "Link", key: "link" },
+];
 
-  const columns = [
-    { label: "ID", key: "ID" },
-    { label: "Services", key: "Services" },
-    { label: "Date", key: "Date" },
-    { label: "Quantity", key: "Quantity" },
-    { label: "Cost", key: "Cost" },
-    { label: "Status", key: "Status" },
-    { label: "Progress", key: "Progress" },
-    { label: "Link", key: "Link" },
-  ];
-  
 const OrderPage = ({ authToken }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const countOrders = () => tableData.length;
   const [user, setUser] = useState(null);
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -127,7 +55,31 @@ const OrderPage = ({ authToken }) => {
       }
     };
 
+    const fetchOrders = async () => {
+      try {
+        const response = await axios.get(
+          "https://theowletapp.com/server/api/v1/orders/list/2",
+          {
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+            },
+          }
+        );
+
+        if (response.data.success) {
+          setOrders(response.data.data.data);
+        } else {
+          throw new Error("Failed to fetch orders");
+        }
+      } catch (error) {
+        console.error("Error fetching orders:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchUserData();
+    fetchOrders();
   }, [authToken]);
 
   const getInitials = (name) => {
@@ -136,6 +88,8 @@ const OrderPage = ({ authToken }) => {
       .map((n) => n[0])
       .join("");
   };
+
+  const countOrders = () => orders.length;
 
   return (
     <div className="max-w-full flex flex-col lgss:flex-row bg-bg h-screen">
@@ -171,43 +125,57 @@ const OrderPage = ({ authToken }) => {
                 <FilterBtn />
               </div>
             </div>
-            <div className="hidden w-full lgss:flex items-center pt-8">
-              <TableHome
-                heading="Orders"
-                columns={columns}
-                tableData={tableData}
-                numberOfOrders={countOrders()}
-              />
-            </div>
-            <div className="lgss:hidden flex flex-col text-left gap-4 mt-4">
-              <div className="w-full flex gap-4">
-                <h1 className="font-bold text-[1.3rem]">All Orders</h1>
-                <div className="bg-[#FECDCA] bg-opacity-50 border-[#FECDCA] border-2 text-[14px] rounded-full text-primary flex gap-1 font-semibold py-1 px-3">
-                  {countOrders()}
-                  <p>Orders</p>
+            {loading ? (
+              <div>Loading...</div>
+            ) : orders.length === 0 ? (
+              <div className="mt-10 w-full bg-white h-fit py-3 border rounded-[8px]">
+                <div className="px-3 py-4 text-[20px] border-b font-semibold flex gap-5 items-center">
+                  <h1 className="text-left">All Orders</h1>
+                  <div className="bg-[#FECDCA] bg-opacity-50 border-[#FECDCA] border-2 text-[16px] rounded-full text-primary py-1 px-3">
+                    <p>{countOrders()} Orders</p>
+                  </div>
+                </div>
+                <div className="w-full flex flex-col justify-center items-center pb-3">
+                  <img src={homeEmptyIcon} alt="" />
+                  <div className="flex flex-col gap-3 font-semibold">
+                    <h2 className="text-[1.2rem]">No orders yet</h2>
+                    <div className="text-primary flex gap-3 justify-center items-center">
+                      <span>
+                        <LuInbox />
+                      </span>
+                      <p>Place your first order now</p>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <HomeCardMobile
-                title="Instagram Nigerian Followers"
-                value={"80%"}
-              />
-              <HomeCardMobile
-                title="Facebook Nigerian Followers"
-                value={"80%"}
-              />
-              <HomeCardMobile
-                title="Twitter Nigerian Followers"
-                value={"80%"}
-              />
-              <HomeCardMobile
-                title="Instagram Nigerian Followers"
-                value={"80%"}
-              />
-              <HomeCardMobile
-                title="Facebook Nigerian Followers"
-                value={"80%"}
-              />
-            </div>
+            ) : (
+              <>
+                <div className="hidden w-full lgss:flex items-center pt-8">
+                  <TableHome
+                    heading="Orders"
+                    columns={columns}
+                    tableData={orders}
+                    numberOfOrders={countOrders()}
+                  />
+                </div>
+                <div className="lgss:hidden flex flex-col text-left gap-4 mt-4">
+                  <div className="w-full flex gap-4">
+                    <h1 className="font-bold text-[1.3rem]">All Orders</h1>
+                    <div className="bg-[#FECDCA] bg-opacity-50 border-[#FECDCA] border-2 text-[14px] rounded-full text-primary flex gap-1 font-semibold py-1 px-3">
+                      {countOrders()}
+                      <p>Orders</p>
+                    </div>
+                  </div>
+                  {orders.map((order) => (
+                    <HomeCardMobile
+                      key={order.id}
+                      title={order.service_name}
+                      value={order.status.status}
+                    />
+                  ))}
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -218,6 +186,5 @@ const OrderPage = ({ authToken }) => {
     </div>
   );
 };
-
 
 export default OrderPage;
