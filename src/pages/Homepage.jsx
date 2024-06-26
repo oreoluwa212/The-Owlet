@@ -9,10 +9,9 @@ import HomeSearchInputWhite from "../components/input/HomeSearchInput";
 import HomeFilters from "../components/buttons/HomeFilters";
 import FilterBtn from "../components/buttons/FilterBtn";
 import HomeCardMobile from "../components/cards/HomeCardMobile";
-import CreateOrderBtn from "../components/buttons/CreateOrderBtn";
-import SearchPlatforms from "../components/modals/creatingOrder/SearchPlatforms";
 import TableHome from "../components/cards/TableHome";
-import { tableData, columns } from "../assets/data/data";
+import { columns } from "../assets/data/data";
+import SearchPlatforms from "../components/modals/creatingOrder/SearchPlatforms";
 import CreateOrder from "../components/modals/creatingOrder/CreateOrder";
 
 const Homepage = ({ authToken }) => {
@@ -20,8 +19,9 @@ const Homepage = ({ authToken }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [platform, setPlatform] = useState("");
   const [service, setService] = useState("");
-  const [activeTab, setActiveTab] = useState("empty");
   const [user, setUser] = useState(null);
+  const [orders, setOrders] = useState([]);
+  const [orderStatus, setOrderStatus] = useState([]);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -44,7 +44,49 @@ const Homepage = ({ authToken }) => {
       }
     };
 
+    const fetchOrderData = async () => {
+      try {
+        const response = await axios.get(
+          "https://theowletapp.com/server/api/v1/orders/list/10",
+          {
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+            },
+          }
+        );
+
+        if (response.status !== 200) {
+          throw new Error("Failed to fetch order data");
+        }
+        setOrders(response.data.data.data);
+      } catch (error) {
+        console.error("Error fetching order data:", error);
+      }
+    };
+
+    const fetchOrderStatus = async () => {
+      try {
+        const response = await axios.get(
+          "https://theowletapp.com/server/api/v1/order/owlet/status",
+          {
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+            },
+          }
+        );
+
+        if (response.status !== 200) {
+          throw new Error("Failed to fetch order status");
+        }
+        setOrderStatus(response.data.data);
+      } catch (error) {
+        console.error("Error fetching order status:", error);
+      }
+    };
+
     fetchUserData();
+    fetchOrderData();
+    fetchOrderStatus();
   }, [authToken]);
 
   const getInitials = (name) => {
@@ -54,10 +96,12 @@ const Homepage = ({ authToken }) => {
       .join("");
   };
 
-  const countOrders = () => tableData.length;
+  const inProgressOrders = orders.filter(
+    (order) => order.status.status.toLowerCase() === "processing"
+  );
 
   return (
-    <div className="max-w-full flex flex-col lgss:flex-row ">
+    <div className="max-w-full flex flex-col lgss:flex-row">
       <div className="w-[20%]">
         <Sidebar
           user={user}
@@ -79,21 +123,7 @@ const Homepage = ({ authToken }) => {
         <div className="w-full flex flex-col bg-bg h-screen">
           <HomeSearch user={user} getInitials={getInitials} />
           <div className="w-full flex flex-col px-[5%]">
-            <div className="w-full flex lgss:flex-row flex-col gap-4 py-2">
-              <div
-                className={activeTab === "empty" ? "active" : ""}
-                onClick={() => setActiveTab("empty")}
-              >
-                <CreateOrderBtn title="Empty Tab" />
-              </div>
-              <div
-                className={activeTab === "active" ? "active" : ""}
-                onClick={() => setActiveTab("active")}
-              >
-                <CreateOrderBtn title="Active Tab" />
-              </div>
-            </div>
-            {activeTab === "empty" ? (
+            {inProgressOrders.length === 0 ? (
               <div className="flex flex-row flex-wrap w-full gap-4 justify-between pt-12">
                 <HomeCard
                   title="Available Balance"
@@ -110,11 +140,15 @@ const Homepage = ({ authToken }) => {
                   value={"#123,583"}
                   img={purse}
                 />
-                <HomeCard title="Total Orders" value={"323"} img={carton} />
+                <HomeCard
+                  title="Total Orders"
+                  value={inProgressOrders.length}
+                  img={carton}
+                />
                 <HomeCard title="Total Orders" value={"Tier 3"} img={medal} />
               </div>
             )}
-            {activeTab === "empty" ? (
+            {inProgressOrders.length === 0 ? (
               <div className="w-full flex flex-col justify-center items-center pt-6">
                 <img src={homeEmptyIcon} alt="" />
                 <div className="flex flex-col gap-3 font-semibold">
@@ -142,8 +176,8 @@ const Homepage = ({ authToken }) => {
                     <TableHome
                       heading="In Progress"
                       columns={columns}
-                      tableData={tableData}
-                      numberOfOrders={countOrders()}
+                      tableData={inProgressOrders}
+                      numberOfOrders={inProgressOrders.length}
                     />
                   </div>
                 </div>
@@ -151,14 +185,13 @@ const Homepage = ({ authToken }) => {
                   <h1 className="uppercase font-semibold text-secondary">
                     orders in progress
                   </h1>
-                  <HomeCardMobile
-                    title="Instagram Nigerian Followers"
-                    value={"80%"}
-                  />
-                  <HomeCardMobile
-                    title="Facebook Nigerian Followers"
-                    value={"80%"}
-                  />
+                  {inProgressOrders.map((order) => (
+                    <HomeCardMobile
+                      key={order.id}
+                      title={order.service_name}
+                      value={`${order.status.remains} remaining`}
+                    />
+                  ))}
                 </div>
               </div>
             )}

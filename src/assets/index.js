@@ -26,12 +26,13 @@ import sound from "../assets/images/sound_cloud.png";
 import telegram from "../assets/images/telegram.png";
 import spotify from "../assets/images/spotify.png";
 import reddit from "../assets/images/reddit.png";
+import youtube from "../assets/images/youtube.png";
 
 export const platformImages = {
+  Youtube: youtube,
   Facebook: Facebook,
   Instagram: instagram,
   Twitter: twitter,
-  Tiktok: tiktok,
   LinkedIn: linkedin,
 };
 
