@@ -14,7 +14,6 @@ import CreateOrderBtn from "../components/buttons/CreateOrderBtn";
 import ReferralBottomCard from "../components/cards/ReferralBottonCard";
 import QuickLinks from "../components/cards/QuickLinks";
 import SearchPlatforms from "../components/modals/creatingOrder/SearchPlatforms";
-import Cookies from "js-cookie";
 import axios from "axios";
 
 const AffiliatePage = ({ authToken }) => {
@@ -107,11 +106,9 @@ const AffiliatePage = ({ authToken }) => {
                 <CommonH1 title="Share your referral link" />
                 <div className="flex flex-col text-left px-[3%] py-6">
                   <div className="flex w-full gap-6">
-                    <input
-                      className="w-[70%] rounded-[4px] placeholder:text-[.8rem] lgss:placeholder:text-[1rem] outline-none px-2 border"
-                      type="text"
-                      placeholder="https://the-owlet.com/ref/cpmb5	"
-                    />
+                    <div className="w-[70%] rounded-[4px] px-2 border flex justify-start items-center text-grey">
+                      <p>https://the-owlet.com/ref/cpmb5</p>
+                    </div>
                     <div className="w-[30%]">
                       <CreateOrderBtn icon={MdCopyAll} title="Copy link" />
                     </div>

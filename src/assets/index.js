@@ -27,6 +27,14 @@ import telegram from "../assets/images/telegram.png";
 import spotify from "../assets/images/spotify.png";
 import reddit from "../assets/images/reddit.png";
 
+export const platformImages = {
+  Facebook: Facebook,
+  Instagram: instagram,
+  Twitter: twitter,
+  Tiktok: tiktok,
+  LinkedIn: linkedin,
+};
+
 export {
   logo,
   avatar,

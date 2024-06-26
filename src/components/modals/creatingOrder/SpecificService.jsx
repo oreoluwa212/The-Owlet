@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   FaArrowLeft,
   FaAt,
@@ -6,10 +6,10 @@ import {
   FaRegComment,
   FaRetweet,
 } from "react-icons/fa";
-import SearchComp from "./SearchComp";
 import { CiHeart } from "react-icons/ci";
 import { BiCommentDetail } from "react-icons/bi";
 import { TbUsersPlus } from "react-icons/tb";
+import SearchComp from "./SearchComp";
 
 function SpecificService({ platform, onServiceClick, setIsModalOpen }) {
   const serviceIcons = {
@@ -61,9 +61,29 @@ function SpecificService({ platform, onServiceClick, setIsModalOpen }) {
     ],
   };
 
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        const response = await fetch(
+          `https://theowletapp.com/server/api/v1/categories/${platform.id}/services`
+        );
+        const data = await response.json();
+        if (data.success) {
+          setServices(data.data.services);
+        } else {
+          console.log(data.message || "Failed to fetch services");
+        }
+      } catch (err) {
+        console.log(err.message || "Something went wrong");
+      }
+    };
+
+    fetchServices();
+  }, [platform]);
+
   const handleServiceClick = (service) => {
     onServiceClick(service);
-    setIsModalOpen("orderform");
+    setIsModalOpen("orderForm");
   };
 
   return (
@@ -73,7 +93,7 @@ function SpecificService({ platform, onServiceClick, setIsModalOpen }) {
         <div className="flex flex-col gap-2 w-full pl-4">
           <div className="flex items-center">
             <FaArrowLeft
-              onClick={() => setIsModalOpen(null)}
+              onClick={() => setIsModalOpen("searchPlatforms")}
               className="mr-2 cursor-pointer"
             />
             <p>Back</p>

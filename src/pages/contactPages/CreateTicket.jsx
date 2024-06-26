@@ -131,11 +131,11 @@ const CreateTicket = ({ authToken }) => {
       );
 
       if (response.data.success) {
-        toast.success("Ticket created successfully!");
+        toast.success(response.data.message);
         fetchTicketHistory();
         setFormData({ subject: "", description: "", uploads: [] });
       } else {
-        toast.error("Failed to create ticket");
+        toast.error(response.data.message);
         console.error("Failed to create ticket:", response.data.message);
       }
     } catch (error) {
