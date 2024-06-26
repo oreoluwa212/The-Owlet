@@ -84,7 +84,7 @@ const Sidebar = ({ user, getInitials, isOpen, setIsOpen, setIsModalOpen }) => {
 
       {activeModal === "searchPlatforms" && (
         <SearchPlatforms
-          setIsModalOpen={setIsModalOpen}
+          setIsModalOpen={setActiveModal}
           isModalOpen={true}
           onPlatformClick={handlePlatformClick}
         />
@@ -93,8 +93,9 @@ const Sidebar = ({ user, getInitials, isOpen, setIsOpen, setIsModalOpen }) => {
       {activeModal === "specificService" && (
         <SpecificService
           platform={selectedPlatform}
-          setIsModalOpen={setIsModalOpen}
+          isModalOpen={true}
           onServiceClick={handleServiceClick}
+          setIsModalOpen={setActiveModal} // Pass setActiveModal to handle back button click
         />
       )}
 
@@ -102,7 +103,8 @@ const Sidebar = ({ user, getInitials, isOpen, setIsOpen, setIsModalOpen }) => {
         <OrderForm
           platform={selectedPlatform}
           service={selectedService}
-          setIsModalOpen={setIsModalOpen}
+          setIsModalOpen={setActiveModal}
+          isModalOpen={true}
         />
       )}
 
