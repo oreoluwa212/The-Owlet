@@ -16,6 +16,7 @@ const Sidebar = ({ user, getInitials, isOpen, setIsOpen, setIsModalOpen }) => {
   const [activeModal, setActiveModal] = useState(null);
   const [selectedPlatform, setSelectedPlatform] = useState("");
   const [selectedService, setSelectedService] = useState("");
+  const authToken = localStorage.getItem("token");
 
   useEffect(() => {
     if (isOpen) {
@@ -43,7 +44,7 @@ const Sidebar = ({ user, getInitials, isOpen, setIsOpen, setIsModalOpen }) => {
   };
 
   const handleServiceClick = (service) => {
-    setSelectedService(`${selectedPlatform} ${service}`);
+    setSelectedService(service);
     openModal("orderForm");
   };
 
@@ -95,7 +96,8 @@ const Sidebar = ({ user, getInitials, isOpen, setIsOpen, setIsModalOpen }) => {
           platform={selectedPlatform}
           isModalOpen={true}
           onServiceClick={handleServiceClick}
-          setIsModalOpen={setActiveModal} // Pass setActiveModal to handle back button click
+          setIsModalOpen={setActiveModal}
+          authToken={authToken}
         />
       )}
 
@@ -105,6 +107,7 @@ const Sidebar = ({ user, getInitials, isOpen, setIsOpen, setIsModalOpen }) => {
           service={selectedService}
           setIsModalOpen={setActiveModal}
           isModalOpen={true}
+          authToken={authToken}
         />
       )}
 

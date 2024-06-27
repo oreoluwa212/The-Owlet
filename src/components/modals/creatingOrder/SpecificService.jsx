@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   FaArrowLeft,
   FaAt,
@@ -10,8 +10,19 @@ import { CiHeart } from "react-icons/ci";
 import { BiCommentDetail } from "react-icons/bi";
 import { TbUsersPlus } from "react-icons/tb";
 import SearchComp from "./SearchComp";
+import ClipLoader from "react-spinners/ClipLoader";
 
-function SpecificService({ platform, onServiceClick, setIsModalOpen }) {
+const SpecificService = ({
+  platform,
+  onServiceClick,
+  setIsModalOpen,
+  authToken,
+}) => {
+  const [loading, setLoading] = useState(false);
+  const [services, setServices] = useState(null);
+
+  console.log("services:", services);
+
   const serviceIcons = {
     Followers: TbUsersPlus,
     Likes: CiHeart,
@@ -22,82 +33,34 @@ function SpecificService({ platform, onServiceClick, setIsModalOpen }) {
     Mentions: FaAt,
   };
 
-  const services = {
-    Instagram: [
-      "Followers",
-      "Likes",
-      "Mass DM",
-      "Comments",
-      "Reposts",
-      "Views",
-      "Mentions",
-    ],
-    Facebook: [
-      "Followers",
-      "Likes",
-      "Mass DM",
-      "Comments",
-      "Reposts",
-      "Views",
-      "Mentions",
-    ],
-    Twitter: [
-      "Followers",
-      "Likes",
-      "Mass DM",
-      "Comments",
-      "Reposts",
-      "Views",
-      "Mentions",
-    ],
-    Twitter: [
-      "Followers",
-      "Likes",
-      "Mass DM",
-      "Comments",
-      "Reposts",
-      "Views",
-      "Mentions",
-    ],
-    Pinterest: [
-      "Followers",
-      "Likes",
-      "Mass DM",
-      "Comments",
-      "Reposts",
-      "Views",
-      "Mentions",
-    ],
-    LinkedIn: [
-      "Followers",
-      "Likes",
-      "Mass DM",
-      "Comments",
-      "Reposts",
-      "Views",
-      "Mentions",
-    ],
-  };
-
   useEffect(() => {
     const fetchServices = async () => {
+      setLoading(true);
       try {
         const response = await fetch(
-          `https://theowletapp.com/server/api/v1/categories/${platform.id}/services`
+          `https://theowletapp.com/server/api/v1/categories/${platform.id}/services`,
+          {
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+            },
+          }
         );
         const data = await response.json();
+        console.log("data:", data);
         if (data.success) {
           setServices(data.data.services);
         } else {
           console.log(data.message || "Failed to fetch services");
         }
       } catch (err) {
-        console.log(err.message || "Something went wrong");
+        console.log("Error:", err || "Something went wrong");
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchServices();
-  }, [platform]);
+  }, [platform, authToken]);
 
   const handleServiceClick = (service) => {
     onServiceClick(service);
@@ -106,7 +69,7 @@ function SpecificService({ platform, onServiceClick, setIsModalOpen }) {
 
   return (
     <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
-      <div className="bg-white h-fit text-[#101828] pb-4 rounded-[16px] border w-[60%] lgss:w-[30%] pt-3 flex flex-col gap-2 justify-start items-start">
+      <div className="bg-white h-[70vh] overflow-auto text-[#101828] pb-4 rounded-[16px] border w-[90%] lgss:w-[30%] pt-3 flex flex-col gap-2 justify-start items-start">
         <SearchComp placeholder={"Search for any platform"} />
         <div className="flex flex-col gap-2 w-full pl-4">
           <div className="flex items-center">
@@ -116,25 +79,30 @@ function SpecificService({ platform, onServiceClick, setIsModalOpen }) {
             />
             <p>Back</p>
           </div>
-          <h2 className="text-[16px] font-semibold">{platform} Services</h2>
-          <ul className="flex flex-col text-left gap-2 text-[1rem]">
-            {services[platform].map((service) => (
-              <li
-                key={service}
-                onClick={() => handleServiceClick(service)}
-                className="cursor-pointer flex items-center"
-              >
-                {React.createElement(serviceIcons[service], {
-                  className: "mr-2",
-                })}
-                {platform} {service}
-              </li>
-            ))}
-          </ul>
+          <h2 className="text-[16px] font-semibold">
+            {platform.name} Services
+          </h2>
+          {loading ? (
+            <div className="flex justify-center items-center w-full h-full">
+              <ClipLoader color="#123abc" loading={loading} size={50} />
+            </div>
+          ) : (
+            <ul className="flex flex-col text-left gap-2 text-[1rem]">
+              {services?.map((service) => (
+                <li
+                  key={service.service}
+                  onClick={() => handleServiceClick(service)}
+                  className="cursor-pointer flex items-center"
+                >
+                  {service.name}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       </div>
     </div>
   );
-}
+};
 
 export default SpecificService;

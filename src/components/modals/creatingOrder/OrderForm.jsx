@@ -1,35 +1,65 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaTimes } from "react-icons/fa";
 
-const OrderForm = ({ platform, service, setIsModalOpen }) => {
+const OrderForm = ({ platform, service, setIsModalOpen, authToken }) => {
+  const [platforms, setPlatforms] = useState([]);
+  const [services, setServices] = useState([]);
   const [selectedPlatform, setSelectedPlatform] = useState(platform);
   const [selectedService, setSelectedService] = useState(service);
   const [socialMediaLink, setSocialMediaLink] = useState("");
   const [quantity, setQuantity] = useState("");
 
-  const services = {
-    Instagram: [
-      "Instagram followers",
-      "Instagram likes",
-      "Instagram Mass DM",
-      "Instagram comments",
-      "Instagram Reposts",
-      "Instagram Views",
-      "Instagram Mentions",
-    ],
-    Facebook: [
-      "Facebook likes",
-      "Facebook followers",
-      "Facebook followers",
-      "Facebook Mass DM",
-      "Facebook comments",
-      "Facebook Reposts",
-      "Facebook Views",
-      "Facebook Mentions",
-    ],
-    Twitter: ["Twitter followers", "Twitter retweets"],
-    Tiktok: ["Tiktok followers", "Tiktok likes"],
-  };
+  useEffect(() => {
+    const fetchPlatforms = async () => {
+      try {
+        const response = await fetch(
+          "https://theowletapp.com/server/api/v1/categories",
+          {
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+            },
+          }
+        );
+        const data = await response.json();
+        if (data.success) {
+          setPlatforms(data.data);
+        } else {
+          console.error(data.message || "Failed to fetch platforms");
+        }
+      } catch (err) {
+        console.error("Error:", err || "Something went wrong");
+      }
+    };
+
+    fetchPlatforms();
+  }, [authToken]);
+
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        const response = await fetch(
+          `https://theowletapp.com/server/api/v1/categories/${selectedPlatform.id}/services`,
+          {
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+            },
+          }
+        );
+        const data = await response.json();
+        if (data.success) {
+          setServices(data.data.services);
+        } else {
+          console.error(data.message || "Failed to fetch services");
+        }
+      } catch (err) {
+        console.error("Error:", err || "Something went wrong");
+      }
+    };
+
+    if (selectedPlatform) {
+      fetchServices();
+    }
+  }, [selectedPlatform, authToken]);
 
   const handleOverlayClick = (e) => {
     if (e.target === e.currentTarget) {
@@ -41,33 +71,36 @@ const OrderForm = ({ platform, service, setIsModalOpen }) => {
     e.preventDefault();
 
     const requestBody = {
-      serviceId: "2788", // Replace with actual serviceId based on selectedService
+      serviceId: selectedService.service,
       quantity: quantity,
-      amount: "0.1", // Adjust this based on your logic or API requirements
+      amount: "0.1",
       link: socialMediaLink,
     };
 
     try {
-      const response = await fetch("https://theowletapp.com/server/api/v1/order", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          // Add any authorization headers if required
-        },
-        body: JSON.stringify(requestBody),
-      });
+      const response = await fetch(
+        "https://theowletapp.com/server/api/v1/order",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${authToken}`,
+          },
+          body: JSON.stringify(requestBody),
+        }
+      );
 
       const data = await response.json();
       if (data.success) {
         console.log("Order created:", data);
-        // Handle success scenario, e.g., show success message, update UI, etc.
       } else {
-        console.error("Failed to create order:", data.message || "Unknown error");
-        // Handle failure scenario, e.g., show error message to user
+        console.error(
+          "Failed to create order:",
+          data.message || "Unknown error"
+        );
       }
     } catch (error) {
       console.error("Error creating order:", error.message || "Unknown error");
-      // Handle network error or any other unexpected errors
     }
   };
 
@@ -77,7 +110,7 @@ const OrderForm = ({ platform, service, setIsModalOpen }) => {
       onClick={handleOverlayClick}
       className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
     >
-      <div className="bg-white h-fit pb-4 rounded-[16px] border xs:w-[80%] w-[50%] lgss:w-[30%] pt-3 px-5 flex flex-col justify-start items-start">
+      <div className="bg-white h-fit pb-4 rounded-[16px] border w-[90%] lgss:w-[30%] pt-3 px-5 flex flex-col justify-start items-start">
         <div className="pt-3 w-full flex justify-between items-center">
           <h2 className="text-2xl font-bold">Create an Order</h2>
           <FaTimes
@@ -89,13 +122,17 @@ const OrderForm = ({ platform, service, setIsModalOpen }) => {
           <label className="block mt-4">
             <span className="font-semibold">Platform</span>
             <select
-              value={selectedPlatform}
-              onChange={(e) => setSelectedPlatform(e.target.value)}
-              className="block w-full mt-1 rounded-md outline-none border-gray-300 shadow-sm"
+              value={selectedPlatform?.id}
+              onChange={(e) =>
+                setSelectedPlatform(
+                  platforms.find((p) => p.id === e.target.value)
+                )
+              }
+              className="block w-full mt-1 rounded-md outline-none border-gray-300 shadow-sm px-3 py-2 text-sm"
             >
-              {Object.keys(services).map((platform) => (
-                <option key={platform} value={platform}>
-                  {platform}
+              {platforms.map((platform) => (
+                <option key={platform.id} value={platform.id}>
+                  {platform.name}
                 </option>
               ))}
             </select>
@@ -103,13 +140,17 @@ const OrderForm = ({ platform, service, setIsModalOpen }) => {
           <label className="block mt-4">
             <span className="font-semibold">Service</span>
             <select
-              value={selectedService}
-              onChange={(e) => setSelectedService(e.target.value)}
-              className="block w-full mt-1 rounded-md outline-none border-gray-300 shadow-sm"
+              value={selectedService?.service}
+              onChange={(e) =>
+                setSelectedService(
+                  services.find((s) => s.service === e.target.value)
+                )
+              }
+              className="block w-full mt-1 rounded-md outline-none border-gray-300 shadow-sm px-3 py-2 text-sm"
             >
-              {services[selectedPlatform].map((service) => (
-                <option key={service} value={service}>
-                  {service}
+              {services.map((service) => (
+                <option key={service.service} value={service.service}>
+                  {service.name}
                 </option>
               ))}
             </select>
@@ -120,8 +161,8 @@ const OrderForm = ({ platform, service, setIsModalOpen }) => {
               type="text"
               value={socialMediaLink}
               onChange={(e) => setSocialMediaLink(e.target.value)}
-              placeholder={`Example: https://www.${selectedPlatform.toLowerCase()}.com/username`}
-              className="block w-full mt-1 rounded-md outline-none border-gray-300 shadow-sm"
+              placeholder={`Example: https://www.${selectedPlatform?.name.toLowerCase()}.com/username`}
+              className="block w-full mt-1 rounded-md outline-none border-gray-300 shadow-sm px-3 py-2 text-sm"
             />
           </label>
           <label className="block mt-4">
@@ -131,7 +172,7 @@ const OrderForm = ({ platform, service, setIsModalOpen }) => {
               value={quantity}
               onChange={(e) => setQuantity(e.target.value)}
               placeholder="How many followers do you want?"
-              className="block w-full mt-1 rounded-md outline-none border-gray-300 shadow-sm"
+              className="block w-full mt-1 rounded-md outline-none border-gray-300 shadow-sm px-3 py-2 text-sm"
             />
           </label>
           <div className="bg-gray-100 p-4 mt-4 rounded-md text-sm text-gray-700">
