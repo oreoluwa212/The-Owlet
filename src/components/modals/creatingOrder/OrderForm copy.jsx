@@ -46,6 +46,7 @@ const OrderForm = ({ platform, service, setIsModalOpen, authToken }) => {
   }, [authToken]);
 
   useEffect(() => {
+    // Fetch services for selected platform
     const fetchServices = async () => {
       if (!selectedPlatform) return;
 
@@ -79,14 +80,14 @@ const OrderForm = ({ platform, service, setIsModalOpen, authToken }) => {
     if (quantity && selectedService) {
       const max = parseFloat(selectedService.max);
       const min = parseFloat(selectedService.min);
+      let calculatedAmount = 0;
 
-      if (quantity < min || quantity > max) {
-        toast.error(`Quantity must be between ${min} and ${max}`);
-        setAmount(null);
-        return;
+      if (max === min) {
+        calculatedAmount = 1 * quantity;
+      } else {
+        calculatedAmount = ((max - min) / min) * quantity;
       }
 
-      const calculatedAmount = selectedService.user_rate * quantity;
       setAmount(calculatedAmount);
     } else {
       setAmount(null);
@@ -103,22 +104,10 @@ const OrderForm = ({ platform, service, setIsModalOpen, authToken }) => {
     e.preventDefault();
     setSubmitting(true);
 
-    if (
-      !selectedService ||
-      quantity < parseFloat(selectedService.min) ||
-      quantity > parseFloat(selectedService.max)
-    ) {
-      toast.error(
-        `Quantity must be between ${selectedService.min} and ${selectedService.max}`
-      );
-      setSubmitting(false);
-      return;
-    }
-
     const requestBody = {
       serviceId: selectedService.service,
       quantity: quantity,
-      amount: amount.toFixed(2),
+      amount: amount.toFixed(0),
       link: socialMediaLink,
     };
 
@@ -138,11 +127,14 @@ const OrderForm = ({ platform, service, setIsModalOpen, authToken }) => {
       const data = await response.json();
       if (data.success) {
         toast.success("Order created successfully!");
+        // Handle success scenario, e.g., show success message, update UI, etc.
       } else {
         toast.error(data.message || "Failed to create order");
+        // Handle failure scenario, e.g., show error message to user
       }
     } catch (error) {
       toast.error(error.message || "Error creating order");
+      // Handle network error or any other unexpected errors
     } finally {
       setSubmitting(false);
     }
@@ -164,8 +156,8 @@ const OrderForm = ({ platform, service, setIsModalOpen, authToken }) => {
               className="cursor-pointer"
             />
           </div>
-          <div className="w-full flex flex-col">
-            <label className="block">
+          <div className="w-full flex flex-col gap-2">
+            <label className="block mt-4">
               <span className="font-semibold">Platform</span>
               {loadingPlatforms ? (
                 <ClipLoader
@@ -191,7 +183,7 @@ const OrderForm = ({ platform, service, setIsModalOpen, authToken }) => {
                 </select>
               )}
             </label>
-            <label className="block mt-1">
+            <label className="block mt-4">
               <span className="font-semibold">Service</span>
               {loadingServices ? (
                 <ClipLoader
@@ -217,7 +209,7 @@ const OrderForm = ({ platform, service, setIsModalOpen, authToken }) => {
                 </select>
               )}
             </label>
-            <label className="block mt-1">
+            <label className="block mt-4">
               <span className="font-semibold">Social Media Profile Link</span>
               <input
                 type="text"
@@ -227,17 +219,23 @@ const OrderForm = ({ platform, service, setIsModalOpen, authToken }) => {
                 className="block w-full mt-1 rounded-md outline-none border-gray-300 shadow-sm px-3 py-2 text-sm"
               />
             </label>
-            <label className="block mt-1">
+            <label className="block mt-4">
               <span className="font-semibold">Quantity</span>
               <input
-                type="number"
+                type="text"
                 value={quantity}
                 onChange={(e) => setQuantity(e.target.value)}
                 placeholder="How many followers do you want?"
                 className="block w-full mt-1 rounded-md outline-none border-gray-300 shadow-sm px-3 py-2 text-sm"
               />
             </label>
-            <div className="bg-gray-100 px-4 mt-2 rounded-md text-sm text-gray-700">
+            {amount !== null && (
+              <div className="mt-4 text-sm text-gray-700">
+                <strong>Amount to Pay: </strong>
+                <span>{amount.toFixed(0)}</span>
+              </div>
+            )}
+            <div className="bg-gray-100 p-4 mt-4 rounded-md text-sm text-gray-700">
               <strong>IMPORTANT</strong>
               <ul>
                 <li>Delivery rate: 1-10k per day</li>
@@ -247,19 +245,6 @@ const OrderForm = ({ platform, service, setIsModalOpen, authToken }) => {
                 </li>
               </ul>
             </div>
-            {amount !== null && (
-              <div className="bg-[#FFFAEB] rounded-[10px] border-[1px] border-[#FEDF89] text-[#B54708] py-2 mt-4 text-md">
-                <h2 className="text-xl px-3 py-2 border-b-[1px] border-[#FEDF89] uppercase font-bold">
-                  order details
-                </h2>
-                <div className="flex w-full justify-between items-center px-3 py-1">
-                  <strong>Amount to Pay: </strong>
-                  <span className="font-semibold text-xl">
-                    ₦{amount.toFixed(2)}
-                  </span>
-                </div>
-              </div>
-            )}
             <button
               type="submit"
               className="mt-4 w-full bg-primary text-white py-2 rounded-md flex justify-center items-center"
