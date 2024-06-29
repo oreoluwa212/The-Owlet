@@ -1,31 +1,51 @@
 import React from "react";
+import { format } from "date-fns";
 
-function FundHistoryTable({ columns, tableData }) {
+const FundHistoryTable = ({ data, columns }) => {
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return (
+      <div className="flex flex-col">
+        <div className="">{format(date, "do MMMM, yyyy")}</div>
+        <div className="">{format(date, "HH:mm:ss")}</div>
+      </div>
+    );
+  };
+
   return (
-    <table className="w-full">
-      <thead>
-        <tr className="bg-secondary bg-opacity-5 py-4 lgss:h-[73px] text-[18px] flex justify-between items-start text-left px-6 w-full">
-          {columns.map((column, index) => (
-            <th key={index} className="font-semibold text-[1rem] text-secondary">
-              {column.label}
-            </th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {tableData.map((row, rowIndex) => (
-          <tr
-            key={rowIndex}
-            className="lgss:h-[90px] border-y-2 flex justify-between items-center lgss:text-[.9rem] text-[.6rem]  py-3 font-semibold"
-          >
-            {columns.map((column, colIndex) => (
-              <td className="px-5" key={colIndex}>{row[column.key]}</td>
+    <div className="overflow-x-auto">
+      <table className="min-w-full bg-transparent shadow-md rounded-lg overflow-hidden">
+        <thead className="bg-gray-50">
+          <tr>
+            {columns.map((column) => (
+              <th
+                key={column.key}
+                className="py-3 px-6 text-left font-semibold text-[#475467] capitalize tracking-wider"
+              >
+                {column.label}
+              </th>
             ))}
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody className="bg-white border divide-y divide-gray-200">
+          {data.map((row, index) => (
+            <tr key={index}>
+              {columns.map((column) => (
+                <td
+                  key={column.key}
+                  className="py-4 px-6 whitespace-nowrap text-sm text-[#475467] font-medium"
+                >
+                  {column.key === "created_at"
+                    ? formatDate(row[column.key])
+                    : row[column.key]}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
-}
+};
 
 export default FundHistoryTable;

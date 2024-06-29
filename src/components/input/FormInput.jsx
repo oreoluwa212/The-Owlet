@@ -14,6 +14,9 @@ function FormInput({
   options,
   value,
   onChange,
+  defaultValue,
+  readOnly,
+  maxLength
 }) {
   let InputComponent = textarea ? "textarea" : "input";
   let inputClassName = textarea
@@ -78,7 +81,10 @@ function FormInput({
             name={name}
             id={id}
             value={value}
+            defaultValue={defaultValue}
             onChange={onChange}
+            readOnly={readOnly}
+            maxLength={maxLength}
           />
           {icon && (
             <div

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Sidebar from "../components/Sidebar";
 import { LuBell, LuMenu } from "react-icons/lu";
 import { GoPeople } from "react-icons/go";
@@ -14,36 +14,14 @@ import CreateOrderBtn from "../components/buttons/CreateOrderBtn";
 import ReferralBottomCard from "../components/cards/ReferralBottonCard";
 import QuickLinks from "../components/cards/QuickLinks";
 import SearchPlatforms from "../components/modals/creatingOrder/SearchPlatforms";
-import axios from "axios";
+import useFetchUserData from "../hooks/useFetchUserData";
+import { toast } from "react-toastify";
 
 const AffiliatePage = ({ authToken }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [user, setUser] = useState(null);
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const response = await axios.get(
-          "https://theowletapp.com/server/api/v1/users/analytics",
-          {
-            headers: {
-              Authorization: `Bearer ${authToken}`,
-            },
-          }
-        );
-
-        if (response.status !== 200) {
-          throw new Error("Failed to fetch user data");
-        }
-        setUser(response.data.data.user);
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    };
-
-    fetchUserData();
-  }, [authToken]);
+  const { userData, error, loading } = useFetchUserData(authToken);
 
   const getInitials = (name) => {
     return name
@@ -52,11 +30,17 @@ const AffiliatePage = ({ authToken }) => {
       .join("");
   };
 
+  const handleCopyReferralLink = () => {
+    const referralLink = `https://the-owlet.com/ref/${userData.user?.referral_code}`;
+    navigator.clipboard.writeText(referralLink);
+    toast.success("Referral link copied to clipboard!");
+  };
+
   return (
     <div className="max-w-full flex flex-col lgss:flex-row bg-bg">
       <div className="w-[20%]">
         <Sidebar
-          user={user}
+          user={userData.user}
           getInitials={getInitials}
           isOpen={isOpen}
           setIsOpen={setIsOpen}
@@ -73,7 +57,7 @@ const AffiliatePage = ({ authToken }) => {
           </div>
         </div>
         <div className="w-full lgss:flex flex-col h-full">
-          <HomeSearch user={user} getInitials={getInitials} />
+          <HomeSearch user={userData.user} getInitials={getInitials} />
           <div className="w-full px-[5%] pt-5">
             <div className="lgss:bg-white lgss:border lgss:shadow-sm lgss:pt-4 rounded-[12px]">
               <CommonH1 title="Your referral stats" />
@@ -92,12 +76,20 @@ const AffiliatePage = ({ authToken }) => {
                 <ReferralTopCard
                   icon={PiWallet}
                   title="Available Earnings"
-                  value="#0.00"
+                  value={
+                    userData.wallet
+                      ? `${userData.wallet.symbol}${userData.wallet.balance}`
+                      : "0.00"
+                  }
                 />
                 <ReferralTopCard
                   icon={PiWallet}
                   title="Total Earnings"
-                  value="#0.00"
+                  value={
+                    userData.wallet
+                      ? `${userData.wallet.symbol}${userData.wallet.balance}`
+                      : "0.00"
+                  }
                 />
               </div>
             </div>
@@ -107,10 +99,14 @@ const AffiliatePage = ({ authToken }) => {
                 <div className="flex flex-col text-left px-[3%] py-6">
                   <div className="flex w-full gap-6">
                     <div className="w-[70%] rounded-[4px] px-2 border flex justify-start items-center text-grey">
-                      <p>https://the-owlet.com/ref/cpmb5</p>
+                      <p>{`https://the-owlet.com/ref/${userData.user?.referral_code}`}</p>
                     </div>
                     <div className="w-[30%]">
-                      <CreateOrderBtn icon={MdCopyAll} title="Copy link" />
+                      <CreateOrderBtn
+                        icon={MdCopyAll}
+                        title="Copy link"
+                        onClick={handleCopyReferralLink}
+                      />
                     </div>
                   </div>
                   <div className="border-t mt-8 py-3">

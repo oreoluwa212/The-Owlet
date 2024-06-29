@@ -8,7 +8,7 @@ const PaymentBtns = ({ img, isActive, onClick }) => {
       }`}
       onClick={onClick}
     >
-      {img && <img src={img} alt="Payment Button Image" />}
+      {img && <img className="h-6" src={img} alt="Payment Button Image" />}
     </div>
   );
 };

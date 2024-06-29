@@ -13,37 +13,21 @@ import TableHome from "../components/cards/TableHome";
 import { columns } from "../assets/data/data";
 import SearchPlatforms from "../components/modals/creatingOrder/SearchPlatforms";
 import CreateOrder from "../components/modals/creatingOrder/CreateOrder";
+import useFetchUserData from "../hooks/useFetchUserData";
 
 const Homepage = ({ authToken }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [platform, setPlatform] = useState("");
   const [service, setService] = useState("");
-  const [user, setUser] = useState(null);
   const [orders, setOrders] = useState([]);
+  const [loadingOrders, setLoadingOrders] = useState([]);
   const [orderStatus, setOrderStatus] = useState([]);
+  const [paymentReference, setPaymentReference] = useState(null);
+
+  const { userData, error, loading } = useFetchUserData(authToken);
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const response = await axios.get(
-          "https://theowletapp.com/server/api/v1/users/analytics",
-          {
-            headers: {
-              Authorization: `Bearer ${authToken}`,
-            },
-          }
-        );
-
-        if (response.status !== 200) {
-          throw new Error("Failed to fetch user data");
-        }
-        setUser(response.data.data.user);
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    };
-
     const fetchOrderData = async () => {
       try {
         const response = await axios.get(
@@ -60,7 +44,9 @@ const Homepage = ({ authToken }) => {
         }
         setOrders(response.data.data.data);
       } catch (error) {
-        console.error("Error fetching order data:", error);
+        console.error("Error fetching order details:", error);
+      } finally {
+        setLoadingOrders(false);
       }
     };
 
@@ -84,10 +70,38 @@ const Homepage = ({ authToken }) => {
       }
     };
 
-    fetchUserData();
     fetchOrderData();
     fetchOrderStatus();
   }, [authToken]);
+
+  const handlePaymentCompletion = (paymentReference) => {
+    setPaymentReference(paymentReference);
+    sendPaymentDetails(paymentReference);
+  };
+
+  const sendPaymentDetails = async (paymentReference) => {
+    try {
+      const response = await axios.post(
+        "https://theowletapp.com/server/api/v1/fund/with/monnify",
+        {
+          trx_ref: paymentReference,
+          amount: 5000,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        }
+      );
+
+      if (response.status !== 200) {
+        throw new Error("Failed to send payment details");
+      }
+      console.log("Payment details sent successfully:", response.data);
+    } catch (error) {
+      console.error("Error sending payment details:", error);
+    }
+  };
 
   const getInitials = (name) => {
     return name
@@ -104,7 +118,7 @@ const Homepage = ({ authToken }) => {
     <div className="max-w-full flex flex-col lgss:flex-row">
       <div className="w-[20%]">
         <Sidebar
-          user={user}
+          user={userData.user}
           getInitials={getInitials}
           isOpen={isOpen}
           setIsOpen={setIsOpen}
@@ -121,23 +135,39 @@ const Homepage = ({ authToken }) => {
           </div>
         </div>
         <div className="w-full flex flex-col bg-bg h-screen">
-          <HomeSearch user={user} getInitials={getInitials} />
+          <HomeSearch user={userData.user} getInitials={getInitials} />
           <div className="w-full flex flex-col px-[5%]">
             {inProgressOrders.length === 0 ? (
               <div className="flex flex-row flex-wrap w-full gap-4 justify-between pt-12">
                 <HomeCard
                   title="Available Balance"
-                  value={"#0.00"}
+                  value={
+                    userData.wallet
+                      ? `${userData.wallet.symbol}${userData.wallet.balance}`
+                      : "$0.00"
+                  }
                   img={purse}
                 />
-                <HomeCard title="Total Orders" value={"0"} img={carton} />
-                <HomeCard title="Total Orders" value={"Tier 1"} img={medal} />
+                <HomeCard
+                  title="Total Orders"
+                  value={`${userData.total_order}`}
+                  img={carton}
+                />
+                <HomeCard
+                  title="Account status"
+                  value={userData.user?.tier}
+                  img={medal}
+                />
               </div>
             ) : (
               <div className="flex flex-row flex-wrap w-full gap-4 justify-between pt-12">
                 <HomeCard
                   title="Available Balance"
-                  value={"#123,583"}
+                  value={
+                    userData.wallet
+                      ? `${userData.wallet.symbol}${userData.wallet.balance}`
+                      : "#0.00"
+                  }
                   img={purse}
                 />
                 <HomeCard
@@ -145,7 +175,11 @@ const Homepage = ({ authToken }) => {
                   value={inProgressOrders.length}
                   img={carton}
                 />
-                <HomeCard title="Total Orders" value={"Tier 3"} img={medal} />
+                <HomeCard
+                  title="Account status"
+                  value={userData.user?.tier}
+                  img={medal}
+                />
               </div>
             )}
             {inProgressOrders.length === 0 ? (

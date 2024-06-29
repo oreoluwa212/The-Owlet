@@ -148,7 +148,7 @@ const ServicesPage = ({ authToken }) => {
         <div>
           <div className="w-full px-[5%] py-5">
             <h1 className="text-[2rem] font-bold">
-              Instagram followers service list
+              Service list
             </h1>
             <h1 className="text-[1rem] font-medium text-secondary">
               Last updated {getCurrentDate()}
@@ -161,7 +161,7 @@ const ServicesPage = ({ authToken }) => {
               </div>
               <HomeSearchInputWhite />
             </div>
-            <div className="hidden w-full lgss:flex justify-center items-center py-2">
+            <div className="hidden w-full justify-center items-center py-2">
               <TableCard
                 columns={columns}
                 tableData={tableData}
@@ -169,7 +169,7 @@ const ServicesPage = ({ authToken }) => {
               />
             </div>
           </div>
-          <div className="lgss:hidden flex flex-col gap-5 text-left py-6 px-[5%]">
+          <div className="hidden flex-col gap-5 text-left py-6 px-[5%]">
             <div className="w-full flex gap-3">
               <HomeSearchInputWhite />
               <div className="w-[15%] bg-white border-[1px] rounded-[8px] flex items-center justify-center">

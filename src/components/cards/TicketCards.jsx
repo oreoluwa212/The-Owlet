@@ -3,11 +3,16 @@ import HeaderH1 from "../HeaderH1";
 import { MdOutlineChatBubbleOutline } from "react-icons/md";
 
 const TicketCards = ({ complainHead, user, complaint, time, ticketId }) => {
+    const getTimeAgo = (time) => {
+      const timeDiff = new Date() - new Date(time);
+      const hours = Math.floor(timeDiff / (1000 * 60 * 60));
+      return `${hours}h ago`;
+    };
   return (
     <div className="bg-white rounded-[16px] w-full h-fit flex flex-col gap-3 py-4 px-4 border-[1px]">
       <div className="flex w-full justify-between">
         <HeaderH1 title={complainHead} />
-        <p className="text-[12px]">{time}</p>
+        <p className="text-[12px]">{getTimeAgo(time)}</p>
       </div>
       <h2 className="text-[14px] text-[#667085]">
         <span className="font-semibold pr-1 ">{user}:</span>

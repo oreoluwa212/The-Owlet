@@ -11,6 +11,7 @@ import TicketCards from "../../components/cards/TicketCards";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const CreateTicket = ({ authToken }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,6 +21,7 @@ const CreateTicket = ({ authToken }) => {
   const [activeTab, setActiveTab] = useState("pending");
   const [pendingCount, setPendingCount] = useState(0);
   const [resolvedCount, setResolvedCount] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
     subject: "",
@@ -69,11 +71,9 @@ const CreateTicket = ({ authToken }) => {
         setPendingCount(pending.total);
         setResolvedCount(resolved.total);
       } else {
-        toast.error(response.data.message || "Failed to fetch ticket history");
         console.error("Failed to fetch ticket history:", response.data.message);
       }
     } catch (error) {
-      toast.error("Error fetching ticket history");
       console.error("Error fetching ticket history:", error);
     }
   };
@@ -99,10 +99,18 @@ const CreateTicket = ({ authToken }) => {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+
+    const submitButton = e.target.elements.submitButton;
 
     if (!formData.subject || !formData.description) {
       toast.error("Please fill out all required fields.");
+      setLoading(false);
       return;
+    }
+
+    if (submitButton) {
+      submitButton.disabled = true;
     }
 
     try {
@@ -135,6 +143,11 @@ const CreateTicket = ({ authToken }) => {
     } catch (error) {
       toast.error("Error creating ticket");
       console.error("Error creating ticket:", error);
+    } finally {
+      if (submitButton) {
+        submitButton.disabled = false;
+      }
+      setLoading(false);
     }
   };
 
@@ -190,10 +203,21 @@ const CreateTicket = ({ authToken }) => {
                       name="description"
                       value={formData.description}
                       onChange={handleInputChange}
-                      placeholder="Please describe the issue in detail"
+                      onPaste={(e) => {
+                        const pastedText = e.clipboardData.getData("text");
+                        if (
+                          pastedText.length + formData.description.length >
+                          250
+                        ) {
+                          e.preventDefault();
+                          toast.warning("Exceeded maximum character limit.");
+                        }
+                      }}
+                      placeholder="Please describe the issue in detail (max 250 characters)"
                       id="description"
                       label="Description"
                       textarea={true}
+                      maxLength={250}
                     />
                     <div className="flex flex-col gap-2">
                       <input
@@ -224,7 +248,17 @@ const CreateTicket = ({ authToken }) => {
                         </div>
                       )}
                     </div>
-                    <CreateOrderBtn title="Submit ticket" />
+                    <button
+                      className="bg-primary lgss:px-5 w-full text-white flex justify-center lgss:gap-4 gap-1 items-center py-3 rounded-[4px] font-semibold text-[18px]"
+                      type="submit"
+                      name="submitButton"
+                    >
+                      {loading ? (
+                        <ClipLoader color={"#fff"} loading={loading} />
+                      ) : (
+                        "Submit ticket"
+                      )}
+                    </button>
                   </form>
                 </div>
               </div>
