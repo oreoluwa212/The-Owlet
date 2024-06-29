@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Sidebar from "../components/Sidebar";
 import { LuBell, LuMenu } from "react-icons/lu";
 import { GoPeople } from "react-icons/go";
@@ -14,7 +14,8 @@ import CreateOrderBtn from "../components/buttons/CreateOrderBtn";
 import ReferralBottomCard from "../components/cards/ReferralBottonCard";
 import QuickLinks from "../components/cards/QuickLinks";
 import SearchPlatforms from "../components/modals/creatingOrder/SearchPlatforms";
-import axios from "axios";
+import useFetchUserData from "../hooks/useFetchUserData";
+import { toast } from "react-toastify";
 
 const AffiliatePage = ({ authToken }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -56,11 +57,17 @@ const AffiliatePage = ({ authToken }) => {
       .join("");
   };
 
+  const handleCopyReferralLink = () => {
+    const referralLink = `https://the-owlet.com/ref/${userData.user?.referral_code}`;
+    navigator.clipboard.writeText(referralLink);
+    toast.success("Referral link copied to clipboard!");
+  };
+
   return (
     <div className="max-w-full flex flex-col lgss:flex-row bg-bg">
       <div className="w-[20%]">
         <Sidebar
-          user={user}
+          user={userData.user}
           getInitials={getInitials}
           isOpen={isOpen}
           setIsOpen={setIsOpen}
@@ -77,7 +84,7 @@ const AffiliatePage = ({ authToken }) => {
           </div>
         </div>
         <div className="w-full lgss:flex flex-col h-full">
-          <HomeSearch user={user} getInitials={getInitials} />
+          <HomeSearch user={userData.user} getInitials={getInitials} />
           <div className="w-full px-[5%] pt-5">
             <div className="lgss:bg-white lgss:border lgss:shadow-sm lgss:pt-4 rounded-[12px]">
               <CommonH1 title="Your referral stats" />
@@ -129,7 +136,11 @@ const AffiliatePage = ({ authToken }) => {
                       </p>
                     </div>
                     <div className="w-[30%]">
-                      <CreateOrderBtn icon={MdCopyAll} title="Copy link" />
+                      <CreateOrderBtn
+                        icon={MdCopyAll}
+                        title="Copy link"
+                        onClick={handleCopyReferralLink}
+                      />
                     </div>
                   </div>
                   <div className="border-t mt-8 py-3">

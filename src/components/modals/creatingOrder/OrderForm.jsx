@@ -17,7 +17,6 @@ const OrderForm = ({ platform, service, setIsModalOpen, authToken }) => {
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
-    // Fetch platforms
     const fetchPlatforms = async () => {
       setLoadingPlatforms(true);
       try {
@@ -86,7 +85,7 @@ const OrderForm = ({ platform, service, setIsModalOpen, authToken }) => {
         return;
       }
 
-      const calculatedAmount = selectedService.user_rate * quantity;
+      const calculatedAmount = (selectedService.rate/1000) * quantity;
       setAmount(calculatedAmount);
     } else {
       setAmount(null);
@@ -98,6 +97,8 @@ const OrderForm = ({ platform, service, setIsModalOpen, authToken }) => {
       setIsModalOpen(false);
     }
   };
+
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -255,7 +256,7 @@ const OrderForm = ({ platform, service, setIsModalOpen, authToken }) => {
                 <div className="flex w-full justify-between items-center px-3 py-1">
                   <strong>Amount to Pay: </strong>
                   <span className="font-semibold text-xl">
-                    ₦{amount.toFixed(2)}
+                    ${amount.toFixed(2)}
                   </span>
                 </div>
               </div>
@@ -279,3 +280,7 @@ const OrderForm = ({ platform, service, setIsModalOpen, authToken }) => {
 };
 
 export default OrderForm;
+
+// Amount
+//API(max != min), (rate/1000)*quantity = amount
+//(max==min), rate = amount

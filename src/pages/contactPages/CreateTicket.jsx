@@ -12,6 +12,7 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import ClipLoader from "react-spinners/ClipLoader";
 import "react-toastify/dist/ReactToastify.css";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const CreateTicket = ({ authToken }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -103,13 +104,15 @@ const CreateTicket = ({ authToken }) => {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+
+    const submitButton = e.target.elements.submitButton;
 
     if (!formData.subject || !formData.description) {
       toast.error("Please fill out all required fields.");
+      setLoading(false);
       return;
     }
-
-    setLoadingSubmit(true);
 
     try {
       const formDataForSubmit = new FormData();
@@ -141,8 +144,6 @@ const CreateTicket = ({ authToken }) => {
     } catch (error) {
       toast.error("Error creating ticket");
       console.error("Error creating ticket:", error);
-    } finally {
-      setLoadingSubmit(false);
     }
   };
 
@@ -198,10 +199,21 @@ const CreateTicket = ({ authToken }) => {
                       name="description"
                       value={formData.description}
                       onChange={handleInputChange}
-                      placeholder="Please describe the issue in detail"
+                      onPaste={(e) => {
+                        const pastedText = e.clipboardData.getData("text");
+                        if (
+                          pastedText.length + formData.description.length >
+                          250
+                        ) {
+                          e.preventDefault();
+                          toast.warning("Exceeded maximum character limit.");
+                        }
+                      }}
+                      placeholder="Please describe the issue in detail (max 250 characters)"
                       id="description"
                       label="Description"
                       textarea={true}
+                      maxLength={250}
                     />
                     <div className="flex flex-col gap-2">
                       <input
@@ -232,16 +244,7 @@ const CreateTicket = ({ authToken }) => {
                         </div>
                       )}
                     </div>
-                    <button
-                      type="submit"
-                      className="bg-primary text-white py-2 px-4 rounded-md flex justify-center items-center"
-                    >
-                      {loadingSubmit ? (
-                        <ClipLoader size={20} color={"#FFF"} />
-                      ) : (
-                        "Submit ticket"
-                      )}
-                    </button>
+                    <CreateOrderBtn title="Submit ticket" />
                   </form>
                 </div>
               </div>

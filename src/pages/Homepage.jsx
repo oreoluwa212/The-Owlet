@@ -13,17 +13,21 @@ import TableHome from "../components/cards/TableHome";
 import { columns } from "../assets/data/data";
 import SearchPlatforms from "../components/modals/creatingOrder/SearchPlatforms";
 import CreateOrder from "../components/modals/creatingOrder/CreateOrder";
+import useFetchUserData from "../hooks/useFetchUserData";
 
 const Homepage = ({ authToken }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [platform, setPlatform] = useState("");
   const [service, setService] = useState("");
-  const [user, setUser] = useState(null);
   const [orders, setOrders] = useState([]);
+  const [loadingOrders, setLoadingOrders] = useState([]);
   const [orderStatus, setOrderStatus] = useState([]);
   const [balance, setBalance] = useState(0);
   const [tier, setTier] = useState("");
+  const [paymentReference, setPaymentReference] = useState(null);
+
+  const { userData, error, loading } = useFetchUserData(authToken);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -65,7 +69,9 @@ const Homepage = ({ authToken }) => {
         }
         setOrders(response.data.data.data);
       } catch (error) {
-        console.error("Error fetching order data:", error);
+        console.error("Error fetching order details:", error);
+      } finally {
+        setLoadingOrders(false);
       }
     };
 
@@ -89,10 +95,38 @@ const Homepage = ({ authToken }) => {
       }
     };
 
-    fetchUserData();
     fetchOrderData();
     fetchOrderStatus();
   }, [authToken]);
+
+  const handlePaymentCompletion = (paymentReference) => {
+    setPaymentReference(paymentReference);
+    sendPaymentDetails(paymentReference);
+  };
+
+  const sendPaymentDetails = async (paymentReference) => {
+    try {
+      const response = await axios.post(
+        "https://theowletapp.com/server/api/v1/fund/with/monnify",
+        {
+          trx_ref: paymentReference,
+          amount: 5000,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        }
+      );
+
+      if (response.status !== 200) {
+        throw new Error("Failed to send payment details");
+      }
+      console.log("Payment details sent successfully:", response.data);
+    } catch (error) {
+      console.error("Error sending payment details:", error);
+    }
+  };
 
   const getInitials = (name) => {
     return name
@@ -109,7 +143,7 @@ const Homepage = ({ authToken }) => {
     <div className="max-w-full flex flex-col lgss:flex-row">
       <div className="w-[20%]">
         <Sidebar
-          user={user}
+          user={userData.user}
           getInitials={getInitials}
           isOpen={isOpen}
           setIsOpen={setIsOpen}
@@ -126,21 +160,53 @@ const Homepage = ({ authToken }) => {
           </div>
         </div>
         <div className="w-full flex flex-col bg-bg h-screen">
-          <HomeSearch user={user} getInitials={getInitials} />
+          <HomeSearch user={userData.user} getInitials={getInitials} />
           <div className="w-full flex flex-col px-[5%]">
-            <div className="flex flex-row flex-wrap w-full gap-4 justify-between pt-12">
-              <HomeCard
-                title="Available Balance"
-                value={`$${balance}`}
-                img={purse}
-              />
-              <HomeCard
-                title="Total Orders"
-                value={orders.length}
-                img={carton}
-              />
-              <HomeCard title="Tier" value={tier} img={medal} />
-            </div>
+            {inProgressOrders.length === 0 ? (
+              <div className="flex flex-row flex-wrap w-full gap-4 justify-between pt-12">
+                <HomeCard
+                  title="Available Balance"
+                  value={
+                    userData.wallet
+                      ? `${userData.wallet.symbol}${userData.wallet.balance}`
+                      : "$0.00"
+                  }
+                  img={purse}
+                />
+                <HomeCard
+                  title="Total Orders"
+                  value={`${userData.total_order}`}
+                  img={carton}
+                />
+                <HomeCard
+                  title="Account status"
+                  value={userData.user?.tier}
+                  img={medal}
+                />
+              </div>
+            ) : (
+              <div className="flex flex-row flex-wrap w-full gap-4 justify-between pt-12">
+                <HomeCard
+                  title="Available Balance"
+                  value={
+                    userData.wallet
+                      ? `${userData.wallet.symbol}${userData.wallet.balance}`
+                      : "#0.00"
+                  }
+                  img={purse}
+                />
+                <HomeCard
+                  title="Total Orders"
+                  value={inProgressOrders.length}
+                  img={carton}
+                />
+                <HomeCard
+                  title="Account status"
+                  value={userData.user?.tier}
+                  img={medal}
+                />
+              </div>
+            )}
             {inProgressOrders.length === 0 ? (
               <div className="w-full flex flex-col justify-center items-center pt-6">
                 <img src={homeEmptyIcon} alt="" />

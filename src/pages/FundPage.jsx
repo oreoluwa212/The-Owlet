@@ -1,25 +1,30 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Sidebar from "../components/Sidebar";
-import { LuBell, LuMenu } from "react-icons/lu";
-import { PiDotsThreeOutlineVerticalBold } from "react-icons/pi";
-import { book, cashenvoy, cryptomus, flutter, korapay, logo } from "../assets";
 import HomeSearch from "../components/input/HomeSearch";
-import { FaAngleDown } from "react-icons/fa6";
 import PaymentBtns from "../components/buttons/PaymentBtns";
-import Btn from "../components/buttons/Btn";
 import CommonH1 from "../components/CommonH1";
-import CreateOrderBtn from "../components/buttons/CreateOrderBtn";
 import FundHistoryTable from "../components/tables/FundHistoryTable";
 import SearchPlatforms from "../components/modals/creatingOrder/SearchPlatforms";
-import Cookies from "js-cookie";
-import axios from "axios";
-import ClipLoader from "react-spinners/ClipLoader";
+import {
+  book,
+  cryptomus,
+  flutter,
+  homeEmptyIcon,
+  korapay,
+  logo,
+  monnify,
+} from "../assets";
+import { LuBell, LuMenu } from "react-icons/lu";
+import { FaAngleDown } from "react-icons/fa6";
 
 const columns = [
+  { label: "ID", key: "trans_id" },
   { label: "Method", key: "method" },
-  { label: "Amount", key: "amount" },
+  { label: "Cost", key: "amount" },
   { label: "Date", key: "created_at" },
-  { label: "Transaction ID", key: "trans_id" },
 ];
 
 const FundPage = ({ authToken }) => {
@@ -28,10 +33,9 @@ const FundPage = ({ authToken }) => {
   const [activePayment, setActivePayment] = useState(null);
   const [user, setUser] = useState(null);
   const [wallet, setWallet] = useState(null);
-  const [currency, setCurrency] = useState(null);
-  const [symbol, setSymbol] = useState(null);
   const [paymentHistory, setPaymentHistory] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [amount, setAmount] = useState("");
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -48,13 +52,9 @@ const FundPage = ({ authToken }) => {
         if (response.status !== 200) {
           throw new Error("Failed to fetch user data");
         }
-        const userData = response.data.data.user;
-        const walletData = response.data.data.wallet;
-
-        setUser(userData);
-        setWallet(walletData);
-        setCurrency(walletData.currency);
-        setSymbol(walletData.symbol);
+        const data = response.data.data;
+        setUser(data.user);
+        setWallet(data.wallet);
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
@@ -70,7 +70,6 @@ const FundPage = ({ authToken }) => {
             },
           }
         );
-
         if (response.data.success) {
           setPaymentHistory(response.data.data);
         } else {
@@ -94,8 +93,89 @@ const FundPage = ({ authToken }) => {
       .join("");
   };
 
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "https://sdk.monnify.com/plugin/monnify.js";
+    script.async = true;
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
+
+  const payWithMonnify = () => {
+    if (!user || !amount) {
+      toast.error("Please input the amount.");
+      return;
+    }
+
+    MonnifySDK.initialize({
+      amount: parseFloat(amount),
+      currency: wallet.currency,
+      reference: `${new Date().getTime()}`,
+      customerFullName: `${user.firstname} ${user.lastname}`,
+      customerEmail: user.email,
+      apiKey: "MK_TEST_JKUWW3YGPJ",
+      contractCode: "7751744568",
+      paymentDescription: "Lahray World",
+      metadata: {
+        name: user.firstname,
+        age: user.age || 0,
+      },
+      onLoadStart: () => {
+        console.log("Loading has started");
+      },
+      onLoadComplete: () => {
+        console.log("SDK is UP");
+      },
+      onComplete: (response) => {
+        console.log(response);
+
+        const trxRef = response.transactionReference;
+
+        axios
+          .post(
+            "https://theowletapp.com/server/api/v1/fund/with/monnify",
+            {
+              trx_ref: trxRef,
+              amount: amount,
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${authToken}`,
+              },
+            }
+          )
+          .then((response) => {
+            if (response.data.success) {
+              toast.success("Payment successful!");
+            } else {
+              toast.error("Payment failed!");
+            }
+          })
+          .catch((error) => {
+            console.error("Error in Monnify payment:", error);
+            toast.error("An error occurred during the payment process.");
+          });
+      },
+      onClose: (data) => {
+        console.log(data);
+      },
+    });
+  };
+
+  const handlePaymentClick = (method) => {
+    if (method !== "monnify") {
+      toast.error("Please select only Monnify as the payment method.");
+      return;
+    }
+    setActivePayment(method);
+  };
+
   return (
     <div className="w-full flex flex-col lgss:flex-row bg-bg">
+      <ToastContainer />
       <div className="w-[20%]">
         <Sidebar
           user={user}
@@ -116,8 +196,8 @@ const FundPage = ({ authToken }) => {
         </div>
         <div className="w-full lgss:flex flex-col">
           <HomeSearch user={user} getInitials={getInitials} />
-          <div className="flex lgss:flex-row flex-col gap-5 w-full h-full justify-between lgss:py-12 px-[5%]">
-            <div className="lgss:bg-white lgss:w-[55%] lgss:border shaow-md py-6 rounded-[12px] flex flex-col justify-start items-start text-left">
+          <div className="flex lgss:flex-row flex-col gap-10 w-full h-full justify-between lgss:py-12 px-[5%]">
+            <div className="lgss:bg-white lgss:w-[40%] lgss:border shadow-md py-6 rounded-[12px] flex flex-col justify-start items-start text-left">
               <CommonH1 title="Fund your account" />
               <div className="w-full flex flex-col px-[5%] pt-5">
                 <h1 className="text-[1rem] lgss:text-[1.3rem] font-medium text-secondary">
@@ -126,11 +206,13 @@ const FundPage = ({ authToken }) => {
                 <div className="relative w-full">
                   <input
                     type="text"
+                    value={amount}
+                    onChange={(e) => setAmount(e.target.value)}
                     className="px-3 py-4 border-2 mt-2 w-full rounded-[8px] text-black outline-none"
-                    placeholder={`${symbol} 1,000`}
+                    placeholder={`${wallet ? wallet.symbol : ""} 1,000`}
                   />
                   <div className="absolute inset-y-0 right-0 px-3 flex gap-2 items-center pointer-events-none text-black text-[1rem]">
-                    <p>{currency}</p>
+                    <p>{wallet ? wallet.currency : ""}</p>
                     <FaAngleDown />
                   </div>
                 </div>
@@ -144,31 +226,31 @@ const FundPage = ({ authToken }) => {
                     <PaymentBtns
                       img={flutter}
                       isActive={activePayment === "flutter"}
-                      onClick={() => setActivePayment("flutter")}
+                      onClick={() => handlePaymentClick("flutter")}
                     />
                     <PaymentBtns
                       img={cryptomus}
                       isActive={activePayment === "cryptomus"}
-                      onClick={() => setActivePayment("cryptomus")}
+                      onClick={() => handlePaymentClick("cryptomus")}
                     />
                   </div>
                   <div className="flex justify-between gap-4 pt-4 items-center w-full">
                     <PaymentBtns
                       img={korapay}
                       isActive={activePayment === "korapay"}
-                      onClick={() => setActivePayment("korapay")}
+                      onClick={() => handlePaymentClick("korapay")}
                     />
                     <PaymentBtns
-                      img={cashenvoy}
-                      isActive={activePayment === "cashenvoy"}
-                      onClick={() => setActivePayment("cashenvoy")}
+                      img={monnify}
+                      isActive={activePayment === "monnify"}
+                      onClick={() => handlePaymentClick("monnify")}
                     />
                   </div>
                 </div>
               </div>
-              <div className="w-[90%] mx-auto flex flex-col px-[5%] mt-6 bg-[#EAECF0] bg-opacity-50 py-3 rounded-[8px] text-secondary font-semibold text-[.8rem] lgss:text-[1.1rem]">
-                <div className="pb-3 pt-5 border-b-[1px] mb-2">
-                  <h1 className="font-semibold text-[22px] text-black">
+              <div className="w-[90%] mx-auto flex flex-col gap-1 px-[5%] mt-6 bg-[#EAECF0] bg-opacity-50 py-4 rounded-[8px] text-secondary font-semibold text-[.8rem] lgss:text-[0.9rem]">
+                <div className="pb-2 pt-1 border-b-[1px] mb-2">
+                  <h1 className="font-semibold text-[20px] text-black">
                     CASHBACK DETAILS
                   </h1>
                 </div>
@@ -197,40 +279,36 @@ const FundPage = ({ authToken }) => {
                 </p>
               </div>
               <div className="w-full px-[5%] pt-4">
-                <Btn />
+                <button
+                  type="button"
+                  onClick={payWithMonnify}
+                  className="bg-primary px-5 w-full text-white flex justify-center gap-4 items-center py-4 rounded-[8px] font-semibold text-[18px]"
+                >
+                  Pay now
+                </button>
               </div>
             </div>
-            <div className="lgss:w-[55%] h-fit pb-8 bg-white border">
-              <div className="w-full border-b-2 px-5 py-7 flex items-center justify-between text-[18px]">
-                <h1 className="font-bold text-2xl">Funding history</h1>
-                <PiDotsThreeOutlineVerticalBold />
-              </div>
+            <div className="lgss:w-[60%] bg-white h-fit py-3 rounded-[12px] border shadow-md flex flex-col">
+              <CommonH1 title="Funding history" />
               {loading ? (
-                <div className="flex justify-center items-center h-full">
-                  <ClipLoader size={50} color="#000" />
+                <p>Loading...</p>
+              ) : paymentHistory.length === 0 ? (
+                <div className="w-full flex flex-col justify-center items-center pb-3">
+                  <img src={homeEmptyIcon} alt="" />
+                  <div className="flex flex-col gap-3 font-semibold">
+                    <h2 className="text-[1.2rem]">No Funding History</h2>
+                  </div>
                 </div>
-              ) : paymentHistory.length > 0 ? (
-                <FundHistoryTable
-                  columns={columns}
-                  tableData={paymentHistory}
-                />
               ) : (
-                <div className="flex justify-center items-center w-full flex-col font-semibold text-[26px]">
-                  <img
-                    className="h-[250px]"
-                    src={book}
-                    alt="No funding history"
-                  />
-                  <h2 className="text-2xl">No funding history</h2>
-                </div>
+                <FundHistoryTable data={paymentHistory} columns={columns} />
               )}
             </div>
           </div>
         </div>
       </div>
       <SearchPlatforms
-        setIsModalOpen={setIsModalOpen}
         isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
       />
     </div>
   );

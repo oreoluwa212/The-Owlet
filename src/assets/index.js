@@ -27,6 +27,7 @@ import telegram from "../assets/images/telegram.png";
 import spotify from "../assets/images/spotify.png";
 import reddit from "../assets/images/reddit.png";
 import youtube from "../assets/images/youtube.png";
+import monnify from "../assets/images/monnify.png";
 
 export const platformImages = {
   Youtube: youtube,
@@ -46,6 +47,7 @@ export {
   flutter,
   cryptomus,
   cashenvoy,
+  monnify,
   book,
   quicklinkimg,
   play,

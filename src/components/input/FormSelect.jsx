@@ -1,4 +1,3 @@
-// FormSelect.js
 import React from "react";
 
 const FormSelect = ({ name, id, label, options, value, onChange }) => {
