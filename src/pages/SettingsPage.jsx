@@ -1,4 +1,3 @@
-// SettingsPage.js (Updated section)
 import React, { useEffect, useState } from "react";
 import Sidebar from "../components/Sidebar";
 import { LuBell, LuMenu } from "react-icons/lu";
@@ -13,7 +12,7 @@ import { FiCopy } from "react-icons/fi";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import FormSelect from "../components/input/FormSelect"; // Import FormSelect component
+import FormSelect from "../components/input/FormSelect";
 
 const generateRandomApiKey = () => {
   return (
@@ -35,6 +34,7 @@ const SettingsPage = ({ authToken }) => {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [timeZones, setTimeZones] = useState([]);
+  const [selectedTimezone, setSelectedTimezone] = useState(null);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -60,39 +60,42 @@ const SettingsPage = ({ authToken }) => {
     fetchUserData();
   }, [authToken]);
 
-useEffect(() => {
-  const fetchTimeZones = async () => {
-    try {
-      const response = await axios.get(
-        "https://theowletapp.com/server/api/v1/time/zone",
-        {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
-        }
-      );
-
-      if (response.status !== 200) {
-        throw new Error("Failed to fetch time zones");
-      }
-
-      if (response.data && Array.isArray(response.data.data)) {
-        setTimeZones(
-          response.data.data.map((tz) => ({
-            value: tz.timezone,
-            label: tz.timezone,
-          }))
+  useEffect(() => {
+    const fetchTimeZones = async () => {
+      try {
+        const response = await axios.get(
+          "https://theowletapp.com/server/api/v1/time/zone",
+          {
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+            },
+          }
         );
-      } else {
-        console.error("Invalid response format for time zones:", response.data);
-      }
-    } catch (error) {
-      console.error("Error fetching time zones:", error);
-    }
-  };
 
-  fetchTimeZones();
-}, [authToken]);
+        if (response.status !== 200) {
+          throw new Error("Failed to fetch time zones");
+        }
+
+        if (response.data && Array.isArray(response.data.data)) {
+          setTimeZones(
+            response.data.data.map((tz) => ({
+              value: tz.id,
+              label: tz.timezone,
+            }))
+          );
+        } else {
+          console.error(
+            "Invalid response format for time zones:",
+            response.data
+          );
+        }
+      } catch (error) {
+        console.error("Error fetching time zones:", error);
+      }
+    };
+
+    fetchTimeZones();
+  }, [authToken]);
 
   const getInitials = (name) => {
     return name
@@ -120,6 +123,11 @@ useEffect(() => {
 
   const handleProfileUpdate = async (e) => {
     e.preventDefault();
+    if (phone.length > 11) {
+      toast.error("Phone number cannot exceed 11 digits");
+      return;
+    }
+
     try {
       const response = await axios.put(
         "https://theowletapp.com/server/api/v1/users/update/profile",
@@ -177,6 +185,43 @@ useEffect(() => {
     } catch (error) {
       console.error("Error changing password:", error);
       toast.error("Failed to change password");
+    }
+  };
+
+  const handlePhoneChange = (e) => {
+    const input = e.target.value;
+    if (/^\d*$/.test(input) && input.length <= 11) {
+      setPhone(input);
+    }
+  };
+
+  const handleTimezoneChange = async (e) => {
+    const timezoneId = e.target.value;
+    setSelectedTimezone(timezoneId);
+  };
+
+  const handleTimezoneUpdate = async () => {
+    try {
+      const response = await axios.put(
+        "https://theowletapp.com/server/api/v1/users/update/time_zone",
+        {
+          timezone_id: selectedTimezone,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        }
+      );
+
+      if (response.status !== 200) {
+        throw new Error("Failed to update timezone");
+      }
+
+      toast.success("Timezone updated successfully!");
+    } catch (error) {
+      console.error("Error updating timezone:", error);
+      toast.error("Failed to update timezone");
     }
   };
 
@@ -259,7 +304,7 @@ useEffect(() => {
                         label="Phone number"
                         textarea={false}
                         value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
+                        onChange={handlePhoneChange}
                       />
                     </div>
                   </div>
@@ -319,13 +364,16 @@ useEffect(() => {
                       name="timeZone"
                       label="Select Time Zone"
                       options={timeZones}
-                      value={user?.timezone || ""}
-                      onChange={(e) => console.log(e.target.value)}
+                      value={selectedTimezone} 
+                      onChange={handleTimezoneChange}
                     />
                   </div>
                   <hr />
                   <div className="px-[5%] py-4">
-                    <CreateOrderBtn title="Save changes" />
+                    <CreateOrderBtn
+                      title="Save changes"
+                      onClick={handleTimezoneUpdate}
+                    />
                   </div>
                 </div>
               </div>
@@ -343,7 +391,7 @@ useEffect(() => {
                       select={false}
                       textarea={false}
                       icon={<FiCopy />}
-                      onIconClick={handleCopy} // Handle copy icon click
+                      onIconClick={handleCopy}
                     />
                   </div>
                   <hr />

@@ -20,6 +20,8 @@ const AffiliatePage = ({ authToken }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [user, setUser] = useState(null);
+  const [wallet, setWallet] = useState(null);
+  const [referral, setReferral] = useState(null);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -37,6 +39,8 @@ const AffiliatePage = ({ authToken }) => {
           throw new Error("Failed to fetch user data");
         }
         setUser(response.data.data.user);
+        setWallet(response.data.data.wallet);
+        setReferral(response.data.data.referral);
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
@@ -78,11 +82,15 @@ const AffiliatePage = ({ authToken }) => {
             <div className="lgss:bg-white lgss:border lgss:shadow-sm lgss:pt-4 rounded-[12px]">
               <CommonH1 title="Your referral stats" />
               <div className="flex lgss:flex-row flex-col w-full px-5 py-6 gap-5">
-                <ReferralTopCard icon={GoPeople} title="Visitors" value="0" />
+                <ReferralTopCard
+                  icon={GoPeople}
+                  title="Visitors"
+                  value={referral ? referral.referral_visitor_count : "0"}
+                />
                 <ReferralTopCard
                   icon={AiOutlineUsergroupAdd}
                   title="Registrations"
-                  value="0"
+                  value={referral ? referral.registered_referral : "0"}
                 />
                 <ReferralTopCard
                   icon={BsFunnel}
@@ -92,12 +100,20 @@ const AffiliatePage = ({ authToken }) => {
                 <ReferralTopCard
                   icon={PiWallet}
                   title="Available Earnings"
-                  value="#0.00"
+                  value={
+                    wallet
+                      ? `${wallet.symbol}${referral.avalable_balance}`
+                      : "0"
+                  }
                 />
                 <ReferralTopCard
                   icon={PiWallet}
                   title="Total Earnings"
-                  value="#0.00"
+                  value={
+                    wallet
+                      ? `${wallet.symbol}${referral.total_balance}`
+                      : "0"
+                  }
                 />
               </div>
             </div>
@@ -107,7 +123,10 @@ const AffiliatePage = ({ authToken }) => {
                 <div className="flex flex-col text-left px-[3%] py-6">
                   <div className="flex w-full gap-6">
                     <div className="w-[70%] rounded-[4px] px-2 border flex justify-start items-center text-grey">
-                      <p>https://the-owlet.com/ref/cpmb5</p>
+                      <p>
+                        https://the-owlet.com/ref/
+                        {user ? user.referral_code : "cpmb5"}
+                      </p>
                     </div>
                     <div className="w-[30%]">
                       <CreateOrderBtn icon={MdCopyAll} title="Copy link" />

@@ -10,6 +10,7 @@ import { AiOutlineSearch, AiOutlineClose } from "react-icons/ai";
 import TicketCards from "../../components/cards/TicketCards";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
+import ClipLoader from "react-spinners/ClipLoader";
 import "react-toastify/dist/ReactToastify.css";
 
 const CreateTicket = ({ authToken }) => {
@@ -20,6 +21,8 @@ const CreateTicket = ({ authToken }) => {
   const [activeTab, setActiveTab] = useState("pending");
   const [pendingCount, setPendingCount] = useState(0);
   const [resolvedCount, setResolvedCount] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [loadingSubmit, setLoadingSubmit] = useState(false);
 
   const [formData, setFormData] = useState({
     subject: "",
@@ -40,7 +43,7 @@ const CreateTicket = ({ authToken }) => {
         );
 
         if (response.status !== 200) {
-          throw new Error("Failed to fetch user data");
+          console.log("Failed to fetch user data");
         }
         setUser(response.data.data.user);
       } catch (error) {
@@ -52,6 +55,7 @@ const CreateTicket = ({ authToken }) => {
   }, [authToken]);
 
   const fetchTicketHistory = async () => {
+    setLoading(true);
     try {
       const response = await axios.get(
         "https://theowletapp.com/server/api/v1/tickets/history/14",
@@ -69,12 +73,12 @@ const CreateTicket = ({ authToken }) => {
         setPendingCount(pending.total);
         setResolvedCount(resolved.total);
       } else {
-        toast.error(response.data.message || "Failed to fetch ticket history");
         console.error("Failed to fetch ticket history:", response.data.message);
       }
     } catch (error) {
-      toast.error("Error fetching ticket history");
       console.error("Error fetching ticket history:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -104,6 +108,8 @@ const CreateTicket = ({ authToken }) => {
       toast.error("Please fill out all required fields.");
       return;
     }
+
+    setLoadingSubmit(true);
 
     try {
       const formDataForSubmit = new FormData();
@@ -135,6 +141,8 @@ const CreateTicket = ({ authToken }) => {
     } catch (error) {
       toast.error("Error creating ticket");
       console.error("Error creating ticket:", error);
+    } finally {
+      setLoadingSubmit(false);
     }
   };
 
@@ -224,7 +232,16 @@ const CreateTicket = ({ authToken }) => {
                         </div>
                       )}
                     </div>
-                    <CreateOrderBtn title="Submit ticket" />
+                    <button
+                      type="submit"
+                      className="bg-primary text-white py-2 px-4 rounded-md flex justify-center items-center"
+                    >
+                      {loadingSubmit ? (
+                        <ClipLoader size={20} color={"#FFF"} />
+                      ) : (
+                        "Submit ticket"
+                      )}
+                    </button>
                   </form>
                 </div>
               </div>

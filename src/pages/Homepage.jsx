@@ -22,6 +22,8 @@ const Homepage = ({ authToken }) => {
   const [user, setUser] = useState(null);
   const [orders, setOrders] = useState([]);
   const [orderStatus, setOrderStatus] = useState([]);
+  const [balance, setBalance] = useState(0);
+  const [tier, setTier] = useState("");
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -38,7 +40,10 @@ const Homepage = ({ authToken }) => {
         if (response.status !== 200) {
           throw new Error("Failed to fetch user data");
         }
-        setUser(response.data.data.user);
+        const data = response.data.data;
+        setUser(data.user);
+        setBalance(data.wallet.balance);
+        setTier(data.user.tier);
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
@@ -123,31 +128,19 @@ const Homepage = ({ authToken }) => {
         <div className="w-full flex flex-col bg-bg h-screen">
           <HomeSearch user={user} getInitials={getInitials} />
           <div className="w-full flex flex-col px-[5%]">
-            {inProgressOrders.length === 0 ? (
-              <div className="flex flex-row flex-wrap w-full gap-4 justify-between pt-12">
-                <HomeCard
-                  title="Available Balance"
-                  value={"#0.00"}
-                  img={purse}
-                />
-                <HomeCard title="Total Orders" value={"0"} img={carton} />
-                <HomeCard title="Total Orders" value={"Tier 1"} img={medal} />
-              </div>
-            ) : (
-              <div className="flex flex-row flex-wrap w-full gap-4 justify-between pt-12">
-                <HomeCard
-                  title="Available Balance"
-                  value={"#123,583"}
-                  img={purse}
-                />
-                <HomeCard
-                  title="Total Orders"
-                  value={inProgressOrders.length}
-                  img={carton}
-                />
-                <HomeCard title="Total Orders" value={"Tier 3"} img={medal} />
-              </div>
-            )}
+            <div className="flex flex-row flex-wrap w-full gap-4 justify-between pt-12">
+              <HomeCard
+                title="Available Balance"
+                value={`$${balance}`}
+                img={purse}
+              />
+              <HomeCard
+                title="Total Orders"
+                value={orders.length}
+                img={carton}
+              />
+              <HomeCard title="Tier" value={tier} img={medal} />
+            </div>
             {inProgressOrders.length === 0 ? (
               <div className="w-full flex flex-col justify-center items-center pt-6">
                 <img src={homeEmptyIcon} alt="" />
@@ -183,7 +176,7 @@ const Homepage = ({ authToken }) => {
                 </div>
                 <div className="lgss:hidden flex flex-col gap-5 text-left py-6">
                   <h1 className="uppercase font-semibold text-secondary">
-                    orders in progress
+                    Orders in Progress
                   </h1>
                   {inProgressOrders.map((order) => (
                     <HomeCardMobile

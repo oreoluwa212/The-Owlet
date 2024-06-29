@@ -13,6 +13,7 @@ import FundHistoryTable from "../components/tables/FundHistoryTable";
 import SearchPlatforms from "../components/modals/creatingOrder/SearchPlatforms";
 import Cookies from "js-cookie";
 import axios from "axios";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const columns = [
   { label: "Method", key: "method" },
@@ -26,6 +27,9 @@ const FundPage = ({ authToken }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activePayment, setActivePayment] = useState(null);
   const [user, setUser] = useState(null);
+  const [wallet, setWallet] = useState(null);
+  const [currency, setCurrency] = useState(null);
+  const [symbol, setSymbol] = useState(null);
   const [paymentHistory, setPaymentHistory] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -44,7 +48,13 @@ const FundPage = ({ authToken }) => {
         if (response.status !== 200) {
           throw new Error("Failed to fetch user data");
         }
-        setUser(response.data.data.user);
+        const userData = response.data.data.user;
+        const walletData = response.data.data.wallet;
+
+        setUser(userData);
+        setWallet(walletData);
+        setCurrency(walletData.currency);
+        setSymbol(walletData.symbol);
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
@@ -117,10 +127,10 @@ const FundPage = ({ authToken }) => {
                   <input
                     type="text"
                     className="px-3 py-4 border-2 mt-2 w-full rounded-[8px] text-black outline-none"
-                    placeholder="# 1,000"
+                    placeholder={`${symbol} 1,000`}
                   />
                   <div className="absolute inset-y-0 right-0 px-3 flex gap-2 items-center pointer-events-none text-black text-[1rem]">
-                    <p>NGN</p>
+                    <p>{currency}</p>
                     <FaAngleDown />
                   </div>
                 </div>
@@ -197,7 +207,7 @@ const FundPage = ({ authToken }) => {
               </div>
               {loading ? (
                 <div className="flex justify-center items-center h-full">
-                  <p>Loading...</p>
+                  <ClipLoader size={50} color="#000" />
                 </div>
               ) : paymentHistory.length > 0 ? (
                 <FundHistoryTable
