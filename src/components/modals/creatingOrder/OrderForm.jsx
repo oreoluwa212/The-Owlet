@@ -85,7 +85,7 @@ const OrderForm = ({ platform, service, setIsModalOpen, authToken }) => {
         return;
       }
 
-      const calculatedAmount = (selectedService.rate/1000) * quantity;
+      const calculatedAmount = (selectedService.rate / 1000) * quantity;
       setAmount(calculatedAmount);
     } else {
       setAmount(null);
@@ -97,8 +97,6 @@ const OrderForm = ({ platform, service, setIsModalOpen, authToken }) => {
       setIsModalOpen(false);
     }
   };
-
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();

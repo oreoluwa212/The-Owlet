@@ -9,8 +9,8 @@ import FilterBtn from "../components/buttons/FilterBtn";
 import HomeCardMobile from "../components/cards/HomeCardMobile";
 import SearchPlatforms from "../components/modals/creatingOrder/SearchPlatforms";
 import TableHome from "../components/cards/TableHome";
-import Cookies from "js-cookie";
-import axios from "axios";
+import useFetchUserData from "../hooks/useFetchUserData";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const columns = [
   { label: "ID", key: "order_id" },
@@ -24,63 +24,11 @@ const columns = [
 ];
 
 const OrderPage = ({ authToken }) => {
+  const { userData, loading: userDataLoading } = useFetchUserData(authToken);
   const [isOpen, setIsOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [user, setUser] = useState(null);
-  const [orders, setOrders] = useState([]);
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        if (!authToken) {
-          throw new Error("Auth token not provided");
-        }
-
-        const response = await axios.get(
-          "https://theowletapp.com/server/api/v1/users/analytics",
-          {
-            headers: {
-              Authorization: `Bearer ${authToken}`,
-            },
-          }
-        );
-
-        if (response.status !== 200) {
-          throw new Error("Failed to fetch user data");
-        }
-        setUser(response.data.data.user);
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    };
-
-    const fetchOrders = async () => {
-      try {
-        const response = await axios.get(
-          "https://theowletapp.com/server/api/v1/orders/list/2",
-          {
-            headers: {
-              Authorization: `Bearer ${authToken}`,
-            },
-          }
-        );
-
-        if (response.data.success) {
-          setOrders(response.data.data.data);
-        } else {
-          throw new Error("Failed to fetch orders");
-        }
-      } catch (error) {
-        console.error("Error fetching orders:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchUserData();
-    fetchOrders();
-  }, [authToken]);
+  useEffect(() => {}, [userData, authToken]);
 
   const getInitials = (name) => {
     return name
@@ -89,13 +37,13 @@ const OrderPage = ({ authToken }) => {
       .join("");
   };
 
-  const countOrders = () => orders.length;
+  const countOrders = () => userData.total_order;
 
   return (
     <div className="max-w-full flex flex-col lgss:flex-row bg-bg h-screen">
       <div className="w-[20%]">
         <Sidebar
-          user={user}
+          user={userData.user}
           isOpen={isOpen}
           setIsOpen={setIsOpen}
           isModalOpen={isModalOpen}
@@ -112,7 +60,7 @@ const OrderPage = ({ authToken }) => {
           </div>
         </div>
         <div className="w-full lgss:flex flex-col">
-          <HomeSearch user={user} getInitials={getInitials} />
+          <HomeSearch user={userData.user} getInitials={getInitials} />
           <div className="w-full px-[5%]">
             <div className="flex justify-between w-full gap-4 pt-4">
               <div className="hidden lgss:flex gap-3">
@@ -125,9 +73,11 @@ const OrderPage = ({ authToken }) => {
                 <FilterBtn />
               </div>
             </div>
-            {loading ? (
-              <div>Loading...</div>
-            ) : orders.length === 0 ? (
+            {userDataLoading ? (
+              <div className="flex justify-center items-center py-4">
+                <ClipLoader size={32} />
+              </div>
+            ) : userData.total_order === 0 ? (
               <div className="mt-10 w-full bg-white h-fit py-3 border rounded-[8px]">
                 <div className="px-3 py-4 text-[20px] border-b font-semibold flex gap-5 items-center">
                   <h1 className="text-left">All Orders</h1>
@@ -154,7 +104,7 @@ const OrderPage = ({ authToken }) => {
                   <TableHome
                     heading="Orders"
                     columns={columns}
-                    tableData={orders}
+                    tableData={userData.total_order}
                     numberOfOrders={countOrders()}
                   />
                 </div>
@@ -166,7 +116,7 @@ const OrderPage = ({ authToken }) => {
                       <p>Orders</p>
                     </div>
                   </div>
-                  {orders.map((order) => (
+                  {userData.total_order.map((order) => (
                     <HomeCardMobile
                       key={order.id}
                       title={order.service_name}

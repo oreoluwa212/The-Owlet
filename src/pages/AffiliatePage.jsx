@@ -18,37 +18,9 @@ import useFetchUserData from "../hooks/useFetchUserData";
 import { toast } from "react-toastify";
 
 const AffiliatePage = ({ authToken }) => {
+  const { userData, error, loading } = useFetchUserData(authToken);
   const [isOpen, setIsOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [user, setUser] = useState(null);
-  const [wallet, setWallet] = useState(null);
-  const [referral, setReferral] = useState(null);
-
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const response = await axios.get(
-          "https://theowletapp.com/server/api/v1/users/analytics",
-          {
-            headers: {
-              Authorization: `Bearer ${authToken}`,
-            },
-          }
-        );
-
-        if (response.status !== 200) {
-          throw new Error("Failed to fetch user data");
-        }
-        setUser(response.data.data.user);
-        setWallet(response.data.data.wallet);
-        setReferral(response.data.data.referral);
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    };
-
-    fetchUserData();
-  }, [authToken]);
 
   const getInitials = (name) => {
     return name
@@ -77,7 +49,7 @@ const AffiliatePage = ({ authToken }) => {
       </div>
       <div className="flex flex-col lgss:w-[80%] z-0">
         <div className="lgss:hidden w-full px-[5%] flex justify-between items-center border-b-[1px] py-5">
-          <img src={logo} alt="the-owulet logo" />
+          <img src={logo} alt="the-owlet logo" />
           <div className="gap-8 flex justify-center items-center text-secondary text-[24px]">
             <LuBell />
             <LuMenu onClick={() => setIsOpen(true)} />
@@ -92,12 +64,20 @@ const AffiliatePage = ({ authToken }) => {
                 <ReferralTopCard
                   icon={GoPeople}
                   title="Visitors"
-                  value={referral ? referral.referral_visitor_count : "0"}
+                  value={
+                    userData.referral
+                      ? userData.referral.referral_visitor_count
+                      : "0"
+                  }
                 />
                 <ReferralTopCard
                   icon={AiOutlineUsergroupAdd}
                   title="Registrations"
-                  value={referral ? referral.registered_referral : "0"}
+                  value={
+                    userData.referral
+                      ? userData.referral.registered_referral
+                      : "0"
+                  }
                 />
                 <ReferralTopCard
                   icon={BsFunnel}
@@ -108,8 +88,8 @@ const AffiliatePage = ({ authToken }) => {
                   icon={PiWallet}
                   title="Available Earnings"
                   value={
-                    wallet
-                      ? `${wallet.symbol}${referral.avalable_balance}`
+                    userData.wallet
+                      ? `${userData.wallet.symbol}${userData.referral.avalable_balance}`
                       : "0"
                   }
                 />
@@ -117,8 +97,8 @@ const AffiliatePage = ({ authToken }) => {
                   icon={PiWallet}
                   title="Total Earnings"
                   value={
-                    wallet
-                      ? `${wallet.symbol}${referral.total_balance}`
+                    userData.wallet
+                      ? `${userData.wallet.symbol}${userData.referral.total_balance}`
                       : "0"
                   }
                 />
@@ -132,7 +112,7 @@ const AffiliatePage = ({ authToken }) => {
                     <div className="w-[70%] rounded-[4px] px-2 border flex justify-start items-center text-grey">
                       <p>
                         https://the-owlet.com/ref/
-                        {user ? user.referral_code : "cpmb5"}
+                        {userData.user ? userData.user.referral_code : "cpmb5"}
                       </p>
                     </div>
                     <div className="w-[30%]">

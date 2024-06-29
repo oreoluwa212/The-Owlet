@@ -19,6 +19,7 @@ import {
 } from "../assets";
 import { LuBell, LuMenu } from "react-icons/lu";
 import { FaAngleDown } from "react-icons/fa6";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const columns = [
   { label: "ID", key: "trans_id" },
@@ -291,7 +292,9 @@ const FundPage = ({ authToken }) => {
             <div className="lgss:w-[60%] bg-white h-fit py-3 rounded-[12px] border shadow-md flex flex-col">
               <CommonH1 title="Funding history" />
               {loading ? (
-                <p>Loading...</p>
+                <div className="flex justify-center items-center py-4">
+                <ClipLoader size={32}/>
+                </div>
               ) : paymentHistory.length === 0 ? (
                 <div className="w-full flex flex-col justify-center items-center pb-3">
                   <img src={homeEmptyIcon} alt="" />

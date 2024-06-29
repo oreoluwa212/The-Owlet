@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Sidebar from "../components/Sidebar";
 import { LuBell, LuInbox, LuMenu } from "react-icons/lu";
@@ -23,8 +23,6 @@ const Homepage = ({ authToken }) => {
   const [orders, setOrders] = useState([]);
   const [loadingOrders, setLoadingOrders] = useState([]);
   const [orderStatus, setOrderStatus] = useState([]);
-  const [balance, setBalance] = useState(0);
-  const [tier, setTier] = useState("");
   const [paymentReference, setPaymentReference] = useState(null);
 
   const { userData, error, loading } = useFetchUserData(authToken);
@@ -45,7 +43,6 @@ const Homepage = ({ authToken }) => {
           throw new Error("Failed to fetch user data");
         }
         const data = response.data.data;
-        setUser(data.user);
         setBalance(data.wallet.balance);
         setTier(data.user.tier);
       } catch (error) {
@@ -99,7 +96,7 @@ const Homepage = ({ authToken }) => {
     fetchOrderStatus();
   }, [authToken]);
 
-  const handlePaymentCompletion = (paymentReference) => {
+  const handlePaymentCompletion = async (paymentReference) => {
     setPaymentReference(paymentReference);
     sendPaymentDetails(paymentReference);
   };
@@ -191,7 +188,7 @@ const Homepage = ({ authToken }) => {
                   value={
                     userData.wallet
                       ? `${userData.wallet.symbol}${userData.wallet.balance}`
-                      : "#0.00"
+                      : "$0.00"
                   }
                   img={purse}
                 />

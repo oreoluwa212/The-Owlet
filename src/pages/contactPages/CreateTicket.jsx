@@ -3,14 +3,12 @@ import Sidebar from "../../components/Sidebar";
 import { logo, book } from "../../assets";
 import { LuBell, LuMenu } from "react-icons/lu";
 import HomeSearch from "../../components/input/HomeSearch";
-import CreateOrderBtn from "../../components/buttons/CreateOrderBtn";
 import CommonH1 from "../../components/CommonH1";
 import FormInput from "../../components/input/FormInput";
 import { AiOutlineSearch, AiOutlineClose } from "react-icons/ai";
 import TicketCards from "../../components/cards/TicketCards";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
-import ClipLoader from "react-spinners/ClipLoader";
 import "react-toastify/dist/ReactToastify.css";
 import ClipLoader from "react-spinners/ClipLoader";
 
@@ -102,50 +100,52 @@ const CreateTicket = ({ authToken }) => {
     setFormData({ ...formData, uploads: updatedFiles });
   };
 
-  const handleFormSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
+const handleFormSubmit = async (e) => {
+  e.preventDefault();
 
-    const submitButton = e.target.elements.submitButton;
+  setLoadingSubmit(true);
 
-    if (!formData.subject || !formData.description) {
-      toast.error("Please fill out all required fields.");
-      setLoading(false);
-      return;
-    }
+  if (!formData.subject || !formData.description) {
+    toast.error("Please fill out all required fields.");
+    setLoadingSubmit(false);
+    return;
+  }
 
-    try {
-      const formDataForSubmit = new FormData();
-      formDataForSubmit.append("subject", formData.subject);
-      formDataForSubmit.append("description", formData.description);
-      formData.uploads.forEach((file) => {
-        formDataForSubmit.append("uploads", file);
-      });
+  try {
+    const formDataForSubmit = new FormData();
+    formDataForSubmit.append("subject", formData.subject);
+    formDataForSubmit.append("description", formData.description);
+    formData.uploads.forEach((file) => {
+      formDataForSubmit.append("uploads", file);
+    });
 
-      const response = await axios.post(
-        "https://theowletapp.com/server/api/v1/create/ticket",
-        formDataForSubmit,
-        {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-
-      if (response.data.success) {
-        toast.success(response.data.message);
-        fetchTicketHistory();
-        setFormData({ subject: "", description: "", uploads: [] });
-      } else {
-        toast.error(response.data.message);
-        console.error("Failed to create ticket:", response.data.message);
+    const response = await axios.post(
+      "https://theowletapp.com/server/api/v1/create/ticket",
+      formDataForSubmit,
+      {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+          "Content-Type": "multipart/form-data",
+        },
       }
-    } catch (error) {
-      toast.error("Error creating ticket");
-      console.error("Error creating ticket:", error);
+    );
+
+    if (response.data.success) {
+      toast.success(response.data.message);
+      fetchTicketHistory();
+      setFormData({ subject: "", description: "", uploads: [] });
+    } else {
+      toast.error(response.data.message);
+      console.error("Failed to create ticket:", response.data.message);
     }
-  };
+  } catch (error) {
+    toast.error("Error creating ticket");
+    console.error("Error creating ticket:", error);
+  } finally {
+    setLoadingSubmit(false);
+  }
+};
+
 
   const getInitials = (name) => {
     return name
@@ -222,6 +222,7 @@ const CreateTicket = ({ authToken }) => {
                         name="uploads"
                         className="border rounded-md py-2 px-3 bg-gray-100"
                         multiple
+                        required
                         onChange={handleFileChange}
                       />
                       {formData.uploads.length > 0 && (
@@ -244,7 +245,19 @@ const CreateTicket = ({ authToken }) => {
                         </div>
                       )}
                     </div>
-                    <CreateOrderBtn title="Submit ticket" />
+                    <button
+                      type="submit"
+                      className="bg-primary lgss:px-5 w-full text-white flex justify-center lgss:gap-4 gap-1 items-center py-3 rounded-[4px] font-semibold text-[18px]"
+                      disabled={loadingSubmit}
+                    >
+                      {loadingSubmit ? (
+                        <div className="">
+                          <ClipLoader color="#fff" size={24} />
+                        </div>
+                      ) : (
+                        <p>Submit ticket</p>
+                      )}
+                    </button>
                   </form>
                 </div>
               </div>

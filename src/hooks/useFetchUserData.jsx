@@ -12,11 +12,6 @@ const useFetchUserData = (authToken) => {
 
   useEffect(() => {
     const fetchUserData = async () => {
-      if (!authToken) {
-        setLoading(false);
-        return;
-      }
-
       try {
         const response = await axios.get(
           "https://theowletapp.com/server/api/v1/users/analytics",
@@ -30,17 +25,16 @@ const useFetchUserData = (authToken) => {
         if (response.status !== 200) {
           throw new Error("Failed to fetch user data");
         }
-
         const data = response.data.data;
         setUserData({
           user: data.user,
           wallet: data.wallet,
+          referral: data.referral,
           total_order: data.total_order,
         });
-        setLoading(false);
       } catch (error) {
-        console.error("Error fetching user data:", error);
         setError(error);
+      } finally {
         setLoading(false);
       }
     };
