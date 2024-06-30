@@ -20,6 +20,7 @@ import {
 import { LuBell, LuMenu } from "react-icons/lu";
 import { FaAngleDown } from "react-icons/fa6";
 import ClipLoader from "react-spinners/ClipLoader";
+import useFetchUserData from "../hooks/useFetchUserData";
 
 const columns = [
   { label: "ID", key: "trans_id" },
@@ -32,35 +33,14 @@ const FundPage = ({ authToken }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activePayment, setActivePayment] = useState(null);
-  const [user, setUser] = useState(null);
-  const [wallet, setWallet] = useState(null);
   const [paymentHistory, setPaymentHistory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [amount, setAmount] = useState("");
 
+  const { userData, error, loading: userLoading } = useFetchUserData(authToken);
+  const { user, wallet } = userData;
+
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const response = await axios.get(
-          "https://theowletapp.com/server/api/v1/users/analytics",
-          {
-            headers: {
-              Authorization: `Bearer ${authToken}`,
-            },
-          }
-        );
-
-        if (response.status !== 200) {
-          throw new Error("Failed to fetch user data");
-        }
-        const data = response.data.data;
-        setUser(data.user);
-        setWallet(data.wallet);
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    };
-
     const fetchPaymentHistory = async () => {
       try {
         const response = await axios.get(
@@ -83,7 +63,6 @@ const FundPage = ({ authToken }) => {
       }
     };
 
-    fetchUserData();
     fetchPaymentHistory();
   }, [authToken]);
 
@@ -103,7 +82,7 @@ const FundPage = ({ authToken }) => {
     return () => {
       document.body.removeChild(script);
     };
-  }, []);
+  }, [authToken]);
 
   const payWithMonnify = () => {
     if (!user || !amount) {
@@ -291,9 +270,9 @@ const FundPage = ({ authToken }) => {
             </div>
             <div className="lgss:w-[60%] bg-white h-fit py-3 rounded-[12px] border shadow-md flex flex-col">
               <CommonH1 title="Funding history" />
-              {loading ? (
+              {loading || userLoading ? (
                 <div className="flex justify-center items-center py-4">
-                <ClipLoader size={32}/>
+                  <ClipLoader size={32} />
                 </div>
               ) : paymentHistory.length === 0 ? (
                 <div className="w-full flex flex-col justify-center items-center pb-3">

@@ -1,22 +1,40 @@
+import React from "react";
 import { CiCircleInfo } from "react-icons/ci";
 import { LuClock4 } from "react-icons/lu";
 
 function HomeCardMobile({ title, value }) {
+  const getStatusStyle = (status) => {
+    switch (status) {
+      case "Completed":
+        return "text-green-500";
+      case "Canceled":
+        return "text-red-500";
+      case "Processing":
+        return "text-yellow-500";
+      default:
+        return "text-primary";
+    }
+  };
+
   return (
-    <div className="bg-white shadow-sm border-[1px] rounded-[8px] h-[110px] w-full flex justify-between items-center px-6 text-[1.3rem]">
-      <div className="flex flex-col gap-4">
-        <h3 className="flex gap-3 justify-center items-center font-semibold text-[1rem]">
-          {title}
-        </h3>
-        <div className="flex gap-4">
-          <div className="text-primary bg-primary text-[.9rem] bg-opacity-5 border-[#FEDF89] border flex gap-2 justify-center items-center px-3 rounded-full py-1">
-            <LuClock4 />
-            <p>In Progress</p>
+    <div className="bg-white shadow-sm border-[1px] rounded-[8px] h-[110px] w-full flex flex-col justify-between items-center px-6 text-[1.3rem]">
+      <div className="flex flex-col gap-4 w-full">
+        <h3 className="font-semibold text-[1rem]">{title}</h3>
+        <div className="flex items-center justify-between">
+          <div className="flex gap-2 items-center">
+            <LuClock4
+              className={`text-primary bg-primary bg-opacity-5 border-[#FEDF89] border rounded-full px-3 py-1 ${getStatusStyle(
+                value
+              )}`}
+            />
+            <p className={`text-[.9rem] ${getStatusStyle(value)}`}>{value}</p>
           </div>
-          <h1 className="text-left text-[1rem] ">{value}</h1>
+          <h1 className="text-left text-[1rem]">{value}</h1>
         </div>
       </div>
-      <CiCircleInfo />
+      <div className="mt-4">
+        <CiCircleInfo className="text-gray-400" />
+      </div>
     </div>
   );
 }

@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa6";
+import React from "react";
+import { FaArrowLeft, FaArrowRight, FaExternalLinkAlt } from "react-icons/fa";
 
 const TableHome = ({ heading, columns, tableData, numberOfOrders }) => {
   return (
@@ -11,7 +11,7 @@ const TableHome = ({ heading, columns, tableData, numberOfOrders }) => {
         </div>
       </div>
       <div className="w-full">
-        <div className="grid grid-cols-8 bg-secondary bg-opacity-5 py-4 text-[18px] px-[5%]">
+        <div className="grid grid-cols-8 bg-secondary bg-opacity-5 py-4 text-[18px] px-5 gap-5">
           {columns.map((column, index) => (
             <div
               key={index}
@@ -25,11 +25,39 @@ const TableHome = ({ heading, columns, tableData, numberOfOrders }) => {
           {tableData.map((row, rowIndex) => (
             <div
               key={rowIndex}
-              className="grid grid-cols-8 border-b py-3 px-[5%] text-[.9rem] font-semibold text-center"
+              className="grid grid-cols-8 border-b py-3 px-5 gap-5 text-[.9rem] font-semibold text-center text-[#475467]/80"
             >
               {columns.map((column, colIndex) => (
                 <div key={colIndex} className="text-center">
-                  {row[column.key]}
+                  {column.key === "created_at" ? (
+                    formatDateTime(row[column.key])
+                  ) : column.key === "amount" ? (
+                    `${row.currency || "$"} ${parseFloat(
+                      row[column.key]
+                    ).toFixed(2)}`
+                  ) : column.key === "status" ? (
+                    row.status.status === "In progress" ? (
+                      <span className="text-green-500 flex items-center justify-center">
+                        <FaExternalLinkAlt className="mr-1" />
+                        Completed
+                      </span>
+                    ) : (
+                      row.status.status
+                    )
+                  ) : column.key === "progress" ? (
+                    `${row.status.remains}%`
+                  ) : column.key === "link" ? (
+                    <a
+                      href={row[column.key]}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center"
+                    >
+                      <FaExternalLinkAlt className="mr-1" />
+                    </a>
+                  ) : (
+                    row[column.key]
+                  )}
                 </div>
               ))}
             </div>
@@ -57,6 +85,19 @@ const TableHome = ({ heading, columns, tableData, numberOfOrders }) => {
       </div>
     </div>
   );
+};
+
+const formatDateTime = (dateTimeString) => {
+  const dateTime = new Date(dateTimeString);
+  const options = {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+    second: "numeric",
+  };
+  return dateTime.toLocaleDateString("en-US", options);
 };
 
 export default TableHome;

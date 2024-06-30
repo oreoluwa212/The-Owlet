@@ -85,7 +85,7 @@ const OrderForm = ({ platform, service, setIsModalOpen, authToken }) => {
         return;
       }
 
-      const calculatedAmount = (selectedService.rate / 1000) * quantity;
+      const calculatedAmount = Math.round(selectedService.rate);
       setAmount(calculatedAmount);
     } else {
       setAmount(null);
