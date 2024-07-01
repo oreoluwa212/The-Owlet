@@ -17,7 +17,7 @@ function HomeCardMobile({ title, value }) {
   };
 
   return (
-    <div className="bg-white shadow-sm border-[1px] rounded-[8px] h-[110px] w-full flex flex-col justify-between items-center px-6 text-[1.3rem]">
+    <div className="bg-white shadow-sm border-[1px] rounded-[8px] h-[110px] w-full flex flex-col justify-between items-center px-6 pt-4 text-[1.3rem]">
       <div className="flex flex-col gap-4 w-full">
         <h3 className="font-semibold text-[1rem]">{title}</h3>
         <div className="flex items-center justify-between">
@@ -29,11 +29,7 @@ function HomeCardMobile({ title, value }) {
             />
             <p className={`text-[.9rem] ${getStatusStyle(value)}`}>{value}</p>
           </div>
-          <h1 className="text-left text-[1rem]">{value}</h1>
         </div>
-      </div>
-      <div className="mt-4">
-        <CiCircleInfo className="text-gray-400" />
       </div>
     </div>
   );

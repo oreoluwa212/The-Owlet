@@ -20,7 +20,7 @@ const columns = [
   { label: "Quantity", key: "quantity" },
   { label: "Cost", key: "amount" },
   { label: "Status", key: "status" },
-  { label: "Progress", key: "status" },
+  { label: "Progress", key: "progress" },
   { label: "Link", key: "link" },
 ];
 
@@ -35,7 +35,7 @@ const OrderPage = ({ authToken }) => {
     const fetchOrders = async () => {
       try {
         const response = await axios.get(
-          "https://theowletapp.com/server/api/v1/orders/list/2",
+          "https://theowletapp.com/server/api/v1/orders/list/10",
           {
             headers: {
               Authorization: `Bearer ${authToken}`,

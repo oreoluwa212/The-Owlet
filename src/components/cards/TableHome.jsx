@@ -36,7 +36,7 @@ const TableHome = ({ heading, columns, tableData, numberOfOrders }) => {
                       row[column.key]
                     ).toFixed(2)}`
                   ) : column.key === "status" ? (
-                    row.status.status === "In progress" ? (
+                    row.status.status === "completed" ? (
                       <span className="text-green-500 flex items-center justify-center">
                         <FaExternalLinkAlt className="mr-1" />
                         Completed

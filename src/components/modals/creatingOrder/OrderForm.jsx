@@ -74,23 +74,32 @@ const OrderForm = ({ platform, service, setIsModalOpen, authToken }) => {
     fetchServices();
   }, [selectedPlatform, authToken]);
 
-  useEffect(() => {
-    if (quantity && selectedService) {
-      const max = parseFloat(selectedService.max);
-      const min = parseFloat(selectedService.min);
+useEffect(() => {
+  if (quantity && selectedService) {
+    const max = parseFloat(selectedService.max);
+    const min = parseFloat(selectedService.min);
+    const rate = parseFloat(selectedService.rate);
+    const user_rate = parseFloat(selectedService.user_rate);
 
-      if (quantity < min || quantity > max) {
-        toast.error(`Quantity must be between ${min} and ${max}`);
-        setAmount(null);
-        return;
-      }
-
-      const calculatedAmount = Math.round(selectedService.rate);
-      setAmount(calculatedAmount);
-    } else {
+    if (quantity < min || quantity > max) {
+      toast.error(`Quantity must be between ${min} and ${max}`);
       setAmount(null);
+      return;
     }
-  }, [quantity, selectedService]);
+
+    let calculatedAmount;
+    if (max !== min) {
+      calculatedAmount = user_rate * quantity;
+    } else {
+      calculatedAmount = rate;
+    }
+
+    setAmount(calculatedAmount);
+  } else {
+    setAmount(null);
+  }
+}, [quantity, selectedService]);
+
 
   const handleOverlayClick = (e) => {
     if (e.target === e.currentTarget) {
@@ -137,6 +146,11 @@ const OrderForm = ({ platform, service, setIsModalOpen, authToken }) => {
       const data = await response.json();
       if (data.success) {
         toast.success("Order created successfully!");
+        setSelectedPlatform(platform);
+        setSelectedService(service);
+        setSocialMediaLink("");
+        setQuantity("");
+        setAmount(null);
       } else {
         toast.error(data.message || "Failed to create order");
       }

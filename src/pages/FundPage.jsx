@@ -92,7 +92,7 @@ const FundPage = ({ authToken }) => {
 
     MonnifySDK.initialize({
       amount: parseFloat(amount),
-      currency: wallet.currency,
+      currency: "NGN",
       reference: `${new Date().getTime()}`,
       customerFullName: `${user.firstname} ${user.lastname}`,
       customerEmail: user.email,
@@ -128,8 +128,10 @@ const FundPage = ({ authToken }) => {
             }
           )
           .then((response) => {
+            console.log("response", response);
             if (response.data.success) {
               toast.success("Payment successful!");
+              setAmount("");
             } else {
               toast.error("Payment failed!");
             }
