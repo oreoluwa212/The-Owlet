@@ -208,13 +208,7 @@ const Homepage = ({ authToken }) => {
               <div className="w-full flex flex-col justify-center items-center pt-6">
                 <img src={homeEmptyIcon} alt="" />
                 <div className="flex flex-col gap-3 font-semibold">
-                  <h2 className="text-[1.2rem]">No orders yet</h2>
-                  <div className="text-primary flex gap-3 justify-center items-center">
-                    <span>
-                      <LuInbox />
-                    </span>
-                    <p>Place your first order now</p>
-                  </div>
+                  <h2 className="text-[1.2rem]">No pending orders</h2>
                 </div>
               </div>
             ) : (

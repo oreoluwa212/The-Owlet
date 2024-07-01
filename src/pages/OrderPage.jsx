@@ -138,7 +138,7 @@ const OrderPage = ({ authToken }) => {
                     <h1 className="font-bold text-[1.3rem]">All Orders</h1>
                     <div className="bg-[#FECDCA] bg-opacity-50 border-[#FECDCA] border-2 text-[14px] rounded-full text-primary flex gap-1 font-semibold py-1 px-3">
                       {countOrders()}
-                      <p>Orders</p>
+                      <p>{countOrders() === 1 ? "Order" : "Orders"}</p>
                     </div>
                   </div>
                   {orders.map((order) => (

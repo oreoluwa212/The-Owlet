@@ -7,7 +7,9 @@ const TableHome = ({ heading, columns, tableData, numberOfOrders }) => {
       <div className="px-8 py-6 text-[20px] font-semibold flex gap-5 items-center">
         <h1 className="text-left">{heading}</h1>
         <div className="bg-[#FECDCA] bg-opacity-50 border-[#FECDCA] border-2 text-[16px] rounded-full text-primary py-1 px-3">
-          <p>{numberOfOrders} Orders</p>
+          <p>
+            {numberOfOrders} {numberOfOrders === 1 ? "Order" : "Orders"}
+          </p>
         </div>
       </div>
       <div className="w-full">
