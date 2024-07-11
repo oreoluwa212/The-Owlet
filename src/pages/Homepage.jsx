@@ -27,75 +27,6 @@ const Homepage = ({ authToken }) => {
 
   const { userData, error, loading } = useFetchUserData(authToken);
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const response = await axios.get(
-          "https://theowletapp.com/server/api/v1/users/analytics",
-          {
-            headers: {
-              Authorization: `Bearer ${authToken}`,
-            },
-          }
-        );
-
-        if (response.status !== 200) {
-          throw new Error("Failed to fetch user data");
-        }
-        const data = response.data.data;
-        setBalance(data.wallet.balance);
-        setTier(data.user.tier);
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    };
-
-    const fetchOrderData = async () => {
-      try {
-        const response = await axios.get(
-          "https://theowletapp.com/server/api/v1/orders/list/10",
-          {
-            headers: {
-              Authorization: `Bearer ${authToken}`,
-            },
-          }
-        );
-
-        if (response.status !== 200) {
-          throw new Error("Failed to fetch order data");
-        }
-        setOrders(response.data.data.data);
-      } catch (error) {
-        console.error("Error fetching order details:", error);
-      } finally {
-        setLoadingOrders(false);
-      }
-    };
-
-    const fetchOrderStatus = async () => {
-      try {
-        const response = await axios.get(
-          "https://theowletapp.com/server/api/v1/order/owlet/status",
-          {
-            headers: {
-              Authorization: `Bearer ${authToken}`,
-            },
-          }
-        );
-
-        if (response.status !== 200) {
-          throw new Error("Failed to fetch order status");
-        }
-        setOrderStatus(response.data.data);
-      } catch (error) {
-        console.error("Error fetching order status:", error);
-      }
-    };
-
-    fetchOrderData();
-    fetchOrderStatus();
-  }, [authToken]);
-
   const handlePaymentCompletion = async (paymentReference) => {
     setPaymentReference(paymentReference);
     sendPaymentDetails(paymentReference);
@@ -166,7 +97,7 @@ const Homepage = ({ authToken }) => {
                   value={
                     userData.wallet
                       ? `${userData.wallet.symbol}${userData.wallet.balance}`
-                      : "$0.00"
+                      : "0.00"
                   }
                   img={purse}
                 />
@@ -188,7 +119,7 @@ const Homepage = ({ authToken }) => {
                   value={
                     userData.wallet
                       ? `${userData.wallet.symbol}${userData.wallet.balance}`
-                      : "$0.00"
+                      : "0.00"
                   }
                   img={purse}
                 />
