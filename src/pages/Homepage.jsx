@@ -97,7 +97,7 @@ const Homepage = ({ authToken }) => {
                   value={
                     userData.wallet
                       ? `${userData.wallet.symbol}${userData.wallet.balance}`
-                      : "0.00"
+                      : "0"
                   }
                   img={purse}
                 />
@@ -119,7 +119,7 @@ const Homepage = ({ authToken }) => {
                   value={
                     userData.wallet
                       ? `${userData.wallet.symbol}${userData.wallet.balance}`
-                      : "0.00"
+                      : "0"
                   }
                   img={purse}
                 />
